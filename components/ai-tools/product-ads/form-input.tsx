@@ -14,6 +14,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { avatars } from '@/lib/objects';
 
 const sampleProduct = [
   '/products/headphone.png',
@@ -21,34 +22,6 @@ const sampleProduct = [
   '/products/perfume2.png',
   '/products/burger.png',
   '/products/ice-creame.png'
-]
-
-const AvatarList = [
-  {
-    name: 'Avatar 1',
-    imageUrl: '/products/avatar1.avif'
-  },
-  {
-    name: 'Avatar 2',
-    imageUrl: '/products/avatar2.webp'
-  },
-  {
-    name: 'Avatar 3',
-    imageUrl: '/products/avatar3.avif'
-  },
-  {
-    name: 'Avatar 4',
-    imageUrl: '/products/avatar4.webp'
-  },
-  {
-    name: 'Avatar 5',
-    imageUrl: '/products/avatar5.webp'
-  },
-  {
-    name: 'Avatar 6',
-    imageUrl: '/products/avatar6.webp'
-  },
-
 ]
 
 type Props = {
@@ -205,7 +178,7 @@ export const FormInput = ({ onHandleInputChange, OnGenerate, loading }: Props) =
           </div>
 
           {/* Avatar options */}
-          {AvatarList.map((avatar, index) => (
+          {avatars.map((avatar, index) => (
             <Image src={avatar.imageUrl} alt={avatar.name} width={200} height={200}
               className={`rounded-lg h-[100px] w-[80px] cursor-pointer object-cover
                                 ${avatar.name == selectedAvatar && 'border-2 border-primary'}
@@ -213,7 +186,7 @@ export const FormInput = ({ onHandleInputChange, OnGenerate, loading }: Props) =
               onClick={async () => {
                 setSelectedAvatar(avatar.name);
 
-                onHandleInputChange('avatarName', avatar.name)
+                onHandleInputChange('avatarId', avatar.storageId)
               }}
             />
           ))}

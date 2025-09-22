@@ -13,7 +13,7 @@ export default defineSchema({
     description: v.optional(v.string()),
     avatar: v.optional(v.string()),
     resolution: v.optional(v.string()),
-    adImage: v.optional(v.string()),
-    adVideo: v.optional(v.string()),
+    adImageStorageId: v.optional(v.id('_storage')),
+    adVideoStorageId: v.optional(v.id('_storage')),
   }).index('by_userId', ['userId'])
 });
