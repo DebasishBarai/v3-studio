@@ -1,6 +1,6 @@
 'use client'
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -28,7 +28,7 @@ import {
   Settings,
   Coins,
 } from "lucide-react";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { usePathname } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
@@ -78,7 +78,17 @@ const CustomMenuItem = ({ item }: { item: any }) => {
 
 export function AppSidebar() {
 
-  const credits = useQuery(api.user.getCredits)
+  const user = useQuery(api.user.getUser)
+
+  const addUser = useMutation(api.user.addUser)
+
+  useEffect(() => {
+    if (!user) {
+      addUser()
+    }
+  }, [user, addUser])
+
+  const credits = user?.credits ?? 0;
 
   console.log('sidebar updated');
 
