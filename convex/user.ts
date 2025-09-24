@@ -1,10 +1,11 @@
-import { mutation, query } from "./_generated/server";
+import { v } from "convex/values";
+import { internalQuery, mutation, query } from "./_generated/server";
 
 export const getUser = query({
   args: {},
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
-    console.log({ identity });
+
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -14,8 +15,6 @@ export const getUser = query({
       .filter((q) => q.eq(q.field('subject'), identity.subject))
       .unique();
 
-    console.log({ user })
-
     return user;
   },
 });
@@ -24,7 +23,7 @@ export const addUser = mutation({
   args: {},
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
-    console.log({ identity });
+
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -50,7 +49,7 @@ export const getCredits = query({
   args: {},
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
-    console.log({ identity });
+
     if (identity === null) {
       throw new Error("Not authenticated");
     }
@@ -63,3 +62,15 @@ export const getCredits = query({
     return user?.credits ?? 0;
   },
 });
+
+export const getInternalUser = internalQuery({
+  args: { subject: v.string() },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_subject', (q) => q.eq('subject', args.subject))
+      .first();
+
+    return user;
+  }
+})

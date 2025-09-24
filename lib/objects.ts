@@ -30,3 +30,31 @@ export const avatars = [
     storageId: 'kg278q1td5tekc7bdgcpj2080d7r3q7c',
   },
 ]
+
+export const sampleProduct = [
+  {
+    name: 'headphone',
+    imageUrl: '/products/headphone.png',
+    storageId: 'kg23jn89wm4gj02rcsd8t4p1rx7r6fwn',
+  },
+  {
+    name: 'juice can',
+    imageUrl: '/products/juice-can.png',
+    storageId: 'kg2bqkrrpcswss91hd47mdz8z17r6c4z',
+  },
+  {
+    name: 'perfume',
+    imageUrl: '/products/perfume2.png',
+    storageId: 'kg2dr4cct54m5vv7vaknp795457r7q53',
+  },
+  {
+    name: 'burger',
+    imageUrl: '/products/burger.png',
+    storageId: 'kg23ny4bv1b9h9pdk8h0tg3ykd7r72kd',
+  },
+  {
+    name: 'ice cream',
+    imageUrl: '/products/ice-creame.png',
+    storageId: 'kg27kfpr2wanta0t4vzgz412xh7r67gy',
+  },
+]

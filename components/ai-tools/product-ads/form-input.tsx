@@ -15,14 +15,9 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { avatars } from '@/lib/objects';
-
-const sampleProduct = [
-  '/products/headphone.png',
-  '/products/juice-can.png',
-  '/products/perfume2.png',
-  '/products/burger.png',
-  '/products/ice-creame.png'
-]
+import { sampleProduct } from '@/lib/objects';
+import { useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 type Props = {
   onHandleInputChange: any,
@@ -30,96 +25,38 @@ type Props = {
   loading: boolean,
 }
 
-/**
- * Convert a File object OR a URL/path string to a base64 string (without prefix).
- */
-export async function convertImageToBase64(
-  input: File | string
-): Promise<string> {
-  // Case 1: File object (from input type="file")
-  if (input instanceof File) {
-    return fileToBase64(input);
-  }
-
-  // Case 2: URL or relative path
-  const response = await fetch(input);
-  if (!response.ok) throw new Error(`Failed to fetch: ${input}`);
-  const blob = await response.blob();
-  return blobToBase64(blob);
-}
-
-// helper for File
-function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.result) {
-        const base64String = (reader.result as string).split(',')[1];
-        resolve(base64String);
-      } else {
-        reject(new Error('Failed to read file'));
-      }
-    };
-    reader.onerror = () => reject(new Error('Error reading file'));
-    reader.readAsDataURL(file);
-  });
-}
-
-// helper for Blob/URL fetch
-function blobToBase64(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.result) {
-        const base64String = (reader.result as string).split(',')[1];
-        resolve(base64String);
-      } else {
-        reject(new Error('Failed to read blob'));
-      }
-    };
-    reader.onerror = () => reject(new Error('Error reading blob'));
-    reader.readAsDataURL(blob);
-  });
-}
-
-
 export const FormInput = ({ onHandleInputChange, OnGenerate, loading }: Props) => {
 
   const [preview, setPreview] = useState<string | null>()
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null)
 
+  const generateProductImageUrl = useMutation(api.ad.generateProductImageUrl)
 
-  const onFileSelect = async (input: FileList | string | null) => {
+  const onFileSelect = async (input: FileList | null) => {
     try {
-      // Case 1: Input from file input
-      if (input && typeof input !== 'string') {
-        if (input.length === 0) return;
+      if (!input || input.length === 0) return;
 
-        const file = input[0];
-        if (file.size > 5 * 1024 * 1024) {
-          alert('File size greater than 5 MB');
-          return;
-        }
-
-        const base64Image = await convertImageToBase64(file);
-
-        onHandleInputChange('base64Image', base64Image);
-
-        // Show preview with object URL
-        setPreview(URL.createObjectURL(file));
+      const file = input[0];
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size greater than 5 MB');
         return;
       }
+      // Create JSON payload instead of FormData since we're not sending files
+      const productUrl = await generateProductImageUrl();
 
-      // Case 2: Input is a URL string (clicked sample product)
-      if (typeof input === 'string') {
-        const base64Image = await convertImageToBase64(input);
+      const result = await fetch(productUrl, {
+        method: "POST",
+        headers: { "Content-Type": file!.type },
+        body: file,
+      });
 
-        // Clear base64 and store URL if you prefer using URL
-        onHandleInputChange('base64Image', base64Image);
+      const { storageId } = await result.json();
 
-        setPreview(input);
-        return;
-      }
+      onHandleInputChange('productId', storageId);
+
+      // Show preview with object URL
+      setPreview(URL.createObjectURL(file));
+      return;
     } catch (error) {
       console.error('Error converting image to base64:', error);
       toast.error('Error processing image');
@@ -153,9 +90,9 @@ export const FormInput = ({ onHandleInputChange, OnGenerate, loading }: Props) =
           <h2 className='opacity-40 text-center mt-3'>Select Sample product to try</h2>
           <div className='flex gap-5 items-center flex-wrap'>
             {sampleProduct.map((product, index) => (
-              <Image src={product} alt={product} width={100} height={100} key={index}
+              <Image src={product.imageUrl} alt={product.name} width={100} height={100} key={index}
                 className='w-[60px] h-[60px] rounded-lg cursor-pointer hover:scale-105 transition-all'
-                onClick={() => onFileSelect(product)}
+                onClick={() => onHandleInputChange('productId', product.storageId)}
               />
             ))}
           </div>

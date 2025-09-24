@@ -14,7 +14,8 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as ad from "../ad.js";
-import type * as ai from "../ai.js";
+import type * as generateAdImage from "../generateAdImage.js";
+import type * as generateAdVideo from "../generateAdVideo.js";
 import type * as storage from "../storage.js";
 import type * as user from "../user.js";
 
@@ -28,7 +29,8 @@ import type * as user from "../user.js";
  */
 declare const fullApi: ApiFromModules<{
   ad: typeof ad;
-  ai: typeof ai;
+  generateAdImage: typeof generateAdImage;
+  generateAdVideo: typeof generateAdVideo;
   storage: typeof storage;
   user: typeof user;
 }>;

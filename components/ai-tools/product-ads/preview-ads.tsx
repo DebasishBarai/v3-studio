@@ -2,26 +2,24 @@
 
 import { Button } from '@/components/ui/button';
 import { api } from '@/convex/_generated/api';
-import { useQuery } from 'convex/react';
+import { useAction, useQuery } from 'convex/react';
 import { Download, Loader2Icon, LoaderCircle, Play, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState } from 'react'
+import { useState } from 'react';
 
 export const PreviewAds = () => {
 
-  const user = useQuery(api.user.getUser)
-
   const ads = useQuery(api.ad.getAds)
+
+  const generateAdVideo = useAction(api.generateAdVideo.generateAdVideo)
 
   const [loadingId, setLoadingId] = useState('');
 
   const DownloadImage = async (ad) => {
     try {
-      const imageUrl = useQuery(api.storage.getUrl, { id: ad.adImageStorageId }) ?? '';
-
       // Fetch the image
-      const response = await fetch(imageUrl);
+      const response = await fetch(ad.adImageUrl);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch image: ${response.status}`);
@@ -34,7 +32,7 @@ export const PreviewAds = () => {
       const blobUrl = window.URL.createObjectURL(blob);
 
       // Extract filename from URL or use a default
-      const urlPath = new URL(imageUrl).pathname;
+      const urlPath = new URL(ad.adImageUrl).pathname;
       const filename = urlPath.split('/').pop() || 'downloaded-image.jpg';
 
       // Create a temporary anchor element and trigger download
@@ -55,22 +53,13 @@ export const PreviewAds = () => {
   };
 
   const GenerateVideo = async (ad) => {
-    // setLoadingId(adId);
-    // const result = await axios.post('/api/generate-ads/generate-video', {
-    //   adId
-    // });
-    //
-    // if (result.status !== 200 && result.data.success) {
-    //   throw new Error('Failed to generate video');
-    // }
-    //
-    // updateAd(result.data.id, {
-    //   adVideoUrl: result.data.video
-    // });
-    //
-    // setLoadingId('');
-    //
-    // console.log(result.data);
+    setLoadingId(ad._id);
+
+    console.log('Generating video for ad:', ad);
+
+    await generateAdVideo({ adId: ad._id });
+
+    setLoadingId('');
   }
 
   return (
@@ -82,19 +71,20 @@ export const PreviewAds = () => {
           <div key={index}>
             {ad?.adImageStorageId ?
               <div>
-                <Image src={useQuery(api.storage.getUrl, { id: ad.adImageStorageId }) ?? ''}
+                <Image src={ad.adImageUrl || ''}
                   alt={ad.adImageStorageId}
                   width={500}
                   height={500}
-                  className='w-full h-[250px] object-contain rounded-lg'
+                  unoptimized
+                  className='w-full h-[250px] rounded-lg'
                 />
                 <div className='flex justify-between items-center mt-2'>
                   <div className='flex items-center gap-2'>
                     <Button variant={'ghost'} onClick={() => DownloadImage(ad)}> <Download /> </Button>
-                    <Link href={useQuery(api.storage.getUrl, { id: ad.adImageStorageId }) ?? ''} target='_blank'>
+                    <Link href={ad.adImageUrl || ''} target='_blank'>
                       <Button variant={'ghost'}>View</Button>
                     </Link>
-                    {ad?.adVideoStorageId && <Link href={useQuery(api.storage.getUrl, { id: ad.adVideoStorageId }) ?? ''} target='_blank'>
+                    {ad?.adVideoStorageId && <Link href={ad.adVideoUrl ?? ''} target='_blank'>
                       <Button variant={'ghost'}><Play /></Button>
                     </Link>}
                   </div>
