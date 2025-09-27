@@ -7,12 +7,11 @@ import { useAction, useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { toast } from 'sonner'
-import { fromTheme } from 'tailwind-merge'
 
 // Updated FormData structure - removed file, added base64Image
 type FormData = {
-  productId: string,
-  description: string,
+  product: string | File,
+  description?: string,
   resolution: string,
   avatarId?: string,
 }
@@ -21,8 +20,9 @@ export default function CreateAdsPage() {
   const [formData, setFormData] = useState<FormData>();
   const [loading, setLoading] = useState(false);
 
-  const generateProductImageUrl = useMutation(api.ad.generateProductImageUrl)
   const createAd = useAction(api.generateAdImage.createAd)
+
+  const generateProductImageUrl = useMutation(api.ad.generateProductImageUrl)
 
   // Updated handler to process file uploads and convert to base64
   const onHandleInputChange = async (field: string, value: string) => {
@@ -37,20 +37,38 @@ export default function CreateAdsPage() {
 
   const OnGenerate = async () => {
     // Updated validation: check for base64Image OR imageUrl
-    if (!formData?.productId) {
+    if (!formData?.product) {
       alert('Please upload a Product Image');
       return;
     }
 
     setLoading(true);
 
-    const productId = formData.productId as Id<'_storage'>
+    // const productId = formData.productId as Id<'_storage'>
     const avatarId = formData.avatarId as Id<'_storage'>;
+
+    let productId: Id<'_storage'>;
+
+    if (formData?.product instanceof File) {
+      const file = formData?.product as File;
+      const productUrl = await generateProductImageUrl();
+
+      const result = await fetch(productUrl, {
+        method: "POST",
+        headers: { "Content-Type": file!.type },
+        body: file,
+      });
+
+      const { storageId } = await result.json();
+      productId = storageId;
+    } else {
+      productId = formData?.product as Id<'_storage'>;
+    }
 
     await createAd({
       productId: productId,
       description: formData?.description,
-      resolution: formData?.resolution,
+      resolution: formData?.resolution || '1024x1024',
       avatarId: avatarId,
     });
 

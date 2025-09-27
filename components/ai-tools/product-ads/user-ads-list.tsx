@@ -33,18 +33,18 @@ export const UsersAdsList = () => {
       <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5'>
         {ads && ads.map((ad, index) => (
           <div key={index}>
-            <Image src={ad.adImage ?? ''} alt={ad.adImage ?? ''}
+            <Image src={ad.adImageUrl ?? ''} alt={ad.adImageUrl ?? ''}
               width={'400'}
               height={400}
               className='w-full h-[250px] lg:h-[370px] object-cover rounded-xl'
             />
             <div className='flex items-center mt-2 justify-between'>
-              <Link href={ad.adImage ?? ''} target='_blank' >
+              <Link href={ad.adImageUrl ?? ''} target='_blank' >
                 <Button className='' variant={'outline'}>View</Button>
               </Link>
 
-              {ad?.adVideo &&
-                <Link href={ad.adVideo} target='_blank' >
+              {ad?.adVideoUrl &&
+                <Link href={ad.adVideoUrl} target='_blank' >
                   <Button><Play /></Button></Link>}
             </div>
           </div>

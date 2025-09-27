@@ -30,7 +30,6 @@ export const FormInput = ({ onHandleInputChange, OnGenerate, loading }: Props) =
   const [preview, setPreview] = useState<string | null>()
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null)
 
-  const generateProductImageUrl = useMutation(api.ad.generateProductImageUrl)
 
   const onFileSelect = async (input: FileList | null) => {
     try {
@@ -41,18 +40,8 @@ export const FormInput = ({ onHandleInputChange, OnGenerate, loading }: Props) =
         alert('File size greater than 5 MB');
         return;
       }
-      // Create JSON payload instead of FormData since we're not sending files
-      const productUrl = await generateProductImageUrl();
 
-      const result = await fetch(productUrl, {
-        method: "POST",
-        headers: { "Content-Type": file!.type },
-        body: file,
-      });
-
-      const { storageId } = await result.json();
-
-      onHandleInputChange('productId', storageId);
+      onHandleInputChange('product', file)
 
       // Show preview with object URL
       setPreview(URL.createObjectURL(file));
@@ -92,7 +81,10 @@ export const FormInput = ({ onHandleInputChange, OnGenerate, loading }: Props) =
             {sampleProduct.map((product, index) => (
               <Image src={product.imageUrl} alt={product.name} width={100} height={100} key={index}
                 className='w-[60px] h-[60px] rounded-lg cursor-pointer hover:scale-105 transition-all'
-                onClick={() => onHandleInputChange('productId', product.storageId)}
+                onClick={() => {
+                  setPreview(product.imageUrl)
+                  onHandleInputChange('product', product.storageId)
+                }}
               />
             ))}
           </div>
