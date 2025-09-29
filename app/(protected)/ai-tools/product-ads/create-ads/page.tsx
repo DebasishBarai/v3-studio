@@ -42,37 +42,54 @@ export default function CreateAdsPage() {
       return;
     }
 
-    setLoading(true);
-
-    // const productId = formData.productId as Id<'_storage'>
-    const avatarId = formData.avatarId as Id<'_storage'>;
-
-    let productId: Id<'_storage'>;
-
-    if (formData?.product instanceof File) {
-      const file = formData?.product as File;
-      const productUrl = await generateProductImageUrl();
-
-      const result = await fetch(productUrl, {
-        method: "POST",
-        headers: { "Content-Type": file!.type },
-        body: file,
-      });
-
-      const { storageId } = await result.json();
-      productId = storageId;
-    } else {
-      productId = formData?.product as Id<'_storage'>;
+    if (!formData?.description) {
+      alert('Please upload Product Description');
+      return;
     }
 
-    await createAd({
-      productId: productId,
-      description: formData?.description,
-      resolution: formData?.resolution || '1024x1024',
-      avatarId: avatarId,
-    });
+    if (!formData?.resolution) {
+      alert('Please upload Product Size');
+      return;
+    }
 
-    toast.success('Ad created successfully');
+    try {
+      setLoading(true);
+
+      // const productId = formData.productId as Id<'_storage'>
+      const avatarId = formData.avatarId as Id<'_storage'>;
+
+      let productId: Id<'_storage'>;
+
+      if (formData?.product instanceof File) {
+        const file = formData?.product as File;
+        const productUrl = await generateProductImageUrl();
+
+        const result = await fetch(productUrl, {
+          method: "POST",
+          headers: { "Content-Type": file!.type },
+          body: file,
+        });
+
+        const { storageId } = await result.json();
+        productId = storageId;
+      } else {
+        productId = formData?.product as Id<'_storage'>;
+      }
+
+      const adId = await createAd({
+        productId: productId,
+        description: formData?.description,
+        resolution: formData?.resolution || '1024x1024',
+        avatarId: avatarId,
+      });
+
+      toast.success(`Ad created successfully with id: ${adId}`);
+    } catch (error) {
+      console.error('Error creating ad:', error);
+      toast.error('Error creating ad');
+    } finally {
+      setLoading(false);
+    }
 
   }
 

@@ -21,32 +21,36 @@ import {
   Clapperboard,
   Play,
   Package,
-  Globe,
   Folder,
   CreditCard,
-  Code,
   Settings,
   Coins,
+  LucideIcon,
 } from "lucide-react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { usePathname } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
 
+type MenuItem = {
+  title: string;
+  url: string;
+  icon: LucideIcon;
+  badge?: string;
+}
+
 // Menu items data
-const creativeToolsItems = [
+const creativeToolsItems: MenuItem[] = [
   { title: "Home", url: "/dashboard", icon: Home },
   { title: "AI Film", url: "/home", icon: Clapperboard },
   { title: "Short Video", url: "/ai-tools/short-video", icon: Play, badge: "New" },
   { title: "Product Ads", url: "/ai-tools/product-ads", icon: Package, badge: "New" },
-  { title: "Explore", url: "/explore", icon: Globe },
 ];
 
-const userItems = [
+const userItems: MenuItem[] = [
   { title: "My Projects", url: "/projects", icon: Folder },
   { title: "Pricing", url: "/pricing", icon: CreditCard, badge: "Discount" },
-  { title: "Developer", url: "/developer", icon: Code, badge: "New" },
-  { title: "Profile", url: "/profile", icon: Settings },
+  { title: "Settings", url: "/settings", icon: Settings },
 ];
 
 // Badge component
@@ -57,7 +61,7 @@ const Badge = ({ children }: { children: React.ReactNode }) => (
 );
 
 // Custom menu item component
-const CustomMenuItem = ({ item }: { item: any }) => {
+const CustomMenuItem = ({ item }: { item: MenuItem }) => {
 
   const pathname = usePathname();
 
@@ -89,8 +93,6 @@ export function AppSidebar() {
   }, [user, addUser])
 
   const credits = user?.credits ?? 0;
-
-  console.log('sidebar updated');
 
   return (
     <Sidebar>
