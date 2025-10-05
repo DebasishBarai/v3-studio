@@ -2,11 +2,14 @@
 
 import { Button } from '@/components/ui/button';
 import { api } from '@/convex/_generated/api';
+import { Doc } from '@/convex/_generated/dataModel';
 import { useAction, useQuery } from 'convex/react';
 import { Download, Loader2Icon, LoaderCircle, Play, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+
+type Ad = Doc<'ads'>;
 
 export const PreviewAds = () => {
 
@@ -16,8 +19,12 @@ export const PreviewAds = () => {
 
   const [loadingId, setLoadingId] = useState('');
 
-  const DownloadImage = async (ad) => {
+  const DownloadImage = async (ad: Ad) => {
     try {
+      if (!ad.adImageUrl) {
+        throw new Error('No image URL found');
+      }
+
       // Fetch the image
       const response = await fetch(ad.adImageUrl);
 
@@ -52,7 +59,7 @@ export const PreviewAds = () => {
     }
   };
 
-  const GenerateVideo = async (ad) => {
+  const GenerateVideo = async (ad: Ad) => {
     setLoadingId(ad._id);
 
     console.log('Generating video for ad:', ad);
