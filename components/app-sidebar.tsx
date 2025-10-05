@@ -49,8 +49,8 @@ const creativeToolsItems: MenuItem[] = [
 
 const userItems: MenuItem[] = [
   { title: "My Projects", url: "/projects", icon: Folder },
-  { title: "Pricing", url: "/pricing", icon: CreditCard, badge: "Discount" },
   { title: "Settings", url: "/settings", icon: Settings },
+  { title: "Pricing", url: "/pricing", icon: CreditCard, badge: "Discount" },
 ];
 
 // Badge component

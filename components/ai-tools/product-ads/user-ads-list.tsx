@@ -36,6 +36,7 @@ export const UsersAdsList = () => {
             <Image src={ad.adImageUrl ?? ''} alt={ad.adImageUrl ?? ''}
               width={'400'}
               height={400}
+              unoptimized
               className='w-full h-[250px] lg:h-[370px] object-cover rounded-xl'
             />
             <div className='flex items-center mt-2 justify-between'>

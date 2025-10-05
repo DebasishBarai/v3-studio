@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { internalQuery, mutation, query } from "./_generated/server";
+import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
 
 export const getUser = query({
   args: {},
@@ -74,3 +74,30 @@ export const getInternalUser = internalQuery({
     return user;
   }
 })
+
+export const addInternalCredits = internalMutation({
+  args: {
+    subject: v.string(),
+    credits: v.number(),
+  },
+  handler: async (ctx, args) => {
+
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_subject', (q) => q.eq('subject', args.subject))
+      .first();
+
+    if (!user) {
+      throw new Error(`User with subject ${args.subject} not found`);
+    }
+
+    // Build the patch object, only including fields that are not null or undefined
+    const patch: Record<string, number> = {};
+    if (args.credits != null) patch.credits = args.credits;
+
+    // Only patch if there are fields to update
+    if (Object.keys(patch).length > 0) {
+      await ctx.db.patch(user._id, patch);
+    }
+  }
+});
