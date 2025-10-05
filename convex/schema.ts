@@ -18,5 +18,14 @@ export default defineSchema({
     adImageUrl: v.optional(v.string()),
     adVideoStorageId: v.optional(v.id('_storage')),
     adVideoUrl: v.optional(v.string()),
+  }).index('by_userId', ['userId']),
+  suggestions: defineTable({
+    userId: v.id('users'),
+    fullName: v.string(),
+    email: v.string(),
+    subject: v.string(),
+    content: v.string(),
+    createdAt: v.number(),
   }).index('by_userId', ['userId'])
+    .index('by_createdAt', ['createdAt']),
 });
