@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { User, Mail, FileText, Instagram, Youtube, Music2 } from 'lucide-react';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import { toast } from 'sonner';
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,6 +32,8 @@ export default function ContactPage() {
     try {
       await addSuggestion(formData);
 
+      toast.success('Message sent successfully! We\'ll get back to you soon.');
+
       setSubmitStatus('success');
       setFormData({
         fullName: '',
@@ -43,6 +46,7 @@ export default function ContactPage() {
       setTimeout(() => setSubmitStatus('idle'), 3000);
     } catch (error) {
       setSubmitStatus('error');
+      toast.error('Failed to send message. Please try again.');
 
       console.error('Error submitting form:', error);
     } finally {
@@ -118,23 +122,23 @@ export default function ContactPage() {
                 {/* Submit Button */}
                 <button
                   disabled={isSubmitting}
-                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-md"
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-md"
                   type="submit"
                 >
                   {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
 
                 {/* Status Messages */}
-                {submitStatus === 'success' && (
-                  <div className="p-3 rounded-lg bg-green-500/20 border border-green-500/50 text-green-400 text-sm">
-                    Message sent successfully! We&apos;ll get back to you soon.
-                  </div>
-                )}
-                {submitStatus === 'error' && (
-                  <div className="p-3 rounded-lg bg-red-500/20 border border-red-500/50 text-red-400 text-sm">
-                    Failed to send message. Please try again.
-                  </div>
-                )}
+                {/* {submitStatus === 'success' && ( */}
+                {/*   <div className="p-3 rounded-lg bg-green-500/20 border border-green-500/50 text-green-400 text-sm"> */}
+                {/*     Message sent successfully! We&apos;ll get back to you soon. */}
+                {/*   </div> */}
+                {/* )} */}
+                {/* {submitStatus === 'error' && ( */}
+                {/*   <div className="p-3 rounded-lg bg-red-500/20 border border-red-500/50 text-red-400 text-sm"> */}
+                {/*     Failed to send message. Please try again. */}
+                {/*   </div> */}
+                {/* )} */}
               </form>
 
               {/* Social Media Links */}

@@ -4,6 +4,7 @@ import './globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
 import ConvexClientProvider from '@/app/providers'
+import { Toaster } from '@/components/ui/sonner'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -34,6 +35,7 @@ export default function RootLayout({
         <ClerkProvider appearance={{ theme: dark }}>
           <ConvexClientProvider>{children}</ConvexClientProvider>
         </ClerkProvider>
+        <Toaster richColors />
       </body>
     </html>
   )
