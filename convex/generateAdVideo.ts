@@ -29,6 +29,10 @@ export const generateAdVideo = action({
       throw new Error("User not found");
     }
 
+    if (user.credits < 5) {
+      throw new Error("Insufficient credits");
+    }
+
     const ad = await ctx.runQuery(internal.ad.getInternalAd, {
       _id: args.adId,
     });
@@ -83,6 +87,12 @@ while the background elements provide the dynamic motion and vibrance.`;
       id: ad._id,
       adVideoStorageId: videoStorageId,
       adVideoUrl: videoUrl ?? undefined,
+    });
+
+    // update credits
+    await ctx.runMutation(internal.user.decreaseInternalCredits, {
+      subject: identity.subject,
+      amount: 5,
     });
     return
 

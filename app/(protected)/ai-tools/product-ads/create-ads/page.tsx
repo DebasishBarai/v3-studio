@@ -55,9 +55,6 @@ export default function CreateAdsPage() {
     try {
       setLoading(true);
 
-      // const productId = formData.productId as Id<'_storage'>
-      const avatarId = formData.avatarId as Id<'_storage'>;
-
       let productId: Id<'_storage'>;
 
       if (formData?.product instanceof File) {
@@ -76,14 +73,24 @@ export default function CreateAdsPage() {
         productId = formData?.product as Id<'_storage'>;
       }
 
-      const adId = await createAd({
-        productId: productId,
-        description: formData?.description,
-        resolution: formData?.resolution || '1024x1024',
-        avatarId: avatarId,
-      });
+      if (!formData?.avatarId || formData?.avatarId === '') {
+        const adId = await createAd({
+          productId: productId,
+          description: formData?.description,
+          resolution: formData?.resolution || '1024x1024',
+        });
+        toast.success(`Ad created successfully with id: ${adId}`);
+      } else {
+        const avatarId = formData.avatarId as Id<'_storage'>;
+        const adId = await createAd({
+          productId: productId,
+          description: formData?.description,
+          resolution: formData?.resolution || '1024x1024',
+          avatarId: avatarId,
+        });
+        toast.success(`Ad created successfully with id: ${adId}`);
+      }
 
-      toast.success(`Ad created successfully with id: ${adId}`);
     } catch (error) {
       console.error('Error creating ad:', error);
       toast.error('Error creating ad');

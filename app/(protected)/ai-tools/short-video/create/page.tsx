@@ -12,12 +12,12 @@ export default function VideoCreatorPage() {
   const [showAIWriter, setShowAIWriter] = useState(false);
 
   const styles = [
-    { id: 1, name: 'Pixar 3D', image: '/api/placeholder/400/300' },
-    { id: 2, name: 'Cinematic', image: '/api/placeholder/400/300' },
-    { id: 3, name: 'Ghibli', image: '/api/placeholder/400/300' },
-    { id: 4, name: 'Anime', image: '/api/placeholder/400/300' },
-    { id: 5, name: 'Cyberpunk', image: '/api/placeholder/400/300' },
-    { id: 6, name: 'Watercolor', image: '/api/placeholder/400/300' }
+    { id: 1, name: 'Pixar 3D', image: '/short-video/style/pixar-3d.webp' },
+    { id: 2, name: 'Cinematic', image: '/short-video/style/cinematic.webp' },
+    { id: 3, name: 'Ghibli', image: '/short-video/style/ghibli.webp' },
+    { id: 4, name: 'Anime', image: '/short-video/style/anime.webp' },
+    { id: 5, name: 'Cyberpunk', image: '/short-video/style/cyberpunk.webp' },
+    { id: 6, name: 'Watercolor', image: '/short-video/style/watercolor.webp' }
   ];
 
   const music = [

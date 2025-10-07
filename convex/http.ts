@@ -81,7 +81,7 @@ const handleClerkWebhook = httpAction(async (ctx, request) => {
         }
 
         // Add credits to user account
-        await ctx.runMutation(internal.user.addInternalCredits, {
+        await ctx.runMutation(internal.user.setInternalCredits, {
           subject: user.subject,
           credits: creditsToAdd,
         });

@@ -40,7 +40,7 @@ export const addUser = mutation({
     await ctx.db.insert('users', {
       subject: identity.subject,
       name: identity.name || 'Anonymous',
-      credits: 5,
+      credits: 10,
     });
   }
 })
@@ -75,7 +75,7 @@ export const getInternalUser = internalQuery({
   }
 })
 
-export const addInternalCredits = internalMutation({
+export const setInternalCredits = internalMutation({
   args: {
     subject: v.string(),
     credits: v.number(),
@@ -101,3 +101,37 @@ export const addInternalCredits = internalMutation({
     }
   }
 });
+
+export const decreaseInternalCredits = internalMutation({
+  args: {
+    subject: v.string(),
+    amount: v.number(),
+  },
+  handler: async (ctx, args) => {
+
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_subject', (q) => q.eq('subject', args.subject))
+      .first();
+
+    if (!user) {
+      throw new Error(`User with subject ${args.subject} not found`);
+    }
+
+    if (args.amount === null) {
+      throw new Error("Amount cannot be null");
+    }
+
+    // Decrease credits, ensuring it doesn't go below zero
+    const newCredits = Math.max(0, user.credits - args.amount);
+
+    // Build the patch object, only including fields that are not null or undefined
+    const patch: Record<string, number> = {};
+    patch.credits = newCredits;
+
+    // Only patch if there are fields to update
+    if (Object.keys(patch).length > 0) {
+      await ctx.db.patch(user._id, patch);
+    }
+  }
+})

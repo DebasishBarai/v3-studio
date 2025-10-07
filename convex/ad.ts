@@ -1,6 +1,6 @@
 import { v } from "convex/values";
+import { Id } from "./_generated/dataModel";
 import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
-import { Doc, Id } from "./_generated/dataModel";
 
 export const getAds = query({
   args: {},
@@ -23,6 +23,7 @@ export const getAds = query({
     const ads = await ctx.db
       .query('ads')
       .withIndex('by_userId', (q) => q.eq('userId', user?._id))
+      .order('desc')
       .collect();
 
     return ads;
