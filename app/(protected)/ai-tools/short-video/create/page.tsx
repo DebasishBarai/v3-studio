@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { Film, PenLine, Music, Mic, Tv, Sparkles, Play, CirclePlay, Pause } from 'lucide-react';
 
 export default function VideoCreatorPage() {
@@ -12,7 +13,7 @@ export default function VideoCreatorPage() {
   const [showAIWriter, setShowAIWriter] = useState(false);
 
   const styles = [
-    { id: 1, name: 'Pixar 3D', image: '/short-video/style/pixar-3d.webp' },
+    { id: 1, name: 'Pixar 3D', image: '/short-video/style/pixar.webp' },
     { id: 2, name: 'Cinematic', image: '/short-video/style/cinematic.webp' },
     { id: 3, name: 'Ghibli', image: '/short-video/style/ghibli.webp' },
     { id: 4, name: 'Anime', image: '/short-video/style/anime.webp' },
@@ -100,18 +101,21 @@ export default function VideoCreatorPage() {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {styles.map((style) => (
                 <div
-                  key={style.id}
-                  onClick={() => setSelectedStyle(style.id)}
-                  className={`relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all hover:scale-105 ${selectedStyle === style.id ? 'border-pink-500' : 'border-gray-700'
-                    }`}
+                  key={style.name}
+                  className="relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all hover:scale-105 border-gray-700"
                 >
-                  <div className="relative bg-gradient-to-br from-purple-900/50 to-pink-900/50 aspect-video">
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                      <Film className="w-8 h-8" />
-                    </div>
-                    <h3 className="absolute bottom-0 w-full text-white text-sm font-medium bg-gradient-to-t from-black/80 via-black/40 to-transparent p-2">
+                  <div className="relative rounded-lg overflow-hidden bg-black">
+                    <Image
+                      alt={style.name}
+                      loading="lazy"
+                      width={400}
+                      height={300}
+                      className="w-full aspect-video object-cover rounded-lg"
+                      src={style.image}
+                    />
+                    <h2 className="absolute bottom-0 w-full text-white text-sm font-medium bg-gradient-to-t from-black/80 via-black/40 to-transparent p-2">
                       {style.name}
-                    </h3>
+                    </h2>
                   </div>
                 </div>
               ))}
