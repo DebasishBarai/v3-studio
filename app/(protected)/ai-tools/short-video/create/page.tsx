@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Film, PenLine, Music, Mic, Tv, Sparkles, Play, CirclePlay, Pause } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function VideoCreatorPage() {
   const [script, setScript] = useState('');
@@ -102,7 +103,8 @@ export default function VideoCreatorPage() {
               {styles.map((style) => (
                 <div
                   key={style.name}
-                  className="relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all hover:scale-105 border-gray-700"
+                  className={cn("relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all hover:scale-105 border-gray-700 cursor-pointer", selectedStyle === style.id ? 'border-pink-500' : 'border-gray-700')}
+                  onClick={() => setSelectedStyle(style.id)}
                 >
                   <div className="relative rounded-lg overflow-hidden bg-black">
                     <Image
@@ -249,7 +251,7 @@ export default function VideoCreatorPage() {
             <Sparkles className="w-6 h-6" />
             Generate Video
           </h2>
-          <p className="text-white/70 text-sm mt-1">200 Credits to Generate Video</p>
+          <p className="text-white/70 text-sm mt-1">100 Credits to Generate Video</p>
         </button>
       </div>
     </div>
