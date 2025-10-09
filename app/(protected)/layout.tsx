@@ -1,6 +1,3 @@
-import { redirect } from 'next/navigation'
-import { headers } from 'next/headers'
-
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { cn } from '@/lib/utils';
@@ -15,7 +12,7 @@ export default async function AuthenticatedLayout({
     <Providers>
       <SidebarProvider>
         <AppSidebar />
-        <SidebarTrigger className={cn('m-4 bg-slate-900')} />
+        <SidebarTrigger className={cn('m-4 bg-slate-900 sticky top-4 z-10')} />
         <div className="min-h-screen w-full p-4 pt-16">
           {children}
         </div>
