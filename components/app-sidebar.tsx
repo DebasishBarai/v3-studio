@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Pacifico } from 'next/font/google';
 
 import {
   Sidebar,
@@ -60,6 +61,11 @@ const Badge = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
+const pacifico = Pacifico({
+  weight: '400',
+  subsets: ['latin'],
+})
+
 // Custom menu item component
 const CustomMenuItem = ({ item }: { item: MenuItem }) => {
 
@@ -102,7 +108,7 @@ export function AppSidebar() {
           <Link href="/">
             <Image alt="logo" src="/logo.png" width={80} height={80} />
           </Link>
-          <h1 className="text-2xl font-bold">V3 Studio</h1>
+          <h1 className={`text-2xl font-bold text-yellow-500 ${pacifico.className}`}>V3 Studio</h1>
         </div>
       </SidebarHeader>
 
