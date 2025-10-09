@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'ShortsAI – Instantly Create Viral Videos with AI',
-  description: 'Create viral short videos instantly using AI-powered tools',
+  title: 'V3 Studio – Instantly Create Viral Videos with AI',
+  description: 'Create viral videos and Product Ads instantly using AI-powered tools',
   icons: {
     icon: '/logo.png',
   }

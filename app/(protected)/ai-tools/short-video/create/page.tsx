@@ -195,6 +195,15 @@ export default function VideoCreatorPage() {
               ))}
             </div>
           </div>
+
+          {/* Generate Button */}
+          <button className="w-full bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg p-4 cursor-pointer hover:from-pink-700 hover:to-purple-700 transition shadow-lg">
+            <h2 className="text-xl flex gap-2 items-center justify-center text-white font-semibold">
+              <Sparkles className="w-6 h-6" />
+              Generate Video
+            </h2>
+            <p className="text-white/70 text-sm mt-1">100 Credits to Generate Video</p>
+          </button>
         </div>
 
         {/* Preview Section */}
@@ -242,17 +251,6 @@ export default function VideoCreatorPage() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Generate Button */}
-      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 max-w-md w-full px-4">
-        <button className="w-full bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg p-4 cursor-pointer hover:from-pink-700 hover:to-purple-700 transition shadow-lg">
-          <h2 className="text-xl flex gap-2 items-center justify-center text-white font-semibold">
-            <Sparkles className="w-6 h-6" />
-            Generate Video
-          </h2>
-          <p className="text-white/70 text-sm mt-1">100 Credits to Generate Video</p>
-        </button>
       </div>
     </div>
   );

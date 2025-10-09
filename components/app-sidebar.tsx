@@ -102,7 +102,7 @@ export function AppSidebar() {
           <Link href="/">
             <Image alt="logo" src="/logo.png" width={80} height={80} />
           </Link>
-          <h1 className="text-2xl font-bold">Shorts AI</h1>
+          <h1 className="text-2xl font-bold">V3 Studio</h1>
         </div>
       </SidebarHeader>
 
@@ -164,7 +164,7 @@ export function AppSidebar() {
         {/* User Info Section */}
         <div className="flex gap-3 items-center">
           <UserButton />
-          <h2 className="p-2 text-xs opacity-40">Copyright @AI Shorts</h2>
+          <h2 className="p-2 text-xs opacity-40">Copyright @V3 Studio</h2>
         </div>
       </SidebarFooter>
     </Sidebar>
