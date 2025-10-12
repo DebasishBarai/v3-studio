@@ -1,5 +1,7 @@
 import { v } from "convex/values";
-import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
+import { action, internalMutation, internalQuery, mutation, query } from "./_generated/server";
+import { internal } from "./_generated/api";
+import { Doc } from "./_generated/dataModel";
 
 export const getUser = query({
   args: {},
@@ -19,29 +21,50 @@ export const getUser = query({
   },
 });
 
-export const addUser = mutation({
+export const addUser = action({
   args: {},
-  handler: async (ctx) => {
+  handler: async (ctx): Promise<Doc<'users'> | null | undefined> => {
     const identity = await ctx.auth.getUserIdentity();
 
     if (identity === null) {
       throw new Error("Not authenticated");
     }
 
-    const user = await ctx.db
-      .query('users')
-      .withIndex('by_subject', (q) => q.eq('subject', identity.subject))
-      .first();
+    const user: Doc<'users'> | null = await ctx.runQuery(internal.user.getInternalUser, {
+      subject: identity.subject,
+    });
 
     if (user) {
       return user
     }
 
-    await ctx.db.insert('users', {
-      subject: identity.subject,
-      name: identity.name || 'Anonymous',
-      credits: 10,
+    // Create Polar customer with identity.subject as external customer ID
+    const polarResponse = await fetch('https://sandbox-api.polar.sh/v1/customers', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.POLAR_ORGANIZATION_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: identity.email,
+        name: identity.name || 'Anonymous',
+        external_id: identity.subject,
+      }),
     });
+
+    if (!polarResponse.ok) {
+      throw new Error(`Failed to create Polar customer: ${polarResponse.statusText}`);
+    }
+
+    const polarCustomer = await polarResponse.json();
+
+    const newUser = await ctx.runMutation(internal.user.createInternalUser, {
+      subject: identity.subject,
+      name: identity.name,
+      polarCustomerId: polarCustomer.id,
+    })
+
+    return newUser
   }
 })
 
@@ -65,13 +88,39 @@ export const getCredits = query({
 
 export const getInternalUser = internalQuery({
   args: { subject: v.string() },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<Doc<'users'> | null> => {
     const user = await ctx.db
       .query('users')
       .withIndex('by_subject', (q) => q.eq('subject', args.subject))
       .first();
 
     return user;
+  }
+})
+
+export const createInternalUser = internalMutation({
+  args: {
+    subject: v.string(),
+    name: v.optional(v.string()),
+    polarCustomerId: v.string(),
+  },
+  handler: async (ctx, args) => {
+
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_subject', (q) => q.eq('subject', args.subject))
+      .first();
+
+    if (user) {
+      throw new Error(`User with subject ${args.subject} already exists`);
+    }
+
+    await ctx.db.insert('users', {
+      subject: args.subject,
+      name: args.name ?? 'Anonymous',
+      credits: 10,
+      polarCustomerId: args.polarCustomerId,
+    });
   }
 })
 

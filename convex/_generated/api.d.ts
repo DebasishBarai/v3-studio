@@ -17,6 +17,7 @@ import type * as ad from "../ad.js";
 import type * as generateAdImage from "../generateAdImage.js";
 import type * as generateAdVideo from "../generateAdVideo.js";
 import type * as http from "../http.js";
+import type * as polar from "../polar.js";
 import type * as storage from "../storage.js";
 import type * as suggestion from "../suggestion.js";
 import type * as user from "../user.js";
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   generateAdImage: typeof generateAdImage;
   generateAdVideo: typeof generateAdVideo;
   http: typeof http;
+  polar: typeof polar;
   storage: typeof storage;
   suggestion: typeof suggestion;
   user: typeof user;

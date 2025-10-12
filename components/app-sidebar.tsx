@@ -28,7 +28,7 @@ import {
   Coins,
   LucideIcon,
 } from "lucide-react";
-import { useMutation, useQuery } from "convex/react";
+import { useAction, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { usePathname } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
@@ -90,7 +90,7 @@ export function AppSidebar() {
 
   const user = useQuery(api.user.getUser)
 
-  const addUser = useMutation(api.user.addUser)
+  const addUser = useAction(api.user.addUser)
 
   useEffect(() => {
     if (!user) {

@@ -6,6 +6,7 @@ export default defineSchema({
     name: v.string(),
     credits: v.number(),
     subject: v.string(),
+    polarCustomerId: v.string(),
   }).index('by_subject', ['subject']),
   ads: defineTable({
     userId: v.id('users'),
