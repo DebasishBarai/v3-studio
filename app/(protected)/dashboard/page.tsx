@@ -3,8 +3,12 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 export default function DashboardPage() {
+
+  const user = useQuery(api.user.getUser)
 
   return (
     <div className="max-w-full mx-auto">
@@ -24,23 +28,25 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        <div className="flex-1 p-6 bg-gradient-to-r from-[#2D2F36] via-[#202227] to-[#1B1C20] rounded-xl shadow-md border border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div>
-            <h3 className="text-xl font-semibold text-white flex items-center gap-2">
-              🔥 Unlock Pro Features
-            </h3>
-            <p className="text-sm text-gray-300 mt-2 leading-relaxed">
-              Get <span className="font-semibold text-white">exclusive tools</span>, <span className="font-semibold text-white">faster rendering</span>, and <span className="font-semibold text-white">discounted credits</span>.
-              <br />
-              Upgrade now and save <span className="font-bold text-yellow-400">20%</span> 🎉
-            </p>
+        {!user?.subscriptionProductId && (
+          <div className="flex-1 p-6 bg-gradient-to-r from-[#2D2F36] via-[#202227] to-[#1B1C20] rounded-xl shadow-md border border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+              <h3 className="text-xl font-semibold text-white flex items-center gap-2">
+                🔥 Unlock Pro Features
+              </h3>
+              <p className="text-sm text-gray-300 mt-2 leading-relaxed">
+                Get <span className="font-semibold text-white">exclusive tools</span>, <span className="font-semibold text-white">faster rendering</span>, and <span className="font-semibold text-white">discounted credits</span>.
+                <br />
+                Upgrade now and save <span className="font-bold text-yellow-400">20%</span> 🎉
+              </p>
+            </div>
+            <Link href="/billing">
+              <Button className="bg-yellow-400 text-black hover:bg-yellow-500 shadow-md hover:shadow-yellow-500/30 transition-all">
+                🚀 Upgrade Now
+              </Button>
+            </Link>
           </div>
-          <Link href="/pricing">
-            <Button className="bg-yellow-400 text-black hover:bg-yellow-500 shadow-md hover:shadow-yellow-500/30 transition-all">
-              🚀 Upgrade Now
-            </Button>
-          </Link>
-        </div>
+        )}
       </div>
 
       {/* Features Grid */}

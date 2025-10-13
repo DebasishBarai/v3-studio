@@ -66,7 +66,7 @@ const subscriptionTiers: PricingTier[] = [
       'No Watermark',
       'Project autosave & exports',
     ],
-    productId: process.env.NEXT_PUBLIC_CREATOR_PLAN__PRODUCT_ID as string,
+    productId: process.env.NEXT_PUBLIC_CREATOR_PLAN_PRODUCT_ID as string,
   },
   {
     name: 'Pro Plan',
@@ -241,7 +241,7 @@ export default function PricingPage() {
                         }`}
                       onClick={async () => await openCheckout({ products: [tier.productId] })}
                     >
-                      Subscribe
+                      {user?.subscriptionProductId === tier.productId ? 'Subscribed' : 'Subscribe'}
                     </button>
                   </div>
                 </div>
