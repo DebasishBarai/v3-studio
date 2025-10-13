@@ -51,7 +51,7 @@ const creativeToolsItems: MenuItem[] = [
 const userItems: MenuItem[] = [
   { title: "My Projects", url: "/projects", icon: Folder },
   { title: "Settings", url: "/settings", icon: Settings },
-  { title: "Pricing", url: "/pricing", icon: CreditCard, badge: "Discount" },
+  { title: "Billing", url: "/billing", icon: CreditCard, badge: "Discount" },
 ];
 
 // Badge component
@@ -160,7 +160,7 @@ export function AppSidebar() {
             <Coins className="h-4 w-4 text-yellow-400" />
             {`Remaining Credits: ${credits}`}
           </div>
-          <Link href="/pricing">
+          <Link href="/billing">
             <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors bg-primary text-primary-foreground shadow hover:bg-primary/90 h-8 rounded-md px-3 text-xs w-full cursor-pointer">
               Add Credits
             </button>

@@ -86,6 +86,50 @@ export const getCredits = query({
   },
 });
 
+export const updateUserSubscription = action({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    const user: Doc<'users'> | null = await ctx.runQuery(internal.user.getInternalUser, {
+      subject: identity.subject,
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // get polar customer subscription state
+    const polarResponse = await fetch(`https://sandbox-api.polar.sh/v1/customers/${user.polarCustomerId}/state`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${process.env.POLAR_ORGANIZATION_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (!polarResponse.ok) {
+      throw new Error(`Failed to get Polar customer subscription state: ${polarResponse.statusText}`);
+    }
+
+    const polarCustomerState = await polarResponse.json();
+
+    // @ts-expect-error - subscription state is not typed
+    const activeSubscriptionProductId = polarCustomerState.active_subscriptions.find(s => s.status === 'active').product_id
+
+    await ctx.runMutation(internal.user.updateInternalUser, {
+      subject: identity.subject,
+      update: {
+        subscriptionProductId: activeSubscriptionProductId,
+      }
+    })
+  },
+})
+
 export const getInternalUser = internalQuery({
   args: { subject: v.string() },
   handler: async (ctx, args): Promise<Doc<'users'> | null> => {
@@ -184,3 +228,34 @@ export const decreaseInternalCredits = internalMutation({
     }
   }
 })
+
+export const updateInternalUser = internalMutation({
+  args: {
+    subject: v.string(),
+    update: v.object({
+      credits: v.optional(v.number()),
+      subscriptionProductId: v.optional(v.string()),
+    }),
+  },
+  handler: async (ctx, args) => {
+
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_subject', (q) => q.eq('subject', args.subject))
+      .first();
+
+    if (!user) {
+      throw new Error(`User with subject ${args.subject} not found`);
+    }
+
+    // Build the patch object, only including fields that are not null or undefined
+    const patch: Record<string, any> = {};
+    if (args.update.credits != null) patch.credits = args.update.credits;
+    if (args.update.subscriptionProductId != null) patch.subscriptionProductId = args.update.subscriptionProductId;
+
+    // Only patch if there are fields to update
+    if (Object.keys(patch).length > 0) {
+      await ctx.db.patch(user._id, patch);
+    }
+  }
+});
