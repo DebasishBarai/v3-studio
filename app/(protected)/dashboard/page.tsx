@@ -5,10 +5,37 @@ import Link from "next/link";
 import Image from "next/image";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useEffect } from "react";
+import { useMutation } from "convex/react";
+import { promptVariations } from "@/lib/objects";
 
 export default function DashboardPage() {
 
   const user = useQuery(api.user.getUser)
+
+  /*
+  const seedPrompt = useMutation(api.prompt.seedPrompt)
+
+
+  useEffect(() => {
+    const seedAllPrompts = async () => {
+      try {
+        // Sequential version (safer, avoids rate limits)
+        for (const [category, prompts] of Object.entries(promptVariations)) {
+          for (const prompt of prompts) {
+            await seedPrompt({ prompt, category });
+          }
+        }
+
+        console.log("✅ All prompts seeded successfully!");
+      } catch (err) {
+        console.error("❌ Error seeding prompts:", err);
+      }
+    };
+
+    seedAllPrompts();
+  }, [seedPrompt]);
+*/
 
   return (
     <div className="max-w-full mx-auto">

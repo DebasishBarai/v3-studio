@@ -1,17 +1,19 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Film, PenLine, Music, Mic, Tv, Sparkles, Play, CirclePlay, Pause } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function VideoCreatorPage() {
-  const [script, setScript] = useState('');
+  const [prompt, setPrompt] = useState('');
   const [selectedStyle, setSelectedStyle] = useState<number | null>(null);
   const [selectedMusic, setSelectedMusic] = useState<number | null>(null);
   const [selectedVoice, setSelectedVoice] = useState<number | null>(null);
   const [playingMusic, setPlayingMusic] = useState<number | null>(null);
   const [showAIWriter, setShowAIWriter] = useState(false);
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const styles = [
     { id: 1, name: 'Pixar 3D', image: '/short-video/style/pixar.webp' },
@@ -46,6 +48,15 @@ export default function VideoCreatorPage() {
     { id: 8, name: 'Coral', gender: 'Female' }
   ];
 
+  useEffect(() => {
+    if (textareaRef.current) {
+      // Reset height to auto to get the correct scrollHeight
+      textareaRef.current.style.height = 'auto';
+      // Set height to match content
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 10}px`;
+    }
+  }, [prompt]);
+
   const toggleMusicPlay = (id: number) => {
     setPlayingMusic(playingMusic === id ? null : id);
   };
@@ -62,17 +73,17 @@ export default function VideoCreatorPage() {
               Create Your Short Video
             </h1>
             <p className="text-gray-400 mt-1">
-              Write your script, choose a style, add music, and select a voice to generate your video.
+              Write your prompt, choose a style, add music, and select a voice to generate your video.
             </p>
           </div>
 
-          {/* Script Section */}
+          {/* Prompt Section */}
           <div className="p-6 border border-zinc-800 rounded-xl bg-zinc-900/50">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-2">
                 <PenLine className="w-5 h-5 text-pink-500" />
                 <div>
-                  <h2 className="font-bold text-xl">Script</h2>
+                  <h2 className="font-bold text-xl">Prompt</h2>
                   <p className="text-gray-400 text-sm">Write your own or generate with AI.</p>
                 </div>
               </div>
@@ -81,14 +92,15 @@ export default function VideoCreatorPage() {
                 className="flex items-center gap-2 px-4 py-2 border border-zinc-700 rounded-md hover:bg-zinc-800 transition"
               >
                 <Sparkles className="w-4 h-4" />
-                AI Script Writer
+                AI Prompt Writer
               </button>
             </div>
             <textarea
-              value={script}
-              onChange={(e) => setScript(e.target.value)}
-              className="w-full h-[200px] bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
-              placeholder="Enter your video script here..."
+              ref={textareaRef}
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
+              placeholder="Enter your video prompt here or let AI generate it for you..."
             />
           </div>
 
@@ -213,7 +225,7 @@ export default function VideoCreatorPage() {
             Preview
           </h2>
           <p className="text-gray-400 mt-1">Your video preview will appear here.</p>
-          <div className="mt-4 border border-zinc-800 rounded-xl h-[300px] flex items-center justify-center text-gray-500 bg-zinc-900/30">
+          <div className="mt-4 border border-zinc-800 rounded-xl min-h-[300px] h-[80vh] flex items-center justify-center text-gray-500 bg-zinc-900/30">
             <div className="text-center">
               <Film className="w-12 h-12 mx-auto mb-2 opacity-50" />
               <p>Video Preview Placeholder</p>
@@ -225,9 +237,9 @@ export default function VideoCreatorPage() {
             <h3 className="font-semibold mb-3">Configuration</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-400">Script:</span>
-                <span className={script ? 'text-green-400' : 'text-gray-500'}>
-                  {script ? '✓ Ready' : 'Not set'}
+                <span className="text-gray-400">Prompt:</span>
+                <span className={prompt ? 'text-green-400' : 'text-gray-500'}>
+                  {prompt ? '✓ Ready' : 'Not set'}
                 </span>
               </div>
               <div className="flex justify-between">

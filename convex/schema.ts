@@ -30,4 +30,8 @@ export default defineSchema({
     createdAt: v.number(),
   }).index('by_userId', ['userId'])
     .index('by_createdAt', ['createdAt']),
+  promptVariations: defineTable({
+    category: v.string(), // e.g., "randomAiStory", "scaryStay", etc.
+    prompt: v.string(), // prompt variations
+  }).index("by_category", ["category"]),
 });
