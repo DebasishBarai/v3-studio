@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Film, PenLine, Music, Mic, Tv, Sparkles, Play, CirclePlay, Pause } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useConvex, useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 export default function VideoCreatorPage() {
   const [prompt, setPrompt] = useState('');
@@ -11,7 +13,8 @@ export default function VideoCreatorPage() {
   const [selectedMusic, setSelectedMusic] = useState<number | null>(null);
   const [selectedVoice, setSelectedVoice] = useState<number | null>(null);
   const [playingMusic, setPlayingMusic] = useState<number | null>(null);
-  const [showAIWriter, setShowAIWriter] = useState(false);
+
+  const convex = useConvex()
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -61,6 +64,17 @@ export default function VideoCreatorPage() {
     setPlayingMusic(playingMusic === id ? null : id);
   };
 
+  const getRandomPrompt = async () => {
+    const randomPrompt = await convex.query(api.prompt.getRandomPromptVariation, {
+      nounce: Math.random(),
+    });
+
+    if (randomPrompt) {
+      setPrompt(randomPrompt.prompt);
+    }
+  };
+
+
   return (
     <div className="min-h-screen bg-black text-white p-4 md:p-10">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto">
@@ -88,8 +102,8 @@ export default function VideoCreatorPage() {
                 </div>
               </div>
               <button
-                onClick={() => setShowAIWriter(!showAIWriter)}
-                className="flex items-center gap-2 px-4 py-2 border border-zinc-700 rounded-md hover:bg-zinc-800 transition"
+                onClick={getRandomPrompt}
+                className="flex items-center gap-2 px-4 py-2 border border-zinc-700 cursor-pointer rounded-md hover:bg-zinc-800 transition"
               >
                 <Sparkles className="w-4 h-4" />
                 AI Prompt Writer

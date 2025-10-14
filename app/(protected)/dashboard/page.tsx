@@ -16,6 +16,8 @@ export default function DashboardPage() {
   /*
   const seedPrompt = useMutation(api.prompt.seedPrompt)
 
+  const removePromptVariationDuplicates = useMutation(api.prompt.removePromptVariationDuplicates)
+
 
   useEffect(() => {
     const seedAllPrompts = async () => {
@@ -27,6 +29,8 @@ export default function DashboardPage() {
           }
         }
 
+        await removePromptVariationDuplicates();
+
         console.log("✅ All prompts seeded successfully!");
       } catch (err) {
         console.error("❌ Error seeding prompts:", err);
@@ -34,7 +38,8 @@ export default function DashboardPage() {
     };
 
     seedAllPrompts();
-  }, [seedPrompt]);
+  }, [seedPrompt, removePromptVariationDuplicates]);
+
 */
 
   return (
