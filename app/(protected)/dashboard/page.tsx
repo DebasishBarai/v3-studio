@@ -13,7 +13,6 @@ export default function DashboardPage() {
 
   const user = useQuery(api.user.getUser)
 
-  /*
   const seedPrompt = useMutation(api.prompt.seedPrompt)
 
   const removePromptVariationDuplicates = useMutation(api.prompt.removePromptVariationDuplicates)
@@ -40,7 +39,6 @@ export default function DashboardPage() {
     seedAllPrompts();
   }, [seedPrompt, removePromptVariationDuplicates]);
 
-*/
 
   return (
     <div className="max-w-full mx-auto">
