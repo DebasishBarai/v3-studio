@@ -39,7 +39,7 @@ export const addUser = action({
     }
 
     // Create Polar customer with identity.subject as external customer ID
-    const polarResponse = await fetch('https://sandbox-api.polar.sh/v1/customers', {
+    const polarResponse = await fetch(`${process.env.POLAR_BASE_URL}/v1/customers`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.POLAR_ORGANIZATION_TOKEN}`,
@@ -104,7 +104,7 @@ export const updateUserSubscription = action({
     }
 
     // get polar customer subscription state
-    const polarResponse = await fetch(`https://sandbox-api.polar.sh/v1/customers/${user.polarCustomerId}/state`, {
+    const polarResponse = await fetch(`${process.env.POLAR_BASE_URL}/v1/customers/${user.polarCustomerId}/state`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${process.env.POLAR_ORGANIZATION_TOKEN}`,

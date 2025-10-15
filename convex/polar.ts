@@ -19,7 +19,7 @@ export const getCustomerPortalUrl = action({
       throw new Error("User not found");
     }
     // get polar customer portal url
-    const polarResponse = await fetch('https://sandbox-api.polar.sh/v1/customer-sessions', {
+    const polarResponse = await fetch('${process.env.POLAR_BASE_URL}/v1/customer-sessions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.POLAR_ORGANIZATION_TOKEN}`,
@@ -62,7 +62,7 @@ export const getCustomerCheckoutUrl = action({
     }
 
     // get polar customer checkout url
-    const polarResponse = await fetch('https://sandbox-api.polar.sh/v1/checkouts/', {
+    const polarResponse = await fetch('${process.env.POLAR_BASE_URL}/v1/checkouts', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.POLAR_ORGANIZATION_TOKEN}`,
