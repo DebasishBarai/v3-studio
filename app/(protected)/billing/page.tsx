@@ -22,6 +22,7 @@ interface CreditPack {
   price: number;
   badge: string;
   bonus?: number;
+  productId: string;
 }
 
 const subscriptionTiers: PricingTier[] = [
@@ -85,10 +86,10 @@ const subscriptionTiers: PricingTier[] = [
 ];
 
 const creditPacks: CreditPack[] = [
-  { credits: 50, price: 10, badge: '' },
-  { credits: 100, price: 20, badge: 'Flash Sale', bonus: 20 },
-  { credits: 150, price: 30, badge: 'Best Deal', bonus: 50 },
-  { credits: 250, price: 50, badge: 'Top Value', bonus: 100 },
+  { credits: 50, price: 9.99, badge: '', productId: process.env.NEXT_PUBLIC_CREDITS_50_PRODUCT_ID as string },
+  { credits: 100, price: 19.99, badge: 'Flash Sale', bonus: 20, productId: process.env.NEXT_PUBLIC_CREDITS_100_PRODUCT_ID as string },
+  { credits: 150, price: 29.99, badge: 'Best Deal', bonus: 50, productId: process.env.NEXT_PUBLIC_CREDITS_150_PRODUCT_ID as string },
+  { credits: 250, price: 49.99, badge: 'Top Value', bonus: 100, productId: process.env.NEXT_PUBLIC_CREDITS_250_PRODUCT_ID as string },
 ];
 
 export default function PricingPage() {
@@ -289,7 +290,10 @@ export default function PricingPage() {
                   {/* Price and Button */}
                   <div className="mt-6 flex items-center justify-between">
                     <div className="text-xl font-semibold">${pack.price}</div>
-                    <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 h-8 px-4 text-sm">
+                    <button
+                      className="inline-flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap rounded-md font-medium transition-colors bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 h-8 px-4 text-sm"
+                      onClick={async () => await openCheckout({ products: [pack.productId] })}
+                    >
                       Purchase Now
                     </button>
                   </div>
