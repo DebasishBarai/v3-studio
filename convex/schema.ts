@@ -34,4 +34,8 @@ export default defineSchema({
     category: v.string(), // e.g., "randomAiStory", "scaryStay", etc.
     prompt: v.string(), // prompt variations
   }).index("by_category", ["category"]),
-});
+  orders: defineTable({
+    userId: v.id('users'),
+    orderId: v.string(),
+  }).index('by_orderId', ['orderId'])
+})
