@@ -1,6 +1,46 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
+export const voiceValidtaor = v.union(
+  v.object({ name: v.literal('Alloy'), gender: v.literal('Female') }),
+  v.object({ name: v.literal('Nova'), gender: v.literal('Female') }),
+  v.object({ name: v.literal('Onyx'), gender: v.literal('Male') }),
+  v.object({ name: v.literal('Sage'), gender: v.literal('Female') }),
+  v.object({ name: v.literal('Shimmer'), gender: v.literal('Female') }),
+  v.object({ name: v.literal('Verse'), gender: v.literal('Male') }),
+  v.object({ name: v.literal('Ballad'), gender: v.literal('Male') }),
+  v.object({ name: v.literal('Coral'), gender: v.literal('Female') }),
+)
+
+export const styleValidator = v.union(
+  v.literal('Pixar 3D'),
+  v.literal('Cinematic'),
+  v.literal('Ghibli'),
+  v.literal('Anime'),
+  v.literal('Cyberpunk'),
+  v.literal('Watercolor'),
+)
+
+export const musicValidator = v.union(
+  v.literal('Else - Paris'),
+  v.literal('Für Elise'),
+  v.literal('Prelude in E minor (Op. 28 n°4)'),
+  v.literal('Eureka'),
+  v.literal('Tension In The Air'),
+  v.literal('Winter'),
+  v.literal('Bladerunner 2049'),
+  v.literal('Snowfall'),
+  v.literal('Another love'),
+  v.literal('String Arpeggios'),
+)
+
+// Video aspect ratios
+export const aspectRatioValidator = v.union(
+  v.literal('16:9'),
+  v.literal('9:16'),
+  v.literal('1:1'),
+)
+
 export default defineSchema({
   users: defineTable({
     name: v.string(),
@@ -37,5 +77,54 @@ export default defineSchema({
   orders: defineTable({
     userId: v.id('users'),
     orderId: v.string(),
-  }).index('by_orderId', ['orderId'])
+  }).index('by_orderId', ['orderId']),
+  videos: defineTable({
+    userId: v.id('users'),
+
+    prompt: v.string(),
+    title: v.string(),
+    style: styleValidator,
+    music: musicValidator,
+    voice: voiceValidtaor,
+    durationInSecs: v.number(), // Total video length in seconds
+    aspectratio: aspectRatioValidator,
+
+    videoUrl: v.optional(v.string()),
+    thumbnailUrl: v.optional(v.string()),
+
+    characters: v.array(v.object({
+      name: v.string(),
+      imagePrompt: v.string(),
+      imageUrl: v.string(),
+    })),
+    scenes: v.array(v.object({
+      index: v.number(),
+      imagePrompt: v.string(),
+      imageUrl: v.optional(v.string()),
+      videoUrl: v.optional(v.string()),
+
+      angles: v.optional(v.array(v.object({
+        index: v.number(),
+        angleVideoPrompt: v.string(),
+        angleVideoUrl: v.optional(v.string()),
+      }))),
+    })),
+
+    // Error handling
+    error: v.optional(v.object({
+      message: v.string(),
+      step: v.string(),
+      timestamp: v.number(),
+    })),
+
+    // Generation settings
+    numberOfImagesPerPrompt: v.number(), // How many variations to generate
+    generateMultipleAngles: v.boolean(), // Whether to create extra angles
+
+    // Usage tracking
+    creditsUsed: v.optional(v.number()),
+    imagesGenerated: v.optional(v.number()),
+    videosGenerated: v.optional(v.number()),
+  }),
 })
+

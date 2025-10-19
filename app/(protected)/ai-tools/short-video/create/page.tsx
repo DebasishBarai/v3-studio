@@ -79,7 +79,7 @@ export default function VideoCreatorPage() {
     <div className="min-h-screen bg-black text-white p-4 md:p-10">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto">
         {/* Main Content */}
-        <div className="md:col-span-2 space-y-6">
+        <div className="md:col-span-3 space-y-6">
           {/* Header */}
           <div>
             <h1 className="font-bold text-2xl flex items-center gap-2">
@@ -222,30 +222,6 @@ export default function VideoCreatorPage() {
             </div>
           </div>
 
-          {/* Generate Button */}
-          <button className="w-full bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg p-4 cursor-pointer hover:from-pink-700 hover:to-purple-700 transition shadow-lg">
-            <h2 className="text-xl flex gap-2 items-center justify-center text-white font-semibold">
-              <Sparkles className="w-6 h-6" />
-              Generate Video
-            </h2>
-            <p className="text-white/70 text-sm mt-1">100 Credits to Generate Video</p>
-          </button>
-        </div>
-
-        {/* Preview Section */}
-        <div className="col-span-1">
-          <h2 className="font-bold text-xl flex items-center gap-2">
-            <Tv className="w-5 h-5 text-yellow-500" />
-            Preview
-          </h2>
-          <p className="text-gray-400 mt-1">Your video preview will appear here.</p>
-          <div className="mt-4 border border-zinc-800 rounded-xl min-h-[300px] h-[80vh] flex items-center justify-center text-gray-500 bg-zinc-900/30">
-            <div className="text-center">
-              <Film className="w-12 h-12 mx-auto mb-2 opacity-50" />
-              <p>Video Preview Placeholder</p>
-            </div>
-          </div>
-
           {/* Configuration Summary */}
           <div className="mt-6 p-4 border border-zinc-800 rounded-xl bg-zinc-900/50">
             <h3 className="font-semibold mb-3">Configuration</h3>
@@ -276,6 +252,15 @@ export default function VideoCreatorPage() {
               </div>
             </div>
           </div>
+
+          {/* Generate Button */}
+          <button className="w-full bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg p-4 cursor-pointer hover:from-pink-700 hover:to-purple-700 transition shadow-lg">
+            <h2 className="text-xl flex gap-2 items-center justify-center text-white font-semibold">
+              <Sparkles className="w-6 h-6" />
+              Generate Video
+            </h2>
+            <p className="text-white/70 text-sm mt-1">100 Credits to Generate Video</p>
+          </button>
         </div>
       </div>
     </div>
