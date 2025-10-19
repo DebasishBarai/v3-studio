@@ -13,6 +13,8 @@ export default function VideoCreatorPage() {
   const [selectedMusic, setSelectedMusic] = useState<number | null>(null);
   const [selectedVoice, setSelectedVoice] = useState<number | null>(null);
   const [playingMusic, setPlayingMusic] = useState<number | null>(null);
+  const [selectedAspectRatio, setSelectedAspectRatio] = useState<string | null>(null);
+  const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
 
   const convex = useConvex()
 
@@ -25,6 +27,20 @@ export default function VideoCreatorPage() {
     { id: 4, name: 'Anime', image: '/short-video/style/anime.webp' },
     { id: 5, name: 'Cyberpunk', image: '/short-video/style/cyberpunk.webp' },
     { id: 6, name: 'Watercolor', image: '/short-video/style/watercolor.webp' }
+  ];
+
+  const aspectRatios = [
+    { id: '16:9', label: '16:9', description: 'Landscape' },
+    { id: '9:16', label: '9:16', description: 'Portrait' },
+    { id: '1:1', label: '1:1', description: 'Square' },
+  ];
+
+  const durations = [
+    { id: 15, label: '15s', description: 'Quick' },
+    { id: 30, label: '30s', description: 'Short' },
+    { id: 60, label: '60s', description: 'Standard' },
+    { id: 90, label: '90s', description: 'Extended' },
+    { id: 120, label: '120s', description: 'Long' },
   ];
 
   const music = [
@@ -150,6 +166,54 @@ export default function VideoCreatorPage() {
             </div>
           </div>
 
+          {/* Aspect Ratio Section */}
+          <div className="p-6 border border-zinc-800 rounded-xl bg-zinc-900/50">
+            <div className="flex items-center gap-2 mb-2">
+              <Tv className="w-5 h-5 text-yellow-500" />
+              <h2 className="font-bold text-xl">Aspect Ratio</h2>
+            </div>
+            <p className="text-gray-400 mb-4">Choose the video dimensions.</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {aspectRatios.map((ratio) => (
+                <button
+                  key={ratio.id}
+                  onClick={() => setSelectedAspectRatio(ratio.id)}
+                  className={`bg-zinc-900 rounded-lg border p-4 text-center transition ${selectedAspectRatio === ratio.id
+                    ? 'border-yellow-500 bg-yellow-500/10'
+                    : 'border-zinc-800 hover:border-yellow-400'
+                    }`}
+                >
+                  <p className="font-semibold text-lg">{ratio.label}</p>
+                  <p className="text-xs text-gray-400 mt-1">{ratio.description}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Duration Section */}
+          <div className="p-6 border border-zinc-800 rounded-xl bg-zinc-900/50">
+            <div className="flex items-center gap-2 mb-2">
+              <Film className="w-5 h-5 text-orange-500" />
+              <h2 className="font-bold text-xl">Duration</h2>
+            </div>
+            <p className="text-gray-400 mb-4">Set the length of your video.</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {durations.map((duration) => (
+                <button
+                  key={duration.id}
+                  onClick={() => setSelectedDuration(duration.id)}
+                  className={`bg-zinc-900 rounded-lg border p-4 text-center transition ${selectedDuration === duration.id
+                    ? 'border-orange-500 bg-orange-500/10'
+                    : 'border-zinc-800 hover:border-orange-400'
+                    }`}
+                >
+                  <p className="font-semibold text-lg">{duration.label}</p>
+                  <p className="text-xs text-gray-400 mt-1">{duration.description}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Background Music Section */}
           <div className="p-6 border border-zinc-800 rounded-xl bg-zinc-900/50">
             <div className="flex items-center gap-2 mb-2">
@@ -236,6 +300,18 @@ export default function VideoCreatorPage() {
                 <span className="text-gray-400">Style:</span>
                 <span className={selectedStyle ? 'text-green-400' : 'text-gray-500'}>
                   {selectedStyle ? styles.find(s => s.id === selectedStyle)?.name : 'Not set'}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Aspect Ratio:</span>
+                <span className={selectedAspectRatio ? 'text-green-400' : 'text-gray-500'}>
+                  {selectedAspectRatio || 'Not set'}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Duration:</span>
+                <span className={selectedDuration ? 'text-green-400' : 'text-gray-500'}>
+                  {selectedDuration ? `${selectedDuration}s` : 'Not set'}
                 </span>
               </div>
               <div className="flex justify-between">
