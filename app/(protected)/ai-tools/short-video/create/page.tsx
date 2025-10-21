@@ -4,8 +4,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Film, PenLine, Music, Mic, Tv, Sparkles, Play, CirclePlay, Pause } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useConvex, useQuery } from 'convex/react';
+import { useConvex } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import { toast } from 'sonner';
+import { aspectRatioValidator, musicValidator, styleValidator, voiceValidtaor } from '@/convex/schema';
+import { Infer } from 'convex/values';
+import { useRouter } from 'next/navigation';
+
+interface VoiceType {
+  id: number;
+  voice: Infer<typeof voiceValidtaor>;
+}
 
 export default function VideoCreatorPage() {
   const [prompt, setPrompt] = useState('');
@@ -16,6 +25,7 @@ export default function VideoCreatorPage() {
   const [selectedAspectRatio, setSelectedAspectRatio] = useState<string | null>(null);
   const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
 
+  const router = useRouter()
   const convex = useConvex()
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -43,7 +53,7 @@ export default function VideoCreatorPage() {
     { id: 120, label: '120s', description: 'Long' },
   ];
 
-  const music = [
+  const musics = [
     { id: 1, title: 'Else - Paris', url: '#' },
     { id: 2, title: 'Für Elise', url: '#' },
     { id: 3, title: 'Prelude in E minor (Op. 28 n°4)', url: '#' },
@@ -56,15 +66,15 @@ export default function VideoCreatorPage() {
     { id: 10, title: 'String Arpeggios', url: '#' }
   ];
 
-  const voices = [
-    { id: 1, name: 'Alloy', gender: 'Female' },
-    { id: 2, name: 'Nova', gender: 'Female' },
-    { id: 3, name: 'Onyx', gender: 'Male' },
-    { id: 4, name: 'Sage', gender: 'Female' },
-    { id: 5, name: 'Shimmer', gender: 'Female' },
-    { id: 6, name: 'Verse', gender: 'Male' },
-    { id: 7, name: 'Ballad', gender: 'Male' },
-    { id: 8, name: 'Coral', gender: 'Female' }
+  const voices: VoiceType[] = [
+    { id: 1, voice: { name: 'Alloy', gender: 'Female' } },
+    { id: 2, voice: { name: 'Nova', gender: 'Female' } },
+    { id: 3, voice: { name: 'Onyx', gender: 'Male' } },
+    { id: 4, voice: { name: 'Sage', gender: 'Female' } },
+    { id: 5, voice: { name: 'Shimmer', gender: 'Female' } },
+    { id: 6, voice: { name: 'Verse', gender: 'Male' } },
+    { id: 7, voice: { name: 'Ballad', gender: 'Male' } },
+    { id: 8, voice: { name: 'Coral', gender: 'Female' } }
   ];
 
   useEffect(() => {
@@ -90,6 +100,28 @@ export default function VideoCreatorPage() {
     }
   };
 
+  const generateVideo = async () => {
+    if (!prompt || !selectedStyle || !selectedMusic || !selectedVoice || !selectedAspectRatio || !selectedDuration) {
+      toast.error('Please fill in all the required fields');
+      return;
+    }
+    try {
+      const videoId = await convex.mutation(api.video.createVideo, {
+        prompt,
+        style: styles.find(s => s.id === selectedStyle)!.name as Infer<typeof styleValidator>,
+        music: musics.find(s => s.id === selectedMusic)!.title as Infer<typeof musicValidator>,
+        voice: voices.find(s => s.id === selectedVoice)!.voice as Infer<typeof voiceValidtaor>,
+        aspectRatio: aspectRatios.find(s => s.id === selectedAspectRatio)!.label as Infer<typeof aspectRatioValidator>,
+        durationInSecs: selectedDuration,
+        numberOfImagesPerPrompt: 1,
+        generateMultipleAngles: false,
+      });
+
+      router.push(`/ai-tools/short-video/editor/${videoId}`)
+    } catch (error) {
+      toast.error('An error occurred while connecting to the backend');
+    }
+  }
 
   return (
     <div className="min-h-screen bg-black text-white p-4 md:p-10">
@@ -222,7 +254,7 @@ export default function VideoCreatorPage() {
             </div>
             <p className="text-gray-400 mb-4">Choose a soundtrack to set the mood.</p>
             <div className="space-y-3 max-h-[350px] overflow-auto">
-              {music.map((track) => (
+              {musics.map((track) => (
                 <div
                   key={track.id}
                   className={`flex justify-between items-center bg-zinc-900 border rounded-lg p-3 ${selectedMusic === track.id ? 'border-blue-500' : 'border-zinc-800'
@@ -265,11 +297,11 @@ export default function VideoCreatorPage() {
             </div>
             <p className="text-gray-400 mb-4">Select a voice for narration.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[300px] overflow-auto">
-              {voices.map((voice) => (
+              {voices.map((e) => (
                 <button
-                  key={voice.id}
-                  onClick={() => setSelectedVoice(voice.id)}
-                  className={`bg-zinc-900 rounded-lg border p-3 flex gap-3 items-center transition ${selectedVoice === voice.id
+                  key={e.id}
+                  onClick={() => setSelectedVoice(e.id)}
+                  className={`bg-zinc-900 rounded-lg border p-3 flex gap-3 items-center transition ${selectedVoice === e.id
                     ? 'border-green-500'
                     : 'border-zinc-800 hover:border-pink-400'
                     }`}
@@ -278,8 +310,8 @@ export default function VideoCreatorPage() {
                     <CirclePlay className="w-5 h-5" />
                   </button>
                   <div className="text-left">
-                    <p className="font-semibold text-sm">{voice.name}</p>
-                    <p className="text-xs text-gray-400">{voice.gender}</p>
+                    <p className="font-semibold text-sm">{e.voice.name}</p>
+                    <p className="text-xs text-gray-400">{e.voice.gender}</p>
                   </div>
                 </button>
               ))}
@@ -323,14 +355,17 @@ export default function VideoCreatorPage() {
               <div className="flex justify-between">
                 <span className="text-gray-400">Voice:</span>
                 <span className={selectedVoice ? 'text-green-400' : 'text-gray-500'}>
-                  {selectedVoice ? voices.find(v => v.id === selectedVoice)?.name : 'Not set'}
+                  {selectedVoice ? voices.find(v => v.id === selectedVoice)?.voice.name : 'Not set'}
                 </span>
               </div>
             </div>
           </div>
 
           {/* Generate Button */}
-          <button className="w-full bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg p-4 cursor-pointer hover:from-pink-700 hover:to-purple-700 transition shadow-lg">
+          <button
+            className="w-full bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg p-4 cursor-pointer hover:from-pink-700 hover:to-purple-700 transition shadow-lg"
+            onClick={generateVideo}
+          >
             <h2 className="text-xl flex gap-2 items-center justify-center text-white font-semibold">
               <Sparkles className="w-6 h-6" />
               Generate Video

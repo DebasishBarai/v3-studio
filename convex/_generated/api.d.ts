@@ -18,6 +18,7 @@ import type * as prompt from "../prompt.js";
 import type * as storage from "../storage.js";
 import type * as suggestion from "../suggestion.js";
 import type * as user from "../user.js";
+import type * as video from "../video.js";
 
 import type {
   ApiFromModules,
@@ -44,6 +45,7 @@ declare const fullApi: ApiFromModules<{
   storage: typeof storage;
   suggestion: typeof suggestion;
   user: typeof user;
+  video: typeof video;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
 

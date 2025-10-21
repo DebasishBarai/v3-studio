@@ -82,12 +82,12 @@ export default defineSchema({
     userId: v.id('users'),
 
     prompt: v.string(),
-    title: v.string(),
+    title: v.optional(v.string()),
     style: styleValidator,
     music: musicValidator,
     voice: voiceValidtaor,
     durationInSecs: v.number(), // Total video length in seconds
-    aspectratio: aspectRatioValidator,
+    aspectRatio: aspectRatioValidator,
 
     videoUrl: v.optional(v.string()),
     thumbnailUrl: v.optional(v.string()),
