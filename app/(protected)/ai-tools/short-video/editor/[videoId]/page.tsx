@@ -1,12 +1,12 @@
 interface VideoEditorPageProps {
-  params: {
+  params: Promise<{
     videoId: string
-  }
+  }>
 }
 
-export default function VideoEditorPage({ params }: VideoEditorPageProps) {
+export default async function VideoEditorPage({ params }: VideoEditorPageProps) {
 
-  const videoId = params.videoId
+  const { videoId } = await params
 
   return (
     <div>{videoId}</div>
