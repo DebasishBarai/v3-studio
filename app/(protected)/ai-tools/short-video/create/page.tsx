@@ -4,16 +4,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Film, PenLine, Music, Mic, Tv, Sparkles, Play, CirclePlay, Pause } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useConvex } from 'convex/react';
+import { useAction, useConvex } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { toast } from 'sonner';
-import { aspectRatioValidator, musicValidator, styleValidator, voiceValidtaor } from '@/convex/schema';
+import { aspectRatioValidator, musicValidator, styleValidator, voiceValidator } from '@/convex/schema';
 import { Infer } from 'convex/values';
 import { useRouter } from 'next/navigation';
 
 interface VoiceType {
   id: number;
-  voice: Infer<typeof voiceValidtaor>;
+  voice: Infer<typeof voiceValidator>;
 }
 
 export default function VideoCreatorPage() {
@@ -27,6 +27,7 @@ export default function VideoCreatorPage() {
 
   const router = useRouter()
   const convex = useConvex()
+  const createVideo = useAction(api.video.createVideo)
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -106,11 +107,11 @@ export default function VideoCreatorPage() {
       return;
     }
     try {
-      const videoId = await convex.mutation(api.video.createVideo, {
+      const videoId = await createVideo({
         prompt,
         style: styles.find(s => s.id === selectedStyle)!.name as Infer<typeof styleValidator>,
         music: musics.find(s => s.id === selectedMusic)!.title as Infer<typeof musicValidator>,
-        voice: voices.find(s => s.id === selectedVoice)!.voice as Infer<typeof voiceValidtaor>,
+        voice: voices.find(s => s.id === selectedVoice)!.voice as Infer<typeof voiceValidator>,
         aspectRatio: aspectRatios.find(s => s.id === selectedAspectRatio)!.label as Infer<typeof aspectRatioValidator>,
         durationInSecs: selectedDuration,
         numberOfImagesPerPrompt: 1,

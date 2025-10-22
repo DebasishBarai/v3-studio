@@ -1,7 +1,7 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
-export const voiceValidtaor = v.union(
+export const voiceValidator = v.union(
   v.object({ name: v.literal('Alloy'), gender: v.literal('Female') }),
   v.object({ name: v.literal('Nova'), gender: v.literal('Female') }),
   v.object({ name: v.literal('Onyx'), gender: v.literal('Male') }),
