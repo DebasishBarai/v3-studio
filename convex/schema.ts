@@ -41,6 +41,27 @@ export const aspectRatioValidator = v.union(
   v.literal('1:1'),
 )
 
+export const characterSchema = v.object({
+  name: v.string(),
+  imagePrompt: v.string(),
+  imageUrl: v.optional(v.string()),
+})
+
+export const angleSchema = v.object({
+  index: v.number(),
+  angleVideoPrompt: v.string(),
+  angleVideoUrl: v.optional(v.string()),
+})
+
+export const sceneSchema = v.object({
+  index: v.number(),
+  imagePrompt: v.string(),
+  imageUrl: v.optional(v.string()),
+  videoUrl: v.optional(v.string()),
+
+  angles: v.optional(v.array(angleSchema)),
+})
+
 export default defineSchema({
   users: defineTable({
     name: v.string(),
@@ -85,30 +106,15 @@ export default defineSchema({
     title: v.optional(v.string()),
     style: styleValidator,
     music: musicValidator,
-    voice: voiceValidtaor,
+    voice: voiceValidator,
     durationInSecs: v.number(), // Total video length in seconds
     aspectRatio: aspectRatioValidator,
 
     videoUrl: v.optional(v.string()),
     thumbnailUrl: v.optional(v.string()),
 
-    characters: v.array(v.object({
-      name: v.string(),
-      imagePrompt: v.string(),
-      imageUrl: v.string(),
-    })),
-    scenes: v.array(v.object({
-      index: v.number(),
-      imagePrompt: v.string(),
-      imageUrl: v.optional(v.string()),
-      videoUrl: v.optional(v.string()),
-
-      angles: v.optional(v.array(v.object({
-        index: v.number(),
-        angleVideoPrompt: v.string(),
-        angleVideoUrl: v.optional(v.string()),
-      }))),
-    })),
+    characters: v.array(characterSchema),
+    scenes: v.array(sceneSchema),
 
     // Error handling
     error: v.optional(v.object({
@@ -125,6 +131,5 @@ export default defineSchema({
     creditsUsed: v.optional(v.number()),
     imagesGenerated: v.optional(v.number()),
     videosGenerated: v.optional(v.number()),
-  }),
+  })
 })
-

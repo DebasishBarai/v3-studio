@@ -24,10 +24,11 @@ export default function VideoCreatorPage() {
   const [playingMusic, setPlayingMusic] = useState<number | null>(null);
   const [selectedAspectRatio, setSelectedAspectRatio] = useState<string | null>(null);
   const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter()
   const convex = useConvex()
-  const createVideo = useAction(api.video.createVideo)
+  const createVideoBlueprint = useAction(api.generateVideo.createVideoBlueprint)
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -107,7 +108,8 @@ export default function VideoCreatorPage() {
       return;
     }
     try {
-      const videoId = await createVideo({
+      setIsLoading(true);
+      const videoId = await createVideoBlueprint({
         prompt,
         style: styles.find(s => s.id === selectedStyle)!.name as Infer<typeof styleValidator>,
         music: musics.find(s => s.id === selectedMusic)!.title as Infer<typeof musicValidator>,
@@ -121,6 +123,14 @@ export default function VideoCreatorPage() {
       router.push(`/ai-tools/short-video/editor/${videoId}`)
     } catch (error) {
       toast.error('An error occurred while connecting to the backend');
+    } finally {
+      setIsLoading(false);
+      setPrompt('');
+      setSelectedStyle(null);
+      setSelectedMusic(null);
+      setSelectedVoice(null);
+      setSelectedAspectRatio(null);
+      setSelectedDuration(null);
     }
   }
 
@@ -365,11 +375,12 @@ export default function VideoCreatorPage() {
           {/* Generate Button */}
           <button
             className="w-full bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg p-4 cursor-pointer hover:from-pink-700 hover:to-purple-700 transition shadow-lg"
+            disabled={isLoading}
             onClick={generateVideo}
           >
             <h2 className="text-xl flex gap-2 items-center justify-center text-white font-semibold">
               <Sparkles className="w-6 h-6" />
-              Generate Video
+              {isLoading ? 'Generating...' : 'Generate Video'}
             </h2>
             <p className="text-white/70 text-sm mt-1">100 Credits to Generate Video</p>
           </button>

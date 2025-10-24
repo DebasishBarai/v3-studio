@@ -1,46 +1,35 @@
 import { v } from "convex/values";
-import { action, internalMutation } from "./_generated/server";
-import { styleValidator, musicValidator, aspectRatioValidator, voiceValidator } from "./schema";
-import { internal } from "./_generated/api";
+import { styleValidator, musicValidator, aspectRatioValidator, voiceValidator, sceneSchema, characterSchema } from "./schema";
 import { Id } from "./_generated/dataModel";
+import { internalMutation, query } from "./_generated/server";
 
-export const createVideo = action({
-  args: {
-    prompt: v.string(),
-    style: styleValidator,
-    music: musicValidator,
-    voice: voiceValidator,
-    durationInSecs: v.number(),
-    aspectRatio: aspectRatioValidator,
-    numberOfImagesPerPrompt: v.number(),
-    generateMultipleAngles: v.boolean(),
-  },
-  handler: async (ctx, args): Promise<Id<'videos'>> => {
+export const getVideo = query({
+  args: { id: v.id('videos') },
+  handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
     if (identity === null) {
       throw new Error("Not authenticated");
     }
 
-    const user = await ctx.runQuery(internal.user.getInternalUser, {
-      subject: identity.subject,
-    });
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_subject', (q) => q.eq('subject', identity.subject))
+      .first();
 
     if (!user) {
       throw new Error("User not found");
     }
 
-    const video = await ctx.runMutation(internal.video.createInternalVideo, {
-      userId: user._id,
-      prompt: args.prompt,
-      style: args.style,
-      music: args.music,
-      voice: args.voice,
-      aspectRatio: args.aspectRatio,
-      durationInSecs: args.durationInSecs,
-      numberOfImagesPerPrompt: args.numberOfImagesPerPrompt,
-      generateMultipleAngles: args.generateMultipleAngles,
-    })
+    const video = await ctx.db.get(args.id)
+
+    if (!video) {
+      throw new Error("Video not found");
+    }
+
+    if (video.userId !== user._id) {
+      throw new Error("Not authenticated for this video");
+    }
 
     return video
 
@@ -58,6 +47,9 @@ export const createInternalVideo = internalMutation({
     durationInSecs: v.number(),
     numberOfImagesPerPrompt: v.number(),
     generateMultipleAngles: v.boolean(),
+    title: v.optional(v.string()),
+    characters: v.array(characterSchema),
+    scenes: v.array(sceneSchema),
   },
   handler: async (ctx, args): Promise<Id<'videos'>> => {
     const video = await ctx.db
@@ -71,8 +63,9 @@ export const createInternalVideo = internalMutation({
         durationInSecs: args.durationInSecs,
         numberOfImagesPerPrompt: args.numberOfImagesPerPrompt,
         generateMultipleAngles: args.generateMultipleAngles,
-        characters: [],
-        scenes: [],
+        title: args.title,
+        characters: args.characters,
+        scenes: args.scenes,
       })
 
     return video

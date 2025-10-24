@@ -1,6 +1,7 @@
 'use node'
 
 import { GoogleGenAI, Modality } from "@google/genai"
+import { PROMPT, AVATAR_PROMPT } from "./helper";
 import { action } from './_generated/server'
 import { internal } from './_generated/api'
 import { v } from "convex/values";
@@ -64,24 +65,6 @@ export const createAd = action({
 
       avatar = Buffer.from(await avatarBlob.arrayBuffer()).toString("base64");
     }
-
-
-
-    // Direct prompts for image generation
-    const PROMPT = `Create a vibrant product showcase image featuring the uploaded product
-  in the center, surrounded by dynamic splashes of liquid or relevant material that complement the product.
-  Use a clean, colorful background to make the product stand out. Include subtle elements related to the product's flavor,
-  ingredients, or theme floating around to add context and visual interest. 
-  Ensure the product is sharp and in focus, with motion and energy conveyed through the splash effects.`;
-
-    const AVATAR_PROMPT = `Create a photorealistic, studio-quality advertisement image using the FIRST reference image as the product/prop
-and the SECOND reference image as the subject (AI avatar). SHOW the avatar actively USING the product (not merely holding it).
-Make the action explicit (e.g. eating, sipping, wearing, listening, applying, adjusting) and ensure realistic interaction:
-hands, mouth, or body must touch and engage the product naturally. Preserve the avatar's face, skin tone and hair.
-Make the product the clear focal point with sharp detail and appropriate lighting; use shallow depth-of-field to blur the background.
-Add subtle thematic elements (sprinkles, musical notes, steam) only if they support the action. Avoid extra people, floating products,
-cut-off limbs, or unnatural poses. Shot: mid-shot or close-up as appropriate for the product. Studio-quality soft key light + rim light.
-High resolution, photorealistic, realistic shadows/reflections, no text or logos.`;
 
     try {
 
