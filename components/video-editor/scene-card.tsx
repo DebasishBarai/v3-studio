@@ -74,13 +74,6 @@ export const SceneCard = ({
                     <p className="text-sm font-mono leading-relaxed text-xs text-gray-500 mt-2">
                       {caption}
                     </p>
-
-                    {/* Edit Overlay */}
-                    <div className="absolute inset-0 dark:bg-black bg-neutral-200 dark:bg-opacity-20 bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center rounded-md">
-                      <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-black transition-colors focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 w-10 p-1">
-                        <SquarePen className="h-4 w-4" />
-                      </button>
-                    </div>
                   </div>
                 </div>
 

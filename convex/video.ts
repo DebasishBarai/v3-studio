@@ -1,7 +1,10 @@
 import { v } from "convex/values";
-import { styleValidator, musicValidator, aspectRatioValidator, voiceValidator, sceneSchema, characterSchema } from "./schema";
+import schema, { styleValidator, musicValidator, aspectRatioValidator, voiceValidator, sceneSchema, characterSchema } from "./schema";
 import { Id } from "./_generated/dataModel";
-import { internalMutation, query } from "./_generated/server";
+import { internalMutation, mutation, query } from "./_generated/server";
+import { partial } from "convex-helpers/validators";
+
+const videoFields = schema.tables.videos.validator;
 
 export const getVideo = query({
   args: { id: v.id('videos') },
@@ -33,6 +36,41 @@ export const getVideo = query({
 
     return video
 
+  }
+})
+
+export const updateVideo = mutation({
+  args: {
+    id: v.id("videos"),
+    update: partial(videoFields),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_subject', (q) => q.eq('subject', identity.subject))
+      .first();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const video = await ctx.db.get(args.id)
+
+    if (!video) {
+      throw new Error("Video not found");
+    }
+
+    if (video.userId !== user._id) {
+      throw new Error("Not authenticated for this video");
+    }
+
+    await ctx.db.patch(args.id, args.update)
   }
 })
 

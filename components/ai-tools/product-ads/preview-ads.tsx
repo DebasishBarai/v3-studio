@@ -108,8 +108,8 @@ export const PreviewAds = () => {
                 <Loader2Icon className='animate-spin' />
                 <h2>Generating...</h2>
 
-              </div>}
-
+              </div>
+            }
           </div>
         ))}
       </div>
