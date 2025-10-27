@@ -39,8 +39,8 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
 
   if (!video || !videoData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading video...</div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-foreground text-xl">Loading video...</div>
       </div>
     );
   }
@@ -227,24 +227,24 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
+    <div className="p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-white/20">
+        <div className="bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] rounded-xl p-6 mb-6 border border-white/10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-purple-500 rounded-xl">
+              <div className="p-3 bg-gradient-to-r from-pink-600 to-purple-600 rounded-xl">
                 <Video className="w-6 h-6 text-white" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-white">Video Editor</h1>
-                <p className="text-purple-200 text-sm">ID: {videoData._id}</p>
+                <p className="text-gray-300 text-sm">ID: {videoData._id}</p>
               </div>
             </div>
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md"
             >
               <Save className="w-5 h-5" />
               {isSaving ? 'Saving...' : 'Save Changes'}
@@ -253,7 +253,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
         </div>
 
         {/* General Settings */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl mb-6 border border-white/20 overflow-hidden">
+        <div className="bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] rounded-xl mb-6 border border-white/10 overflow-hidden">
           <button
             onClick={() => toggleSection('general')}
             className="w-full flex items-center justify-between p-6 hover:bg-white/5 transition-colors"
@@ -269,7 +269,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
             <div className="p-6 pt-0 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="col-span-1 md:col-span-2">
-                  <label className="block text-sm font-medium text-purple-200 mb-2">Initial Prompt</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Initial Prompt</label>
                   <textarea
                     value={videoData.prompt}
                     disabled
@@ -278,7 +278,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                   />
                 </div>
                 <div className="col-span-1 md:col-span-2">
-                  <label className="block text-sm font-medium text-purple-200 mb-2">Title</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Title</label>
                   <input
                     type="text"
                     value={videoData.title || ''}
@@ -287,7 +287,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-purple-200 mb-2">Style</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Style</label>
                   <input
                     type="text"
                     value={videoData.style}
@@ -296,7 +296,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-purple-200 mb-2">Music</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Music</label>
                   <input
                     type="text"
                     value={videoData.music}
@@ -305,7 +305,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-purple-200 mb-2">Aspect Ratio</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Aspect Ratio</label>
                   <select
                     value={videoData.aspectRatio}
                     onChange={(e) => updateField('aspectRatio', e.target.value)}
@@ -321,7 +321,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-purple-200 mb-2">Voice Gender</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Voice Gender</label>
                   <input
                     type="text"
                     value={videoData.voice.gender}
@@ -330,7 +330,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-purple-200 mb-2">Voice Name</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Voice Name</label>
                   <input
                     type="text"
                     value={videoData.voice.name}
@@ -347,14 +347,14 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                   onChange={(e) => updateField('generateMultipleAngles', e.target.checked)}
                   className="w-4 h-4 rounded border-white/10 bg-white/5 text-purple-500 focus:ring-2 focus:ring-purple-500"
                 />
-                <label className="text-sm text-purple-200">Generate Multiple Angles</label>
+                <label className="text-sm text-gray-300">Generate Multiple Angles</label>
               </div>
             </div>
           )}
         </div>
 
         {/* Characters */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl mb-6 border border-white/20 overflow-hidden">
+        <div className="bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] rounded-xl mb-6 border border-white/10 overflow-hidden">
           <button
             onClick={() => toggleSection('characters')}
             className="w-full flex items-center justify-between p-6 hover:bg-white/5 transition-colors"
@@ -381,7 +381,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                   </div>
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-sm font-medium text-purple-200 mb-2">Name</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
                       <input
                         type="text"
                         value={character.name}
@@ -390,7 +390,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-purple-200 mb-2">Image Prompt</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Image Prompt</label>
                       <textarea
                         value={character.imagePrompt}
                         onChange={(e) => updateNestedField(`characters[${index}].imagePrompt`, e.target.value)}
@@ -420,7 +420,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                             index: index,
                             prompt: character.imagePrompt,
                           })}
-                          className="w-full flex items-center justify-center cursor-pointer gap-2 px-4 py-3 bg-purple-500/20 text-purple-300 rounded-xl hover:bg-purple-500/30 transition-colors border border-purple-500/30"
+                          className="w-full flex items-center justify-center cursor-pointer gap-2 px-4 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-lg hover:scale-105 transition-all"
                         >
                           {generatingCharacter === index ? 'Generating...' : 'Generate Image'}
                         </button>
@@ -431,7 +431,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
               ))}
               <button
                 onClick={addCharacter}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-purple-500/20 text-purple-300 rounded-xl hover:bg-purple-500/30 transition-colors border border-purple-500/30"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-lg hover:scale-105 transition-all"
               >
                 <Plus className="w-5 h-5" />
                 Add Character
@@ -441,7 +441,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
         </div>
 
         {/* Scenes */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl mb-6 border border-white/20 overflow-hidden">
+        <div className="bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] rounded-xl mb-6 border border-white/10 overflow-hidden">
           <button
             onClick={() => toggleSection('scenes')}
             className="w-full flex items-center justify-between p-6 hover:bg-white/5 transition-colors"
@@ -458,7 +458,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
               {/* Add Scene at Start Button */}
               <button
                 onClick={() => addScene('start')}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-500/20 text-green-300 rounded-xl hover:bg-green-500/30 transition-colors border border-green-500/30"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white/10 text-green-300 rounded-lg hover:bg-white/20 transition-all border border-white/10"
               >
                 <ArrowUp className="w-5 h-5" />
                 Add Scene at Start
@@ -484,10 +484,10 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                         </button>
                       </div>
 
-                      {expandedScenes[sceneIndex] && (
+                        {expandedScenes[sceneIndex] && (
                         <div className="space-y-4">
                           <div>
-                            <label className="block text-sm font-medium text-purple-200 mb-2">Scene Image Prompt</label>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Scene Image Prompt</label>
                             <textarea
                               value={scene.imagePrompt}
                               onChange={(e) => updateNestedField(`scenes[${sceneIndex}].imagePrompt`, e.target.value)}
@@ -498,12 +498,12 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
 
                           {/* Angles */}
                           <div className="space-y-3">
-                            <h4 className="text-sm font-semibold text-purple-300">Angles ({scene.angles.length})</h4>
+                            <h4 className="text-sm font-semibold text-gray-300">Angles ({scene.angles.length})</h4>
 
                             {/* Add Angle at Start Button */}
                             <button
                               onClick={() => addAngle(sceneIndex, 'start')}
-                              className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-green-500/10 text-green-300 rounded-lg hover:bg-green-500/20 transition-colors border border-green-500/20 text-sm"
+                              className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white/5 text-green-300 rounded-lg hover:bg-white/10 transition-all border border-white/10 text-sm"
                             >
                               <ArrowUp className="w-4 h-4" />
                               Add Angle at Start
@@ -543,7 +543,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                                 {/* Add Angle After Button */}
                                 <button
                                   onClick={() => addAngle(sceneIndex, 'after', angleIndex)}
-                                  className="w-full flex items-center justify-center gap-2 px-3 py-2 mt-2 bg-blue-500/10 text-blue-300 rounded-lg hover:bg-blue-500/20 transition-colors border border-blue-500/20 text-sm"
+                                  className="w-full flex items-center justify-center gap-2 px-3 py-2 mt-2 bg-white/5 text-blue-300 rounded-lg hover:bg-white/10 transition-all border border-white/10 text-sm"
                                 >
                                   <ArrowDown className="w-4 h-4" />
                                   Add Angle After
@@ -559,7 +559,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                   {/* Add Scene After Button */}
                   <button
                     onClick={() => addScene('after', sceneIndex)}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-3 bg-blue-500/20 text-blue-300 rounded-xl hover:bg-blue-500/30 transition-colors border border-blue-500/30"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-3 bg-white/10 text-blue-300 rounded-lg hover:bg-white/20 transition-all border border-white/10"
                   >
                     <ArrowDown className="w-5 h-5" />
                     Add Scene After
