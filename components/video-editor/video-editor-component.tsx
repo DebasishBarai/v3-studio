@@ -3,7 +3,7 @@
 import { api } from "@/convex/_generated/api"
 import { Doc, Id } from '@/convex/_generated/dataModel'
 import { useAction, useMutation, useQuery } from "convex/react"
-import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, ImagePlay, Plus, Save, Settings, Trash2, User, Video } from 'lucide-react'
+import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, ImagePlay, Plus, RotateCcw, Save, Settings, Trash2, User, Video, WandSparkles } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { toast } from "sonner"
@@ -28,6 +28,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
 
   const generateCharacterImageAction = useAction(api.generateVideoImage.generateCharacterImage);
   const [generatingCharacter, setGeneratingCharacter] = useState<number | null>(null);
+  const [modifyPrompts, setModifyPrompts] = useState<Record<number, string>>({});
 
   const [isSaving, setIsSaving] = useState(false);
 
@@ -443,22 +444,79 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                         className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
                       />
                       {character.imageUrl ? (
-                        <div className='w-fit'>
-                          <Image src={character.imageUrl || ''}
-                            alt={character.imageStorageId}
-                            width={500}
-                            height={500}
-                            unoptimized
-                            className='w-full h-[250px] rounded-lg'
-                          />
-                          <div className='flex justify-between items-center mt-2'>
-                            <div className='flex items-center gap-2'>
-                              <Link href={character.imageUrl || ''} target='_blank'>
-                                <Button variant={'ghost'}>View</Button>
-                              </Link>
+                        <>
+                          <div className='w-fit'>
+                            <Image src={character.imageUrl || ''}
+                              alt={character.imageStorageId}
+                              width={500}
+                              height={500}
+                              unoptimized
+                              className='w-full h-[250px] rounded-lg'
+                            />
+                            <div className='flex justify-between items-center mt-2'>
+                              <div className='flex items-center gap-2'>
+                                <Link href={character.imageUrl || ''} target='_blank'>
+                                  <Button variant={'ghost'}>View</Button>
+                                </Link>
+                              </div>
                             </div>
                           </div>
-                        </div>
+
+                          {/* Modify Prompt Input */}
+                          <div className="mt-3">
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Modify Prompt (Optional)</label>
+                            <textarea
+                              value={modifyPrompts[index] || ''}
+                              onChange={(e) => setModifyPrompts(prev => ({ ...prev, [index]: e.target.value }))}
+                              rows={3}
+                              placeholder="Enter modifications you want to make to the image..."
+                              className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
+                            />
+                          </div>
+
+                          {/* Action Buttons */}
+                          <div className="flex gap-2 mt-3">
+                            <button
+                              disabled={generatingCharacter === index || !character.imagePrompt.trim()}
+                              onClick={() => generateCharacterImage({
+                                index: index,
+                                prompt: character.imagePrompt,
+                              })}
+                              className={cn(
+                                "flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-white transition-all",
+                                {
+                                  "bg-blue-600 hover:bg-blue-700 hover:scale-105 hover:shadow-lg cursor-pointer":
+                                    !(generatingCharacter === index || !character.imagePrompt.trim()),
+                                  "bg-blue-600/60 opacity-60 cursor-not-allowed":
+                                    generatingCharacter === index || !character.imagePrompt.trim(),
+                                }
+                              )}
+                            >
+                              <RotateCcw className="w-4 h-4" />
+                              {generatingCharacter === index ? 'Re-generating...' : 'Re-generate Image'}
+                            </button>
+                            <button
+                              disabled={generatingCharacter === index || !modifyPrompts[index]?.trim() || !character.imageStorageId}
+                              onClick={() => generateCharacterImage({
+                                index: index,
+                                prompt: modifyPrompts[index] || '',
+                                baseImageId: character.imageStorageId,
+                              })}
+                              className={cn(
+                                "flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-white transition-all",
+                                {
+                                  "bg-purple-600 hover:bg-purple-700 hover:scale-105 hover:shadow-lg cursor-pointer":
+                                    !(generatingCharacter === index || !modifyPrompts[index]?.trim() || !character.imageStorageId),
+                                  "bg-purple-600/60 opacity-60 cursor-not-allowed":
+                                    generatingCharacter === index || !modifyPrompts[index]?.trim() || !character.imageStorageId,
+                                }
+                              )}
+                            >
+                              <WandSparkles className="w-4 h-4" />
+                              {generatingCharacter === index ? 'Modifying...' : 'Modify Image'}
+                            </button>
+                          </div>
+                        </>
                       ) : (
                         <button
                           disabled={generatingCharacter === index || !character.name.trim() || !character.imagePrompt.trim()}
