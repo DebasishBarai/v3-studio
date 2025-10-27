@@ -398,13 +398,13 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                         className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
                       />
                       {character.imageUrl ? (
-                        <div>
+                        <div className='w-fit'>
                           <Image src={character.imageUrl || ''}
                             alt={character.imageStorageId}
                             width={500}
                             height={500}
                             unoptimized
-                            className='w-full h-[250px] object-contain rounded-lg'
+                            className='w-full h-[250px] rounded-lg'
                           />
                           <div className='flex justify-between items-center mt-2'>
                             <div className='flex items-center gap-2'>
