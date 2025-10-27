@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { toast } from "sonner"
 import { Button } from "../ui/button"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
 
 
 export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
@@ -29,6 +30,30 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const [generatingCharacter, setGeneratingCharacter] = useState<number | null>(null);
 
   const [isSaving, setIsSaving] = useState(false);
+
+  const musics = [
+    { id: 1, title: 'Else - Paris', url: '#' },
+    { id: 2, title: 'Für Elise', url: '#' },
+    { id: 3, title: 'Prelude in E minor (Op. 28 n°4)', url: '#' },
+    { id: 4, title: 'Eureka', url: '#' },
+    { id: 5, title: 'Tension In The Air', url: '#' },
+    { id: 6, title: 'Winter', url: '#' },
+    { id: 7, title: 'Bladerunner 2049', url: '#' },
+    { id: 8, title: 'Snowfall', url: '#' },
+    { id: 9, title: 'Another love', url: '#' },
+    { id: 10, title: 'String Arpeggios', url: '#' }
+  ];
+
+  const voices = [
+    { id: 1, voice: { name: 'Alloy', gender: 'Female' } },
+    { id: 2, voice: { name: 'Nova', gender: 'Female' } },
+    { id: 3, voice: { name: 'Onyx', gender: 'Male' } },
+    { id: 4, voice: { name: 'Sage', gender: 'Female' } },
+    { id: 5, voice: { name: 'Shimmer', gender: 'Female' } },
+    { id: 6, voice: { name: 'Verse', gender: 'Male' } },
+    { id: 7, voice: { name: 'Ballad', gender: 'Male' } },
+    { id: 8, voice: { name: 'Coral', gender: 'Female' } }
+  ];
 
   // Initialize videoData from query
   useEffect(() => {
@@ -103,7 +128,16 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   };
 
   const generateCharacterImage = async ({ index, prompt, baseImageId }: { index: number, prompt: string, baseImageId?: string }) => {
+    console.log('Generating character image...');
     setGeneratingCharacter(index);
+
+    if (!prompt.trim()) {
+      console.log('No prompt provided for character image');
+      toast.error('Please enter a prompt for the character image');
+      setGeneratingCharacter(null);
+      return;
+    }
+
     try {
       let result
       if (!baseImageId) {
@@ -274,7 +308,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                     value={videoData.prompt}
                     disabled
                     rows={3}
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
                   />
                 </div>
                 <div className="col-span-1 md:col-span-2">
@@ -290,65 +324,76 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                   <label className="block text-sm font-medium text-gray-300 mb-2">Style</label>
                   <input
                     type="text"
+                    disabled
                     value={videoData.style}
                     onChange={(e) => updateField('style', e.target.value)}
-                    className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white cursor-not-allowed placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Music</label>
-                  <input
-                    type="text"
+                  <select
                     value={videoData.music}
                     onChange={(e) => updateField('music', e.target.value)}
-                    className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
+                    className="w-full px-4 py-2 bg-white/5 cursor-pointer border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  >
+                    <option value="" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>Select Music</option>
+                    {musics.map((music) => (
+                      <option key={music.id} value={music.title} style={{ backgroundColor: '#1E1E2D', color: 'white' }}>
+                        {music.title}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Aspect Ratio</label>
                   <select
                     value={videoData.aspectRatio}
+                    disabled
                     onChange={(e) => updateField('aspectRatio', e.target.value)}
-                    className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-4 py-2 bg-white/5 cursor-not-allowed border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                   >
-                    <option value="9:16">9:16 (Portrait)</option>
-                    <option value="16:9">16:9 (Landscape)</option>
-                    <option value="1:1">1:1 (Square)</option>
+                    <option value="9:16" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>9:16 (Portrait)</option>
+                    <option value="16:9" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>16:9 (Landscape)</option>
+                    <option value="1:1" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>1:1 (Square)</option>
                   </select>
                 </div>
               </div>
 
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Voice Gender</label>
-                  <input
-                    type="text"
-                    value={videoData.voice.gender}
-                    onChange={(e) => updateNestedField('voice.gender', e.target.value)}
-                    className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Voice Name</label>
-                  <input
-                    type="text"
-                    value={videoData.voice.name}
-                    onChange={(e) => updateNestedField('voice.name', e.target.value)}
-                    className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
+                <div className="col-span-1 md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Voiceover</label>
+                  <select
+                    value={`${videoData.voice.name} (${videoData.voice.gender})`}
+                    onChange={(e) => {
+                      const selected = voices.find(v => `${v.voice.name} (${v.voice.gender})` === e.target.value);
+                      if (selected) {
+                        updateNestedField('voice.name', selected.voice.name);
+                        updateNestedField('voice.gender', selected.voice.gender);
+                      }
+                    }}
+                    className="w-full px-4 py-2 bg-white/5 cursor-pointer border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  >
+                    <option value="" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>Select Voice</option>
+                    {voices.map((voice) => (
+                      <option key={voice.id} value={`${voice.voice.name} (${voice.voice.gender})`} style={{ backgroundColor: '#1E1E2D', color: 'white' }}>
+                        {voice.voice.name} ({voice.voice.gender})
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={videoData.generateMultipleAngles}
-                  onChange={(e) => updateField('generateMultipleAngles', e.target.checked)}
-                  className="w-4 h-4 rounded border-white/10 bg-white/5 text-purple-500 focus:ring-2 focus:ring-purple-500"
-                />
-                <label className="text-sm text-gray-300">Generate Multiple Angles</label>
-              </div>
+              {/* <div className="flex items-center gap-2"> */}
+              {/*   <input */}
+              {/*     type="checkbox" */}
+              {/*     checked={videoData.generateMultipleAngles} */}
+              {/*     onChange={(e) => updateField('generateMultipleAngles', e.target.checked)} */}
+              {/*     className="w-4 h-4 rounded border-white/10 bg-white/5 text-purple-500 focus:ring-2 focus:ring-purple-500" */}
+              {/*   /> */}
+              {/*   <label className="text-sm text-gray-300">Generate Multiple Angles</label> */}
+              {/* </div> */}
             </div>
           )}
         </div>
@@ -416,11 +461,28 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                         </div>
                       ) : (
                         <button
+                          disabled={generatingCharacter === index || !character.name.trim() || !character.imagePrompt.trim()}
                           onClick={() => generateCharacterImage({
                             index: index,
                             prompt: character.imagePrompt,
                           })}
-                          className="w-full flex items-center justify-center cursor-pointer gap-2 px-4 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-lg hover:scale-105 transition-all"
+                          className={cn(
+                            "w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-white transition-all",
+                            {
+                              // Active state
+                              "bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 hover:shadow-lg cursor-pointer":
+                                !(
+                                  generatingCharacter === index ||
+                                  !character.name.trim() ||
+                                  !character.imagePrompt.trim()
+                                ),
+                              // Disabled state (soft faded gradient)
+                              "bg-gradient-to-r from-pink-400 to-purple-400 opacity-60 cursor-not-allowed":
+                                generatingCharacter === index ||
+                                !character.name.trim() ||
+                                !character.imagePrompt.trim(),
+                            }
+                          )}
                         >
                           {generatingCharacter === index ? 'Generating...' : 'Generate Image'}
                         </button>
@@ -484,7 +546,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                         </button>
                       </div>
 
-                        {expandedScenes[sceneIndex] && (
+                      {expandedScenes[sceneIndex] && (
                         <div className="space-y-4">
                           <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Scene Image Prompt</label>
