@@ -1,13 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import Image from "next/image";
-import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { useEffect } from "react";
-import { useMutation } from "convex/react";
-import { promptVariations } from "@/lib/objects";
+import { useQuery } from "convex/react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function DashboardPage() {
 
