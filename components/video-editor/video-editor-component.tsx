@@ -616,6 +616,16 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                             />
                           </div>
 
+                          <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Scene Video Prompt</label>
+                            <textarea
+                              value={scene.videoPrompt}
+                              onChange={(e) => updateNestedField(`scenes[${sceneIndex}].videoPrompt`, e.target.value)}
+                              rows={4}
+                              className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
+                            />
+                          </div>
+
                           {/* Angles */}
                           <div className="space-y-3">
                             <h4 className="text-sm font-semibold text-gray-300">Angles ({scene.angles.length})</h4>

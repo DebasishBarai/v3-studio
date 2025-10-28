@@ -58,6 +58,7 @@ export const sceneSchema = v.object({
   index: v.number(),
   imagePrompt: v.string(),
   videoPrompt: v.string(),
+  charactersInTheScene: v.optional(v.array(v.string())),
   imageUrl: v.optional(v.string()),
   videoUrl: v.optional(v.string()),
 

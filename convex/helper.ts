@@ -18,11 +18,13 @@ Generate a complete video blueprint in JSON format based on the user's prompt an
 ## Understanding the Workflow
 Your blueprint will be used in this process:
 1. Character images will be generated from character descriptions for consistency
-2. Main scene images will be generated from scene imagePrompts
-3. Videos will be created by animating these images using the videoPrompt (camera motion and movements)
+2. Main scene images will be generated from scene imagePrompts + character reference images
+3. Videos will be created by animating these images using the videoPrompt (camera motion and movements) + character reference images
 4. Angle images will be generated using the main scene as a reference + angleVideoPrompt
 5. Angle videos will be animated with their specific camera movements
 6. All clips will be edited together to create the final video
+
+**IMPORTANT**: Character reference images will be automatically provided to the image/video generation models based on the charactersInTheScene array. Your prompts should reference characters naturally without needing to fully re-describe them.
 
 ## Output Requirements
 
@@ -31,7 +33,9 @@ Generate a compelling, concise title (3-8 words) that captures the video's essen
 
 ### 2. Characters
 Identify all main characters/subjects in the story. For EACH character, provide:
-- **name**: Character identifier (e.g., "Hero", "Villain", "Product", "Narrator", "Main Character")
+- **name**: Character identifier (e.g., "Hero", "Villain", "Product", "Narrator", "Main Character", "Dragon", "Spaceship")
+  - Use clear, consistent names that will be referenced in charactersInTheScene arrays
+  - Names should be descriptive and unique
 - **imagePrompt**: HIGHLY DETAILED visual description (150-250 words) for generating a consistent character reference image. Must include:
   - Physical appearance (age, gender, build, height if applicable)
   - Facial features and distinctive characteristics
@@ -41,7 +45,7 @@ Identify all main characters/subjects in the story. For EACH character, provide:
   - Overall aesthetic and personality conveyed through appearance
   - Exact style matching "${style}"
 
-**CRITICAL**: This description will be used to generate a reference image that must remain consistent across ALL scenes.
+**CRITICAL**: This description will be used to generate a reference image that must remain consistent across ALL scenes. The reference image will be automatically provided when this character appears in a scene.
 
 Example for anime style: "A teenage female protagonist with large expressive violet eyes, long flowing silver hair with twin braids, wearing a futuristic white and blue combat suit with glowing cyan accents, confident determined expression, athletic build, anime style with cel-shading and vibrant colors"
 
@@ -54,26 +58,38 @@ For each scene, provide:
 
 - **index**: Scene number (starting from 0)
 
+- **charactersInTheScene**: Array of character names that appear in this scene
+  - Use EXACT character names as defined in the Characters section
+  - List all characters visible in the scene
+  - Order doesn't matter, but be accurate
+  - Can be empty array [] if no defined characters appear (e.g., pure landscape shots)
+  - Examples: ["Hero"], ["Hero", "Villain"], ["Dragon", "Knight"], []
+
 - **imagePrompt**: EXTREMELY DETAILED description (100-200 words) for the main establishing shot. Must include:
   - **Camera angle/shot type**: (e.g., "wide shot", "close-up", "medium shot", "aerial view", "low angle", "high angle", "over-the-shoulder")
   - **Setting/Location**: Detailed environment description
-  - **Subject positions**: Where characters/objects are and what they're doing
+  - **Character positions and actions**: Where each character from charactersInTheScene is positioned and what they're doing (you can reference them by name since their reference images will be provided)
   - **Action/Moment**: What's happening in this frozen frame
   - **Lighting**: Light sources, mood, atmosphere
   - **Visual details**: Colors, textures, atmospheric elements
   - **Composition**: Foreground, midground, background elements (composed for ${aspectRatio} aspect ratio)
   - **Style**: Must match "${style}" exactly
 
-**IMPORTANT**: This will be turned into a static image first, then animated. Describe it as a freeze-frame.
+**IMPORTANT**: 
+- This will be turned into a static image first, then animated. Describe it as a freeze-frame.
+- Characters listed in charactersInTheScene will have their reference images automatically provided, so you can reference them naturally (e.g., "the Hero stands in the foreground") without fully re-describing their appearance.
+- Focus on positioning, actions, and scene context rather than re-describing character appearances.
 
 - **videoPrompt**: Detailed description (80-150 words) for animating the main scene image. Must include:
   - **Camera movements**: Specific camera motion (e.g., "camera slowly pans right", "smooth dolly push forward", "gentle zoom in", "camera tilts up", "orbital camera movement clockwise", "static camera with no movement")
-  - **Subject movements**: What the characters/objects in the scene do (keep natural and appropriate for the moment: "character turns head slightly", "gentle breathing motion", "hair sways softly in breeze", "minimal ambient movement")
+  - **Character movements**: What each character does (keep natural and appropriate: "Hero turns head slightly toward Villain", "Villain's cape billows in wind", "Dragon's chest expands with breathing")
   - **Environmental motion**: Any atmospheric or environmental animation (e.g., "leaves rustle gently", "water ripples", "fog drifts slowly", "light particles float")
   - **Motion intensity**: Should be subtle and cinematic, avoiding jarring or excessive movements
   - **Duration context**: Movements should be paced for a 5-10 second clip
 
-**CRITICAL**: The videoPrompt animates the static image created from imagePrompt. Focus on what MOVES, not what exists.
+**CRITICAL**: 
+- The videoPrompt animates the static image created from imagePrompt. Focus on what MOVES, not what exists.
+- Character reference images will be provided during video generation for consistency.
 
 - **angles**: (OPTIONAL array) Additional camera perspectives of the SAME scene/moment
   
@@ -90,22 +106,24 @@ For each scene, provide:
     - How the camera angle differs from the main shot
     - What specific detail or aspect this angle emphasizes
     - Camera movement description (e.g., "camera slowly pans left", "camera pushes forward", "smooth zoom in", "camera orbits around subject")
-    - Subject movements if any (keep subtle: "slight movements", "gentle gestures", "minimal natural motion")
+    - Character/subject movements if any (keep subtle: "slight movements", "gentle gestures", "minimal natural motion")
 
-**CRITICAL**: Angle prompts will use the main scene image as a reference, so focus on what's DIFFERENT about the angle and how it moves.
+**CRITICAL**: Angle prompts will use the main scene image as a reference (with character images), so focus on what's DIFFERENT about the angle and how it moves.
 
 ## Critical Guidelines
 
-1. **Visual Clarity**: Every imagePrompt should create a clear mental image that AI can accurately generate
-2. **Motion Clarity**: Every videoPrompt should describe realistic, achievable animations appropriate for the style
-3. **Consistency**: Characters/subjects must look identical across all scenes - always reference the character descriptions
-4. **Appropriate Animation**: Consider what movements are natural for the style (subtle for realistic, more dynamic for animated)
-5. **Camera Language**: Use professional cinematography terms appropriate for the style
-6. **Atmospheric Details**: Include lighting, mood, and environmental details in imagePrompts
-7. **Motion Pacing**: Keep movements smooth and cinematic; avoid rapid or jerky motions
-8. **Location Logic**: Maintain consistent environmental details when scenes share locations
-9. **Story Flow**: Scenes should progress logically and tell a coherent narrative
-10. **Angle Purpose**: Each angle should add value - better detail, emotional impact, or visual variety
+1. **Character Tracking**: Accurately track which characters appear in each scene using charactersInTheScene
+2. **Character Consistency**: Use exact character names from the Characters section in charactersInTheScene arrays
+3. **Visual Clarity**: Every imagePrompt should create a clear mental image that AI can accurately generate
+4. **Motion Clarity**: Every videoPrompt should describe realistic, achievable animations appropriate for the style
+5. **Character References**: Remember that character reference images will be provided automatically - focus on positioning and actions rather than re-describing appearance
+6. **Appropriate Animation**: Consider what movements are natural for the style (subtle for realistic, more dynamic for animated)
+7. **Camera Language**: Use professional cinematography terms appropriate for the style
+8. **Atmospheric Details**: Include lighting, mood, and environmental details in imagePrompts
+9. **Motion Pacing**: Keep movements smooth and cinematic; avoid rapid or jerky motions
+10. **Location Logic**: Maintain consistent environmental details when scenes share locations
+11. **Story Flow**: Scenes should progress logically and tell a coherent narrative
+12. **Angle Purpose**: Each angle should add value - better detail, emotional impact, or visual variety
 
 ## Animation Guidelines for videoPrompt:
 - **Camera movements should be smooth and professional** (dolly, pan, tilt, zoom, orbit, or static)
@@ -113,6 +131,7 @@ For each scene, provide:
 - **Environmental effects should enhance mood** without overwhelming the scene
 - **Timing should feel cinematic** - nothing should move too fast or feel rushed
 - **Consider the style**: realistic styles need more subtle motion, animated styles can be more expressive
+- **Character reference images will be provided** during video generation for visual consistency
 
 ## Style-Specific Considerations for "${style}":
 ${getStyleGuidelines(style)}
@@ -125,13 +144,14 @@ Output ONLY valid JSON with NO additional text or explanations:
   "title": "string",
   "characters": [
     {
-      "name": "string",
+      "name": "string (clear, consistent identifier)",
       "imagePrompt": "string (150-250 words, highly detailed)"
     }
   ],
   "scenes": [
     {
       "index": 0,
+      "charactersInTheScene": ["CharacterName1", "CharacterName2"],
       "imagePrompt": "string (100-200 words, extremely detailed)",
       "videoPrompt": "string (80-150 words, focused on animation and movement)",
       "angles": [
