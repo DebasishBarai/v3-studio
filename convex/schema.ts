@@ -57,6 +57,7 @@ export const angleSchema = v.object({
 export const sceneSchema = v.object({
   index: v.number(),
   imagePrompt: v.string(),
+  videoPrompt: v.string(),
   imageUrl: v.optional(v.string()),
   videoUrl: v.optional(v.string()),
 
