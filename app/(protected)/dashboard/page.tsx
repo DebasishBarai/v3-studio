@@ -50,7 +50,7 @@ export default function DashboardPage() {
           <p className="text-gray-300 mt-2 leading-relaxed">
             Lights, camera, AI! 🚀 Instantly transform your text or images into stunning cinematic videos. Create stories that move — literally.
           </p>
-          <Link href="ai-tools/ai-film">
+          <Link href="ai-tools/short-video">
             <Button className="mt-4 text-white border-white/30 hover:bg-white hover:text-black transition-all bg-transparent border">
               ✨ Start Creating
             </Button>
@@ -95,7 +95,7 @@ export default function DashboardPage() {
             <p className="text-white text-sm opacity-70">
               Instantly turn your script or idea into a visual storyboard powered by AI. Perfect for pre-production planning.
             </p>
-            <Link href="ai-tools/ai-film">
+            <Link href="ai-tools/short-video">
               <Button className="bg-black hover:bg-white hover:text-black text-white mt-2 transition-all">
                 Create Storyboard
               </Button>
@@ -117,7 +117,7 @@ export default function DashboardPage() {
             <p className="text-white text-sm opacity-70">
               Create cinematic-quality video scenes in seconds with intelligent automation and stunning visuals.
             </p>
-            <Link href="ai-tools/ai-film">
+            <Link href="ai-tools/short-video">
               <Button className="bg-black hover:bg-white hover:text-black text-white mt-2 transition-all">
                 Start Creating
               </Button>
