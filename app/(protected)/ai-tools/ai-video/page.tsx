@@ -9,13 +9,13 @@ export default function ShortVideoPage() {
         <div>
           {/* Page header */}
           <div className="flex justify-between items-center">
-            <h2 className="font-bold text-3xl">Create Short Video</h2>
+            <h2 className="font-bold text-3xl">Create AI powered Video</h2>
             <div className="flex items-center gap-5">
               <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
                 <RefreshCw />
                 Refresh
               </button>
-              <Link href="/ai-tools/short-video/create">
+              <Link href="/ai-tools/ai-video/create">
                 <button
                   className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md"
                   type="button"
@@ -41,9 +41,9 @@ export default function ShortVideoPage() {
               />
               <p className="text-lg mb-2">You have no projects yet.</p>
               <p className="max-w-sm">
-                Start creating your first Short Video to bring your ideas to life!
+                Start creating your first AI Powered Video to bring your ideas to life!
               </p>
-              <Link href="/ai-tools/short-video/create">
+              <Link href="/ai-tools/ai-video/create">
                 <button
                   className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow hover:bg-primary/90 h-9 mt-6 px-5 py-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md"
                   type="button"

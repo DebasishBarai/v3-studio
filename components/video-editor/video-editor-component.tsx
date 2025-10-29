@@ -3,14 +3,9 @@
 import { api } from "@/convex/_generated/api"
 import { Doc, Id } from '@/convex/_generated/dataModel'
 import { useAction, useMutation, useQuery } from "convex/react"
-import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, ImagePlay, Plus, RotateCcw, Save, Settings, Trash2, User, WandSparkles } from 'lucide-react'
-import Image from 'next/image'
+import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, ImagePlay, Plus, Save, Settings, Trash2, User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from "sonner"
-import { Button } from "../ui/button"
-import Link from "next/link"
-import { cn } from "@/lib/utils"
-import { CustomButton } from "../ui/custom/custom-button"
 import { CharacterCard } from "../ui/custom/character-card"
 
 

@@ -120,7 +120,7 @@ export default function VideoCreatorPage() {
         generateMultipleAngles: false,
       });
 
-      router.push(`/ai-tools/short-video/editor/${videoId}`)
+      router.push(`/ai-tools/ai-video/editor/${videoId}`);
     } catch (error) {
       toast.error('An error occurred while connecting to the backend');
     } finally {
@@ -143,7 +143,7 @@ export default function VideoCreatorPage() {
           <div>
             <h1 className="font-bold text-2xl flex items-center gap-2">
               <Film className="w-6 h-6" />
-              Create Your Short Video
+              Create Your AI Powered Video
             </h1>
             <p className="text-gray-400 mt-1">
               Write your prompt, choose a style, add music, and select a voice to generate your video.

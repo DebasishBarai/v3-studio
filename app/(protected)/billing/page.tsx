@@ -163,7 +163,7 @@ export default function PricingPage() {
         {activeTab === 'subscription' && (
           <div className="space-y-8">
             <div className="text-center">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent mb-4">Plans & Pricing</h1>
+              <h1 className="text-4xl font-bold text-white mb-4">Plans & Pricing</h1>
               <p className="text-xl text-muted-foreground">Choose the perfect plan for your creative needs</p>
             </div>
 
@@ -255,7 +255,7 @@ export default function PricingPage() {
         {activeTab === 'credits' && (
           <div className="space-y-8">
             <div className="text-center">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent mb-4">Credit Packages</h1>
+              <h1 className="text-4xl font-bold text-white mb-4">Credit Packages</h1>
               <p className="text-xl text-muted-foreground">Buy credits and unlock creative potential</p>
             </div>
 
