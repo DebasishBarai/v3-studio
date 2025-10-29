@@ -441,20 +441,16 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                         modifyingCharacter={modifyingCharacter}
                       />
                     ))}
-                    <div className="min-h-[250px] flex flex-col items-center justify-center text-muted-foreground bg-white/5 rounded-xl p-4 border border-white/10">
+                    {/* Add Character Button */}
+                    <div
+                      className="min-h-[250px] flex flex-col items-center cursor-pointer justify-center text-muted-foreground bg-white/5 rounded-xl p-4 border border-white/10 hover:text-white"
+                      onClick={addCharacter}
+                    >
                       <Plus className="w-10 h-10 mb-2" strokeWidth={2} />
                       <span className="text-lg font-medium">Add Character</span>
                     </div>
                   </div>
 
-                  {/* Add Character Button */}
-                  <button
-                    onClick={addCharacter}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-lg hover:scale-105 transition-all"
-                  >
-                    <Plus className="w-5 h-5" />
-                    Add Character
-                  </button>
                 </div>
               )}
 
