@@ -3,13 +3,15 @@
 import { api } from "@/convex/_generated/api"
 import { Doc, Id } from '@/convex/_generated/dataModel'
 import { useAction, useMutation, useQuery } from "convex/react"
-import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, ImagePlay, Plus, RotateCcw, Save, Settings, Trash2, User, Video, WandSparkles } from 'lucide-react'
+import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, ImagePlay, Plus, RotateCcw, Save, Settings, Trash2, User, WandSparkles } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { toast } from "sonner"
 import { Button } from "../ui/button"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { CustomButton } from "../ui/custom/custom-button"
+import { CharacterCard } from "../ui/custom/character-card"
 
 
 export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
@@ -29,6 +31,9 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const generateCharacterImageAction = useAction(api.generateVideoImage.generateCharacterImage);
   const [generatingCharacter, setGeneratingCharacter] = useState<number | null>(null);
   const [modifyPrompts, setModifyPrompts] = useState<Record<number, string>>({});
+  const [modifyingCharacter, setModifyingCharacter] = useState<number | null>(null);
+
+  const [activeTab, setActiveTab] = useState<'Storyline' | 'Settings'>('Storyline');
 
   const [isSaving, setIsSaving] = useState(false);
 
@@ -55,6 +60,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
     { id: 7, voice: { name: 'Ballad', gender: 'Male' } },
     { id: 8, voice: { name: 'Coral', gender: 'Female' } }
   ];
+
 
   // Initialize videoData from query
   useEffect(() => {
@@ -131,6 +137,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const generateCharacterImage = async ({ index, prompt, baseImageId }: { index: number, prompt: string, baseImageId?: string }) => {
     console.log('Generating character image...');
     setGeneratingCharacter(index);
+    setModifyingCharacter(index);
 
     if (!prompt.trim()) {
       console.log('No prompt provided for character image');
@@ -164,6 +171,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
       toast.error('An error occurred while generating character image');
     } finally {
       setGeneratingCharacter(null);
+      setModifyingCharacter(null);
     }
   }
 
@@ -262,446 +270,351 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   };
 
   return (
-    <div className="p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] rounded-xl p-6 mb-6 border border-white/10">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-gradient-to-r from-pink-600 to-purple-600 rounded-xl">
-                <Video className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-white">Video Editor</h1>
-                <p className="text-gray-300 text-sm">ID: {videoData._id}</p>
-              </div>
-            </div>
+    <div className="w-full min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Tabs */}
+        <div className="flex items-center justify-center mb-12">
+          <div className="inline-flex items-center bg-muted rounded-lg p-1">
             <button
-              onClick={handleSave}
-              disabled={isSaving}
-              className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md"
+              onClick={() => setActiveTab('Storyline')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${activeTab === 'Storyline'
+                ? 'bg-background text-foreground shadow'
+                : 'text-muted-foreground hover:text-foreground'
+                }`}
             >
-              <Save className="w-5 h-5" />
-              {isSaving ? 'Saving...' : 'Save Changes'}
+              Storyline
+            </button>
+            <button
+              onClick={() => setActiveTab('Settings')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${activeTab === 'Settings'
+                ? 'bg-background text-foreground shadow'
+                : 'text-muted-foreground hover:text-foreground'
+                }`}
+            >
+              Settings
             </button>
           </div>
         </div>
-
         {/* General Settings */}
-        <div className="bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] rounded-xl mb-6 border border-white/10 overflow-hidden">
-          <button
-            onClick={() => toggleSection('general')}
-            className="w-full flex items-center justify-between p-6 hover:bg-white/5 transition-colors"
-          >
-            <div className="flex items-center gap-3">
-              <Settings className="w-5 h-5 text-purple-400" />
-              <h2 className="text-xl font-bold text-white">General Settings</h2>
-            </div>
-            {expandedSections.general ? <ChevronUp className="w-5 h-5 text-purple-400" /> : <ChevronDown className="w-5 h-5 text-purple-400" />}
-          </button>
-
-          {expandedSections.general && (
-            <div className="p-6 pt-0 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="col-span-1 md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Initial Prompt</label>
-                  <textarea
-                    value={videoData.prompt}
-                    disabled
-                    rows={3}
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
-                  />
+        {activeTab === 'Settings' && (
+          <>
+            <div className="bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] rounded-xl mb-6 border border-white/10 overflow-hidden">
+              <button
+                onClick={() => toggleSection('general')}
+                className="w-full flex items-center justify-between p-6 hover:bg-white/5 transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <Settings className="w-5 h-5 text-purple-400" />
+                  <h2 className="text-xl font-bold text-white">General Settings</h2>
                 </div>
-                <div className="col-span-1 md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Title</label>
-                  <input
-                    type="text"
-                    value={videoData.title || ''}
-                    onChange={(e) => updateField('title', e.target.value)}
-                    className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Style</label>
-                  <input
-                    type="text"
-                    disabled
-                    value={videoData.style}
-                    onChange={(e) => updateField('style', e.target.value)}
-                    className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white cursor-not-allowed placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Music</label>
-                  <select
-                    value={videoData.music}
-                    onChange={(e) => updateField('music', e.target.value)}
-                    className="w-full px-4 py-2 bg-white/5 cursor-pointer border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  >
-                    <option value="" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>Select Music</option>
-                    {musics.map((music) => (
-                      <option key={music.id} value={music.title} style={{ backgroundColor: '#1E1E2D', color: 'white' }}>
-                        {music.title}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Aspect Ratio</label>
-                  <select
-                    value={videoData.aspectRatio}
-                    disabled
-                    onChange={(e) => updateField('aspectRatio', e.target.value)}
-                    className="w-full px-4 py-2 bg-white/5 cursor-not-allowed border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  >
-                    <option value="9:16" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>9:16 (Portrait)</option>
-                    <option value="16:9" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>16:9 (Landscape)</option>
-                    <option value="1:1" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>1:1 (Square)</option>
-                  </select>
-                </div>
-              </div>
+                {expandedSections.general ? <ChevronUp className="w-5 h-5 text-purple-400" /> : <ChevronDown className="w-5 h-5 text-purple-400" />}
+              </button>
 
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="col-span-1 md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Voiceover</label>
-                  <select
-                    value={`${videoData.voice.name} (${videoData.voice.gender})`}
-                    onChange={(e) => {
-                      const selected = voices.find(v => `${v.voice.name} (${v.voice.gender})` === e.target.value);
-                      if (selected) {
-                        updateNestedField('voice.name', selected.voice.name);
-                        updateNestedField('voice.gender', selected.voice.gender);
-                      }
-                    }}
-                    className="w-full px-4 py-2 bg-white/5 cursor-pointer border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  >
-                    <option value="" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>Select Voice</option>
-                    {voices.map((voice) => (
-                      <option key={voice.id} value={`${voice.voice.name} (${voice.voice.gender})`} style={{ backgroundColor: '#1E1E2D', color: 'white' }}>
-                        {voice.voice.name} ({voice.voice.gender})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* <div className="flex items-center gap-2"> */}
-              {/*   <input */}
-              {/*     type="checkbox" */}
-              {/*     checked={videoData.generateMultipleAngles} */}
-              {/*     onChange={(e) => updateField('generateMultipleAngles', e.target.checked)} */}
-              {/*     className="w-4 h-4 rounded border-white/10 bg-white/5 text-purple-500 focus:ring-2 focus:ring-purple-500" */}
-              {/*   /> */}
-              {/*   <label className="text-sm text-gray-300">Generate Multiple Angles</label> */}
-              {/* </div> */}
-            </div>
-          )}
-        </div>
-
-        {/* Characters */}
-        <div className="bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] rounded-xl mb-6 border border-white/10 overflow-hidden">
-          <button
-            onClick={() => toggleSection('characters')}
-            className="w-full flex items-center justify-between p-6 hover:bg-white/5 transition-colors"
-          >
-            <div className="flex items-center gap-3">
-              <User className="w-5 h-5 text-purple-400" />
-              <h2 className="text-xl font-bold text-white">Characters ({videoData.characters.length})</h2>
-            </div>
-            {expandedSections.characters ? <ChevronUp className="w-5 h-5 text-purple-400" /> : <ChevronDown className="w-5 h-5 text-purple-400" />}
-          </button>
-
-          {expandedSections.characters && (
-            <div className="p-6 pt-0 space-y-4">
-              {videoData.characters.map((character: any, index: number) => (
-                <div key={index} className="bg-white/5 rounded-xl p-4 border border-white/10">
-                  <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-white">Character {index + 1}</h3>
-                    <button
-                      onClick={() => removeCharacter(index)}
-                      className="p-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
+              {expandedSections.general && (
+                <div className="p-6 pt-0 space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="col-span-1 md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Initial Prompt</label>
+                      <textarea
+                        value={videoData.prompt}
+                        disabled
+                        rows={3}
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
+                      />
+                    </div>
+                    <div className="col-span-1 md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Title</label>
                       <input
                         type="text"
-                        value={character.name}
-                        onChange={(e) => updateNestedField(`characters[${index}].name`, e.target.value)}
+                        value={videoData.title || ''}
+                        onChange={(e) => updateField('title', e.target.value)}
                         className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Image Prompt</label>
-                      <textarea
-                        value={character.imagePrompt}
-                        onChange={(e) => updateNestedField(`characters[${index}].imagePrompt`, e.target.value)}
-                        rows={4}
-                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Style</label>
+                      <input
+                        type="text"
+                        disabled
+                        value={videoData.style}
+                        onChange={(e) => updateField('style', e.target.value)}
+                        className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white cursor-not-allowed placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
                       />
-                      {character.imageUrl ? (
-                        <>
-                          <div className='w-fit'>
-                            <Image src={character.imageUrl || ''}
-                              alt={character.imageStorageId}
-                              width={500}
-                              height={500}
-                              unoptimized
-                              className='w-full h-[250px] rounded-lg'
-                            />
-                            <div className='flex justify-between items-center mt-2'>
-                              <div className='flex items-center gap-2'>
-                                <Link href={character.imageUrl || ''} target='_blank'>
-                                  <Button variant={'ghost'}>View</Button>
-                                </Link>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Modify Prompt Input */}
-                          <div className="mt-3">
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Modify Prompt (Optional)</label>
-                            <textarea
-                              value={modifyPrompts[index] || ''}
-                              onChange={(e) => setModifyPrompts(prev => ({ ...prev, [index]: e.target.value }))}
-                              rows={3}
-                              placeholder="Enter modifications you want to make to the image..."
-                              className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
-                            />
-                          </div>
-
-                          {/* Action Buttons */}
-                          <div className="flex gap-2 mt-3">
-                            <button
-                              disabled={generatingCharacter === index || !character.imagePrompt.trim()}
-                              onClick={() => generateCharacterImage({
-                                index: index,
-                                prompt: character.imagePrompt,
-                              })}
-                              className={cn(
-                                "flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-white transition-all",
-                                {
-                                  "bg-blue-600 hover:bg-blue-700 hover:scale-105 hover:shadow-lg cursor-pointer":
-                                    !(generatingCharacter === index || !character.imagePrompt.trim()),
-                                  "bg-blue-600/60 opacity-60 cursor-not-allowed":
-                                    generatingCharacter === index || !character.imagePrompt.trim(),
-                                }
-                              )}
-                            >
-                              <RotateCcw className="w-4 h-4" />
-                              {generatingCharacter === index ? 'Re-generating...' : 'Re-generate Image'}
-                            </button>
-                            <button
-                              disabled={generatingCharacter === index || !modifyPrompts[index]?.trim() || !character.imageStorageId}
-                              onClick={() => generateCharacterImage({
-                                index: index,
-                                prompt: modifyPrompts[index] || '',
-                                baseImageId: character.imageStorageId,
-                              })}
-                              className={cn(
-                                "flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-white transition-all",
-                                {
-                                  "bg-purple-600 hover:bg-purple-700 hover:scale-105 hover:shadow-lg cursor-pointer":
-                                    !(generatingCharacter === index || !modifyPrompts[index]?.trim() || !character.imageStorageId),
-                                  "bg-purple-600/60 opacity-60 cursor-not-allowed":
-                                    generatingCharacter === index || !modifyPrompts[index]?.trim() || !character.imageStorageId,
-                                }
-                              )}
-                            >
-                              <WandSparkles className="w-4 h-4" />
-                              {generatingCharacter === index ? 'Modifying...' : 'Modify Image'}
-                            </button>
-                          </div>
-                        </>
-                      ) : (
-                        <button
-                          disabled={generatingCharacter === index || !character.name.trim() || !character.imagePrompt.trim()}
-                          onClick={() => generateCharacterImage({
-                            index: index,
-                            prompt: character.imagePrompt,
-                          })}
-                          className={cn(
-                            "w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-white transition-all",
-                            {
-                              // Active state
-                              "bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 hover:shadow-lg cursor-pointer":
-                                !(
-                                  generatingCharacter === index ||
-                                  !character.name.trim() ||
-                                  !character.imagePrompt.trim()
-                                ),
-                              // Disabled state (soft faded gradient)
-                              "bg-gradient-to-r from-pink-400 to-purple-400 opacity-60 cursor-not-allowed":
-                                generatingCharacter === index ||
-                                !character.name.trim() ||
-                                !character.imagePrompt.trim(),
-                            }
-                          )}
-                        >
-                          {generatingCharacter === index ? 'Generating...' : 'Generate Image'}
-                        </button>
-                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Music</label>
+                      <select
+                        value={videoData.music}
+                        onChange={(e) => updateField('music', e.target.value)}
+                        className="w-full px-4 py-2 bg-white/5 cursor-pointer border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      >
+                        <option value="" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>Select Music</option>
+                        {musics.map((music) => (
+                          <option key={music.id} value={music.title} style={{ backgroundColor: '#1E1E2D', color: 'white' }}>
+                            {music.title}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Aspect Ratio</label>
+                      <select
+                        value={videoData.aspectRatio}
+                        disabled
+                        onChange={(e) => updateField('aspectRatio', e.target.value)}
+                        className="w-full px-4 py-2 bg-white/5 cursor-not-allowed border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      >
+                        <option value="9:16" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>9:16 (Portrait)</option>
+                        <option value="16:9" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>16:9 (Landscape)</option>
+                        <option value="1:1" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>1:1 (Square)</option>
+                      </select>
                     </div>
                   </div>
+
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="col-span-1 md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Voiceover</label>
+                      <select
+                        value={`${videoData.voice.name} (${videoData.voice.gender})`}
+                        onChange={(e) => {
+                          const selected = voices.find(v => `${v.voice.name} (${v.voice.gender})` === e.target.value);
+                          if (selected) {
+                            updateNestedField('voice.name', selected.voice.name);
+                            updateNestedField('voice.gender', selected.voice.gender);
+                          }
+                        }}
+                        className="w-full px-4 py-2 bg-white/5 cursor-pointer border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      >
+                        <option value="" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>Select Voice</option>
+                        {voices.map((voice) => (
+                          <option key={voice.id} value={`${voice.voice.name} (${voice.voice.gender})`} style={{ backgroundColor: '#1E1E2D', color: 'white' }}>
+                            {voice.voice.name} ({voice.voice.gender})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* <div className="flex items-center gap-2"> */}
+                  {/*   <input */}
+                  {/*     type="checkbox" */}
+                  {/*     checked={videoData.generateMultipleAngles} */}
+                  {/*     onChange={(e) => updateField('generateMultipleAngles', e.target.checked)} */}
+                  {/*     className="w-4 h-4 rounded border-white/10 bg-white/5 text-purple-500 focus:ring-2 focus:ring-purple-500" */}
+                  {/*   /> */}
+                  {/*   <label className="text-sm text-gray-300">Generate Multiple Angles</label> */}
+                  {/* </div> */}
                 </div>
-              ))}
-              <button
-                onClick={addCharacter}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-lg hover:scale-105 transition-all"
-              >
-                <Plus className="w-5 h-5" />
-                Add Character
-              </button>
+              )}
             </div>
-          )}
-        </div>
 
-        {/* Scenes */}
-        <div className="bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] rounded-xl mb-6 border border-white/10 overflow-hidden">
-          <button
-            onClick={() => toggleSection('scenes')}
-            className="w-full flex items-center justify-between p-6 hover:bg-white/5 transition-colors"
-          >
-            <div className="flex items-center gap-3">
-              <ImagePlay className="w-5 h-5 text-purple-400" />
-              <h2 className="text-xl font-bold text-white">Scenes ({videoData.scenes.length})</h2>
-            </div>
-            {expandedSections.scenes ? <ChevronUp className="w-5 h-5 text-purple-400" /> : <ChevronDown className="w-5 h-5 text-purple-400" />}
-          </button>
-
-          {expandedSections.scenes && (
-            <div className="p-6 pt-0 space-y-4">
-              {/* Add Scene at Start Button */}
+            {/* Characters */}
+            <div className="bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] rounded-xl mb-6 border border-white/10 overflow-hidden">
               <button
-                onClick={() => addScene('start')}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white/10 text-green-300 rounded-lg hover:bg-white/20 transition-all border border-white/10"
+                onClick={() => toggleSection('characters')}
+                className="w-full flex items-center justify-between p-6 hover:bg-white/5 transition-colors"
               >
-                <ArrowUp className="w-5 h-5" />
-                Add Scene at Start
+                <div className="flex items-center gap-3">
+                  <User className="w-5 h-5 text-purple-400" />
+                  <h2 className="text-xl font-bold text-white">Characters ({videoData.characters.length})</h2>
+                </div>
+                {expandedSections.characters ? <ChevronUp className="w-5 h-5 text-purple-400" /> : <ChevronDown className="w-5 h-5 text-purple-400" />}
               </button>
 
-              {videoData.scenes.map((scene: any, sceneIndex: number) => (
-                <div key={sceneIndex}>
-                  <div className="bg-white/5 rounded-xl border border-white/10 overflow-hidden">
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-4">
-                        <button
-                          onClick={() => toggleScene(sceneIndex)}
-                          className="flex items-center gap-2 text-white hover:text-purple-300 transition-colors"
-                        >
-                          <h3 className="text-lg font-semibold">Scene {sceneIndex + 1}</h3>
-                          {expandedScenes[sceneIndex] ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                        </button>
-                        <button
-                          onClick={() => removeScene(sceneIndex)}
-                          className="p-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
 
-                      {expandedScenes[sceneIndex] && (
-                        <div className="space-y-4">
-                          <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Scene Image Prompt</label>
-                            <textarea
-                              value={scene.imagePrompt}
-                              onChange={(e) => updateNestedField(`scenes[${sceneIndex}].imagePrompt`, e.target.value)}
-                              rows={4}
-                              className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">Scene Video Prompt</label>
-                            <textarea
-                              value={scene.videoPrompt}
-                              onChange={(e) => updateNestedField(`scenes[${sceneIndex}].videoPrompt`, e.target.value)}
-                              rows={4}
-                              className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
-                            />
-                          </div>
-
-                          {/* Angles */}
-                          <div className="space-y-3">
-                            <h4 className="text-sm font-semibold text-gray-300">Angles ({scene.angles.length})</h4>
-
-                            {/* Add Angle at Start Button */}
-                            <button
-                              onClick={() => addAngle(sceneIndex, 'start')}
-                              className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white/5 text-green-300 rounded-lg hover:bg-white/10 transition-all border border-white/10 text-sm"
-                            >
-                              <ArrowUp className="w-4 h-4" />
-                              Add Angle at Start
-                            </button>
-
-                            {scene.angles.map((angle: any, angleIndex: number) => (
-                              <div key={angleIndex}>
-                                <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-                                  <div className="flex items-center justify-between mb-3">
-                                    <button
-                                      onClick={() => toggleAngle(sceneIndex, angleIndex)}
-                                      className="flex items-center gap-2 text-purple-200 hover:text-white transition-colors"
-                                    >
-                                      <span className="text-sm font-medium">Angle {angleIndex + 1}</span>
-                                      {expandedAngles[`${sceneIndex}-${angleIndex}`] ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-                                    </button>
-                                    {scene.angles.length > 1 && (
-                                      <button
-                                        onClick={() => removeAngle(sceneIndex, angleIndex)}
-                                        className="p-1 bg-red-500/20 text-red-400 rounded hover:bg-red-500/30 transition-colors"
-                                      >
-                                        <Trash2 className="w-3 h-3" />
-                                      </button>
-                                    )}
-                                  </div>
-                                  {expandedAngles[`${sceneIndex}-${angleIndex}`] && (
-                                    <textarea
-                                      value={angle.angleVideoPrompt}
-                                      onChange={(e) => updateNestedField(`scenes[${sceneIndex}].angles[${angleIndex}].angleVideoPrompt`, e.target.value)}
-                                      rows={3}
-                                      placeholder="Angle video prompt..."
-                                      className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
-                                    />
-                                  )}
-                                </div>
-
-                                {/* Add Angle After Button */}
-                                <button
-                                  onClick={() => addAngle(sceneIndex, 'after', angleIndex)}
-                                  className="w-full flex items-center justify-center gap-2 px-3 py-2 mt-2 bg-white/5 text-blue-300 rounded-lg hover:bg-white/10 transition-all border border-white/10 text-sm"
-                                >
-                                  <ArrowDown className="w-4 h-4" />
-                                  Add Angle After
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+              {expandedSections.characters && (
+                <div className="p-6 pt-0 space-y-6">
+                  {/* Grid of Character Cards */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 m-4">
+                    {videoData.characters.map((character: any, index: number) => (
+                      <CharacterCard
+                        key={index}
+                        index={index}
+                        character={character}
+                        removeCharacter={removeCharacter}
+                        generateCharacterImage={generateCharacterImage}
+                        updateNestedField={updateNestedField}
+                        modifyPrompts={modifyPrompts}
+                        setModifyPrompts={setModifyPrompts}
+                        generatingCharacter={generatingCharacter}
+                        modifyingCharacter={modifyingCharacter}
+                      />
+                    ))}
+                    <div className="min-h-[250px] flex flex-col items-center justify-center text-muted-foreground bg-white/5 rounded-xl p-4 border border-white/10">
+                      <Plus className="w-10 h-10 mb-2" strokeWidth={2} />
+                      <span className="text-lg font-medium">Add Character</span>
                     </div>
                   </div>
 
-                  {/* Add Scene After Button */}
+                  {/* Add Character Button */}
                   <button
-                    onClick={() => addScene('after', sceneIndex)}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-3 bg-white/10 text-blue-300 rounded-lg hover:bg-white/20 transition-all border border-white/10"
+                    onClick={addCharacter}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-lg hover:scale-105 transition-all"
                   >
-                    <ArrowDown className="w-5 h-5" />
-                    Add Scene After
+                    <Plus className="w-5 h-5" />
+                    Add Character
                   </button>
                 </div>
-              ))}
+              )}
+
             </div>
-          )}
+          </>
+        )}
+
+        {/* Scenes */}
+        {activeTab === 'Storyline' && (
+          <div className="bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] rounded-xl mb-6 border border-white/10 overflow-hidden">
+            <button
+              onClick={() => toggleSection('scenes')}
+              className="w-full flex items-center justify-between p-6 hover:bg-white/5 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <ImagePlay className="w-5 h-5 text-purple-400" />
+                <h2 className="text-xl font-bold text-white">Scenes ({videoData.scenes.length})</h2>
+              </div>
+              {expandedSections.scenes ? <ChevronUp className="w-5 h-5 text-purple-400" /> : <ChevronDown className="w-5 h-5 text-purple-400" />}
+            </button>
+
+            {expandedSections.scenes && (
+              <div className="p-6 pt-0 space-y-4">
+                {/* Add Scene at Start Button */}
+                <button
+                  onClick={() => addScene('start')}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white/10 text-green-300 rounded-lg hover:bg-white/20 transition-all border border-white/10"
+                >
+                  <ArrowUp className="w-5 h-5" />
+                  Add Scene at Start
+                </button>
+
+                {videoData.scenes.map((scene: any, sceneIndex: number) => (
+                  <div key={sceneIndex}>
+                    <div className="bg-white/5 rounded-xl border border-white/10 overflow-hidden">
+                      <div className="p-4">
+                        <div className="flex items-center justify-between mb-4">
+                          <button
+                            onClick={() => toggleScene(sceneIndex)}
+                            className="flex items-center gap-2 text-white hover:text-purple-300 transition-colors"
+                          >
+                            <h3 className="text-lg font-semibold">Scene {sceneIndex + 1}</h3>
+                            {expandedScenes[sceneIndex] ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                          </button>
+                          <button
+                            onClick={() => removeScene(sceneIndex)}
+                            className="p-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        {expandedScenes[sceneIndex] && (
+                          <div className="space-y-4">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Scene Image Prompt</label>
+                              <textarea
+                                value={scene.imagePrompt}
+                                onChange={(e) => updateNestedField(`scenes[${sceneIndex}].imagePrompt`, e.target.value)}
+                                rows={4}
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-medium text-gray-300 mb-2">Scene Video Prompt</label>
+                              <textarea
+                                value={scene.videoPrompt}
+                                onChange={(e) => updateNestedField(`scenes[${sceneIndex}].videoPrompt`, e.target.value)}
+                                rows={4}
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
+                              />
+                            </div>
+
+                            {/* Angles */}
+                            <div className="space-y-3">
+                              <h4 className="text-sm font-semibold text-gray-300">Angles ({scene.angles.length})</h4>
+
+                              {/* Add Angle at Start Button */}
+                              <button
+                                onClick={() => addAngle(sceneIndex, 'start')}
+                                className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white/5 text-green-300 rounded-lg hover:bg-white/10 transition-all border border-white/10 text-sm"
+                              >
+                                <ArrowUp className="w-4 h-4" />
+                                Add Angle at Start
+                              </button>
+
+                              {scene.angles.map((angle: any, angleIndex: number) => (
+                                <div key={angleIndex}>
+                                  <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+                                    <div className="flex items-center justify-between mb-3">
+                                      <button
+                                        onClick={() => toggleAngle(sceneIndex, angleIndex)}
+                                        className="flex items-center gap-2 text-purple-200 hover:text-white transition-colors"
+                                      >
+                                        <span className="text-sm font-medium">Angle {angleIndex + 1}</span>
+                                        {expandedAngles[`${sceneIndex}-${angleIndex}`] ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                                      </button>
+                                      {scene.angles.length > 1 && (
+                                        <button
+                                          onClick={() => removeAngle(sceneIndex, angleIndex)}
+                                          className="p-1 bg-red-500/20 text-red-400 rounded hover:bg-red-500/30 transition-colors"
+                                        >
+                                          <Trash2 className="w-3 h-3" />
+                                        </button>
+                                      )}
+                                    </div>
+                                    {expandedAngles[`${sceneIndex}-${angleIndex}`] && (
+                                      <textarea
+                                        value={angle.angleVideoPrompt}
+                                        onChange={(e) => updateNestedField(`scenes[${sceneIndex}].angles[${angleIndex}].angleVideoPrompt`, e.target.value)}
+                                        rows={3}
+                                        placeholder="Angle video prompt..."
+                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
+                                      />
+                                    )}
+                                  </div>
+
+                                  {/* Add Angle After Button */}
+                                  <button
+                                    onClick={() => addAngle(sceneIndex, 'after', angleIndex)}
+                                    className="w-full flex items-center justify-center gap-2 px-3 py-2 mt-2 bg-white/5 text-blue-300 rounded-lg hover:bg-white/10 transition-all border border-white/10 text-sm"
+                                  >
+                                    <ArrowDown className="w-4 h-4" />
+                                    Add Angle After
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Add Scene After Button */}
+                    <button
+                      onClick={() => addScene('after', sceneIndex)}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-3 bg-white/10 text-blue-300 rounded-lg hover:bg-white/20 transition-all border border-white/10"
+                    >
+                      <ArrowDown className="w-5 h-5" />
+                      Add Scene After
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        <div className="flex items-center justify-center">
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md"
+          >
+            <Save className="w-5 h-5" />
+            {isSaving ? 'Saving...' : 'Save Changes'}
+          </button>
         </div>
+
       </div>
     </div>
   );
 };
-
-export default VideoEditorComponent;

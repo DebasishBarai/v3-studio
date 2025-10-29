@@ -380,9 +380,9 @@ export default function VideoCreatorPage() {
           >
             <h2 className="text-xl flex gap-2 items-center justify-center text-white font-semibold">
               <Sparkles className="w-6 h-6" />
-              {isLoading ? 'Generating...' : 'Generate Video'}
+              {isLoading ? 'Generating...' : 'Generate Outline'}
             </h2>
-            <p className="text-white/70 text-sm mt-1">100 Credits to Generate Video</p>
+            <p className="text-white/70 text-sm mt-1">10 Credits to Generate Outline</p>
           </button>
         </div>
       </div>
