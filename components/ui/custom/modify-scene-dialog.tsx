@@ -34,7 +34,7 @@ export const ModifySceneDialog = ({
     generateSceneImage({
       index,
       prompt: modifyPrompt,
-      baseImageId: scene.imageStorageId,
+      baseImageId: scene.imageId,
     })
 
     setModifyPrompt("")

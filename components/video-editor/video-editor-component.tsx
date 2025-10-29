@@ -7,6 +7,7 @@ import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, ImagePlay, Plus, Save, Sett
 import { useEffect, useState } from 'react'
 import { toast } from "sonner"
 import { CharacterCard } from "../ui/custom/character-card"
+import { SceneCard } from "../ui/custom/scene-card"
 
 
 export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
@@ -24,7 +25,9 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const [expandedAngles, setExpandedAngles] = useState<Record<string, boolean>>({});
 
   const generateCharacterImageAction = useAction(api.generateVideoImage.generateCharacterImage);
+  const generateSceneImageAction = useAction(api.generateVideoImage.generateSceneImage);
   const [generatingCharacter, setGeneratingCharacter] = useState<number | null>(null);
+  const [generatingScene, setGeneratingScene] = useState<number | null>(null);
   const [modifyPrompts, setModifyPrompts] = useState<Record<number, string>>({});
   const [modifyingCharacter, setModifyingCharacter] = useState<number | null>(null);
 
@@ -244,6 +247,98 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
       return { ...prev, scenes: newScenes };
     });
   };
+
+  const generateSceneImage = async ({ index, prompt, baseImageId, characterNames = [] }: { index: number, prompt: string, baseImageId: string, characterNames?: string[] }) => {
+    console.log('Generating scene image...');
+    setGeneratingScene(index);
+
+    if (!prompt.trim()) {
+      console.log('No prompt provided for scene image');
+      toast.error('Please enter a prompt for the scene image');
+      setGeneratingScene(null);
+      return;
+    }
+
+    try {
+      let result
+      if (baseImageId) {
+        result = await generateSceneImageAction({
+          prompt,
+          baseImageId: baseImageId as Id<'_storage'>,
+          aspectRatio: videoData.aspectRatio,
+        });
+
+      } else {
+        if (characterNames.length === 0) {
+          result = await generateSceneImageAction({
+            prompt,
+            aspectRatio: videoData.aspectRatio,
+          });
+
+        } else {
+          // Validate character names and collect image IDs
+          const characterImageIds = [];
+          const missingCharacters = [];
+          const charactersWithoutImages = [];
+
+          for (const characterName of characterNames) {
+            // Find the character in the video.characters array
+            const character = video.characters.find(
+              (char) => char.name === characterName
+            );
+
+            if (!character) {
+              // Character doesn't exist in the video
+              missingCharacters.push(characterName);
+              continue;
+            }
+
+            if (!character.imageStorageId) {
+              // Character exists but image hasn't been generated yet
+              charactersWithoutImages.push(characterName);
+              continue;
+            }
+
+            // Character exists and has an image
+            characterImageIds.push(character.imageStorageId);
+          }
+
+          // Generate appropriate error messages
+          if (missingCharacters.length > 0) {
+            toast.error(`Following characters not found in character set: ${missingCharacters.join(", ")}`);
+            throw new Error(
+              `Following characters not found in character set: ${missingCharacters.join(", ")}`
+            );
+          }
+
+          if (charactersWithoutImages.length > 0) {
+            toast.error(`Images not yet generated for characters: ${charactersWithoutImages.join(", ")}. Please generate images for these characters first.`);
+            throw new Error(
+              `Images not yet generated for characters: ${charactersWithoutImages.join(", ")}. Please generate images for these characters first.`
+            );
+          }
+          result = await generateSceneImageAction({
+            prompt,
+            characterImageIds,
+            aspectRatio: videoData.aspectRatio,
+          });
+        }
+      }
+
+      updateNestedField(`scenes[${index}].imageId`, result.imageStorageId);
+      updateNestedField(`scenes[${index}].imageUrl`, result.imageUrl);
+
+      toast.success('Scene image generated successfully!');
+    } catch (error) {
+      console.error('Error generating scene image:', error);
+      toast.error('An error occurred while generating scene image');
+    } finally {
+      setGeneratingScene(null);
+    }
+  }
+
+  const generateSceneVideo = async ({ index, prompt, baseImageId, characterImageIds = [] }: { index: number, prompt: string, baseImageId: string, characterImageIds?: string[] }) => {
+  }
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -479,107 +574,22 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                 </button>
 
                 {videoData.scenes.map((scene: any, sceneIndex: number) => (
-                  <div key={sceneIndex}>
-                    <div className="bg-white/5 rounded-xl border border-white/10 overflow-hidden">
-                      <div className="p-4">
-                        <div className="flex items-center justify-between mb-4">
-                          <button
-                            onClick={() => toggleScene(sceneIndex)}
-                            className="flex items-center gap-2 text-white hover:text-purple-300 transition-colors"
-                          >
-                            <h3 className="text-lg font-semibold">Scene {sceneIndex + 1}</h3>
-                            {expandedScenes[sceneIndex] ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                          </button>
-                          <button
-                            onClick={() => removeScene(sceneIndex)}
-                            className="p-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-
-                        {expandedScenes[sceneIndex] && (
-                          <div className="space-y-4">
-                            <div>
-                              <label className="block text-sm font-medium text-gray-300 mb-2">Scene Image Prompt</label>
-                              <textarea
-                                value={scene.imagePrompt}
-                                onChange={(e) => updateNestedField(`scenes[${sceneIndex}].imagePrompt`, e.target.value)}
-                                rows={4}
-                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
-                              />
-                            </div>
-
-                            <div>
-                              <label className="block text-sm font-medium text-gray-300 mb-2">Scene Video Prompt</label>
-                              <textarea
-                                value={scene.videoPrompt}
-                                onChange={(e) => updateNestedField(`scenes[${sceneIndex}].videoPrompt`, e.target.value)}
-                                rows={4}
-                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
-                              />
-                            </div>
-
-                            {/* Angles */}
-                            <div className="space-y-3">
-                              <h4 className="text-sm font-semibold text-gray-300">Angles ({scene.angles.length})</h4>
-
-                              {/* Add Angle at Start Button */}
-                              <button
-                                onClick={() => addAngle(sceneIndex, 'start')}
-                                className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white/5 text-green-300 rounded-lg hover:bg-white/10 transition-all border border-white/10 text-sm"
-                              >
-                                <ArrowUp className="w-4 h-4" />
-                                Add Angle at Start
-                              </button>
-
-                              {scene.angles.map((angle: any, angleIndex: number) => (
-                                <div key={angleIndex}>
-                                  <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-                                    <div className="flex items-center justify-between mb-3">
-                                      <button
-                                        onClick={() => toggleAngle(sceneIndex, angleIndex)}
-                                        className="flex items-center gap-2 text-purple-200 hover:text-white transition-colors"
-                                      >
-                                        <span className="text-sm font-medium">Angle {angleIndex + 1}</span>
-                                        {expandedAngles[`${sceneIndex}-${angleIndex}`] ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-                                      </button>
-                                      {scene.angles.length > 1 && (
-                                        <button
-                                          onClick={() => removeAngle(sceneIndex, angleIndex)}
-                                          className="p-1 bg-red-500/20 text-red-400 rounded hover:bg-red-500/30 transition-colors"
-                                        >
-                                          <Trash2 className="w-3 h-3" />
-                                        </button>
-                                      )}
-                                    </div>
-                                    {expandedAngles[`${sceneIndex}-${angleIndex}`] && (
-                                      <textarea
-                                        value={angle.angleVideoPrompt}
-                                        onChange={(e) => updateNestedField(`scenes[${sceneIndex}].angles[${angleIndex}].angleVideoPrompt`, e.target.value)}
-                                        rows={3}
-                                        placeholder="Angle video prompt..."
-                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 resize-none"
-                                      />
-                                    )}
-                                  </div>
-
-                                  {/* Add Angle After Button */}
-                                  <button
-                                    onClick={() => addAngle(sceneIndex, 'after', angleIndex)}
-                                    className="w-full flex items-center justify-center gap-2 px-3 py-2 mt-2 bg-white/5 text-blue-300 rounded-lg hover:bg-white/10 transition-all border border-white/10 text-sm"
-                                  >
-                                    <ArrowDown className="w-4 h-4" />
-                                    Add Angle After
-                                  </button>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
+                  <div key={sceneIndex} className='m-4'>
+                    <SceneCard
+                      scene={scene}
+                      index={sceneIndex}
+                      expandedScenes={expandedScenes}
+                      expandedAngles={expandedAngles}
+                      toggleScene={toggleScene}
+                      toggleAngle={toggleAngle}
+                      removeScene={removeScene}
+                      removeAngle={removeAngle}
+                      addAngle={addAngle}
+                      updateNestedField={updateNestedField}
+                      generatingScene={generatingScene}
+                      generateSceneImage={generateSceneImage}
+                      generateSceneVideo={generateSceneVideo}
+                    />
                     {/* Add Scene After Button */}
                     <button
                       onClick={() => addScene('after', sceneIndex)}

@@ -141,6 +141,8 @@ export const SceneCard = ({
               generateSceneImage({
                 index,
                 prompt: scene.imagePrompt,
+                baseImageId: scene.imageId,
+                characterNames: scene.charactersInTheScene,
               })
             }
             className={cn(
