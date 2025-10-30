@@ -1,23 +1,21 @@
 'use client'
 
 import { Textarea } from '@/components/ui/textarea';
-import { ImagePlus, Loader2Icon, Monitor, Smartphone, Sparkles, Square } from 'lucide-react'
+import { ImagePlus, Loader2Icon, Monitor, Smartphone, Sparkles, Square } from 'lucide-react';
 import Image from 'next/image';
-import React, { useState } from 'react'
+import { useState } from 'react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { avatars } from '@/lib/objects';
 import { sampleProduct } from '@/lib/objects';
-import { useMutation } from 'convex/react';
-import { api } from '@/convex/_generated/api';
 
 type Props = {
   onHandleInputChange: any,
@@ -132,24 +130,24 @@ export const FormInput = ({ onHandleInputChange, OnGenerate, loading }: Props) =
 
       <div className='mt-8'>
         <h2 className='font-semibold'>4.Select Image Size</h2>
-        <Select onValueChange={(value) => onHandleInputChange('resolution', value)}>
+        <Select onValueChange={(value) => onHandleInputChange('aspectRatio', value)}>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select Resolution" />
+            <SelectValue placeholder="Select Aspect Ratio" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="1024x1024">
+            <SelectItem value="1:1">
               <div className='flex gap-2 items-center'>
                 <Square className='h-4 w-4' />
                 <span>1:1</span>
               </div>
             </SelectItem>
-            <SelectItem value="1536x1024">
+            <SelectItem value="16:9">
               <div className='flex gap-2 items-center'>
                 <Monitor className='h-4 w-4' />
                 <span>16:9</span>
               </div>
             </SelectItem>
-            <SelectItem value="1024x1536">
+            <SelectItem value="9:16">
               <div className='flex gap-2 items-center'>
                 <Smartphone className='h-4 w-4' />
                 <span>9:16</span>

@@ -7,12 +7,14 @@ import { useAction, useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { toast } from 'sonner'
+import { aspectRatioValidator } from '@/convex/schema'
+import { Infer } from 'convex/values'
 
 // Updated FormData structure - removed file, added base64Image
 type FormData = {
   product: string | File,
   description?: string,
-  resolution: string,
+  aspectRatio: Infer<typeof aspectRatioValidator>,
   avatarId?: string,
 }
 
@@ -36,6 +38,7 @@ export default function CreateAdsPage() {
   }
 
   const OnGenerate = async () => {
+    console.log({ formData })
     // Updated validation: check for base64Image OR imageUrl
     if (!formData?.product) {
       alert('Please upload a Product Image');
@@ -47,7 +50,7 @@ export default function CreateAdsPage() {
       return;
     }
 
-    if (!formData?.resolution) {
+    if (!formData?.aspectRatio) {
       alert('Please upload Product Size');
       return;
     }
@@ -77,7 +80,7 @@ export default function CreateAdsPage() {
         const adId = await createAd({
           productId: productId,
           description: formData?.description,
-          resolution: formData?.resolution || '1024x1024',
+          aspectRatio: formData?.aspectRatio || '1:1',
         });
         toast.success(`Ad created successfully with id: ${adId}`);
       } else {
@@ -85,7 +88,7 @@ export default function CreateAdsPage() {
         const adId = await createAd({
           productId: productId,
           description: formData?.description,
-          resolution: formData?.resolution || '1024x1024',
+          aspectRatio: formData?.aspectRatio || '1:1',
           avatarId: avatarId,
         });
         toast.success(`Ad created successfully with id: ${adId}`);

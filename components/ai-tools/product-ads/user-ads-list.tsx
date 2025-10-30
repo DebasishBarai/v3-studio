@@ -13,7 +13,7 @@ export const UsersAdsList = () => {
   const ads = useQuery(api.ad.getAds)
 
   return (
-    <div>
+    <div className="p-10">
       <h2 className='font-bold text-2xl mb-2 mt-5'>My Ads</h2>
 
       {ads?.length == 0 &&
@@ -34,7 +34,7 @@ export const UsersAdsList = () => {
         {ads && ads.map((ad, index) => (
           <div key={index}>
             <Image src={ad.adImageUrl ?? ''} alt={ad.adImageUrl ?? ''}
-              width={'400'}
+              width={400}
               height={400}
               unoptimized
               className='w-full h-[250px] lg:h-[370px] object-cover rounded-xl'

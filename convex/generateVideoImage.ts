@@ -53,12 +53,7 @@ export const generateCharacterImage = action({
 
 
     try {
-      let finalPrompt = args.prompt;
-
-      // Create the final prompt with description if provided
-      if (args.aspectRatio) {
-        finalPrompt += ` Aspect Ratio: ${args.aspectRatio}`;
-      }
+      const finalPrompt = args.prompt;
 
       const prompt = args.baseImageId ? [
         { text: `${finalPrompt}` }, {
@@ -75,7 +70,12 @@ export const generateCharacterImage = action({
         model: "gemini-2.5-flash-image",
         contents: prompt,
         config: {
-          responseModalities: [Modality.TEXT, Modality.IMAGE],
+          responseModalities: [Modality.IMAGE],
+          ...(args.aspectRatio && {
+            imageConfig: {
+              aspectRatio: args.aspectRatio,
+            },
+          }),
         },
       });
 
@@ -186,12 +186,7 @@ export const generateSceneImage = action({
 
 
     try {
-      let finalPrompt = args.prompt;
-
-      // Create the final prompt with description if provided
-      if (args.aspectRatio) {
-        finalPrompt += ` Aspect Ratio: ${args.aspectRatio}`;
-      }
+      const finalPrompt = args.prompt;
 
       const prompt = args.baseImageId ? [
         { text: `${finalPrompt}` }, {
@@ -216,7 +211,12 @@ export const generateSceneImage = action({
         model: "gemini-2.5-flash-image",
         contents: prompt,
         config: {
-          responseModalities: [Modality.TEXT, Modality.IMAGE],
+          responseModalities: [Modality.IMAGE],
+          ...(args.aspectRatio && {
+            imageConfig: {
+              aspectRatio: args.aspectRatio,
+            },
+          }),
         },
       });
 

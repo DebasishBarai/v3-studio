@@ -6,6 +6,34 @@ import { partial } from "convex-helpers/validators";
 
 const videoFields = schema.tables.videos.validator;
 
+export const getVideos = query({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_subject', (q) => q.eq('subject', identity.subject))
+      .first();
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const videos = await ctx.db
+      .query('videos')
+      .withIndex('by_userId', (q) => q.eq('userId', user?._id))
+      .order('desc')
+      .collect();
+
+    return videos;
+  },
+})
+
 export const getVideo = query({
   args: { id: v.id('videos') },
   handler: async (ctx, args) => {

@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { Id } from "./_generated/dataModel";
 import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
+import { aspectRatioValidator } from "./schema";
 
 export const getAds = query({
   args: {},
@@ -42,7 +43,7 @@ export const createInternalAd = internalMutation({
     productId: v.id('_storage'),
     productUrl: v.string(),
     description: v.optional(v.string()),
-    resolution: v.string(),
+    aspectRatio: aspectRatioValidator,
     avatar: v.optional(v.id('_storage')),
     adImageStorageId: v.id('_storage'),
     adImageUrl: v.optional(v.string()),
@@ -55,7 +56,7 @@ export const createInternalAd = internalMutation({
         productId: args.productId,
         productUrl: args.productUrl,
         description: args.description,
-        resolution: args.resolution,
+        aspectRatio: args.aspectRatio,
         avatar: args.avatar,
         adImageStorageId: args.adImageStorageId,
         adImageUrl: args.adImageUrl,

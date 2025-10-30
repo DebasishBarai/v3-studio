@@ -6,6 +6,7 @@ import { action } from './_generated/server'
 import { internal } from './_generated/api'
 import { v } from "convex/values";
 import { Id } from "./_generated/dataModel";
+import { aspectRatioValidator } from "./schema";
 
 const genai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_API_KEY,
@@ -15,7 +16,7 @@ export const createAd = action({
   args: {
     productId: v.id('_storage'),
     description: v.optional(v.string()),
-    resolution: v.string(),
+    aspectRatio: aspectRatioValidator,
     avatarId: v.optional(v.id('_storage')),
   },
   handler: async (ctx, args): Promise<Id<'ads'>> => {
@@ -75,10 +76,6 @@ export const createAd = action({
         finalPrompt += ` Additional context: ${args.description}`;
       }
 
-      if (args.resolution) {
-        finalPrompt += ` Resolution: ${args.resolution}`;
-      }
-
       const prompt = args.avatarId ? [
         { text: `${finalPrompt}` },
         {
@@ -105,10 +102,15 @@ export const createAd = action({
       ];
 
       const response = await genai.models.generateContent({
-        model: "gemini-2.5-flash-image-preview",
+        model: "gemini-2.5-flash-image",
         contents: prompt,
         config: {
-          responseModalities: [Modality.TEXT, Modality.IMAGE],
+          responseModalities: [Modality.IMAGE],
+          ...(args.aspectRatio && {
+            imageConfig: {
+              aspectRatio: args.aspectRatio,
+            },
+          }),
         },
       });
 
@@ -147,7 +149,7 @@ export const createAd = action({
             productId: args.productId,
             productUrl: productUrl,
             description: args.description,
-            resolution: args.resolution,
+            aspectRatio: args.aspectRatio,
             avatar: args.avatarId,
             adImageStorageId,
             adImageUrl: adImageUrl ?? undefined,

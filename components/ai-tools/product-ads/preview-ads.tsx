@@ -83,7 +83,7 @@ export const PreviewAds = () => {
                   width={500}
                   height={500}
                   unoptimized
-                  className='w-full h-[250px] rounded-lg'
+                  className='w-full h-[250px] rounded-lg object-cover'
                 />
                 <div className='flex justify-between items-center mt-2'>
                   <div className='flex items-center gap-2'>

@@ -81,7 +81,7 @@ export default defineSchema({
     productUrl: v.string(),
     description: v.optional(v.string()),
     avatar: v.optional(v.string()),
-    resolution: v.optional(v.string()),
+    aspectRatio: v.optional(aspectRatioValidator),
     adImageStorageId: v.optional(v.id('_storage')),
     adImageUrl: v.optional(v.string()),
     adVideoStorageId: v.optional(v.id('_storage')),
@@ -137,4 +137,5 @@ export default defineSchema({
     imagesGenerated: v.optional(v.number()),
     videosGenerated: v.optional(v.number()),
   })
+    .index('by_userId', ['userId'])
 })
