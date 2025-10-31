@@ -13,9 +13,9 @@ type Ad = Doc<'ads'>;
 
 export const PreviewAds = () => {
 
-  const ads = useQuery(api.ad.getAds)
+  const ads = useQuery(api.ad.ad.getAds)
 
-  const generateAdVideo = useAction(api.generateAdVideo.generateAdVideo)
+  const generateAdVideo = useAction(api.ad.generateAdVideo.generateAdVideo)
 
   const [loadingId, setLoadingId] = useState('');
 

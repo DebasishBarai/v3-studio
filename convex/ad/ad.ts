@@ -1,7 +1,7 @@
 import { v } from "convex/values";
-import { Id } from "./_generated/dataModel";
-import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
-import { aspectRatioValidator } from "./schema";
+import { Id } from "../_generated/dataModel";
+import { internalMutation, internalQuery, mutation, query } from "../_generated/server";
+import { aspectRatioValidator } from "../schema";
 
 export const getAds = query({
   args: {},

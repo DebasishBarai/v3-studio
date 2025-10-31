@@ -1,7 +1,7 @@
 import { v } from "convex/values";
-import schema, { styleValidator, musicValidator, aspectRatioValidator, voiceValidator, sceneSchema, characterSchema } from "./schema";
-import { Id } from "./_generated/dataModel";
-import { internalMutation, mutation, query } from "./_generated/server";
+import schema, { styleValidator, musicValidator, aspectRatioValidator, voiceValidator, sceneSchema, characterSchema } from "../schema";
+import { Id } from "../_generated/dataModel";
+import { internalMutation, mutation, query } from "../_generated/server";
 import { partial } from "convex-helpers/validators";
 
 const videoFields = schema.tables.videos.validator;

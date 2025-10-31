@@ -1,12 +1,12 @@
 'use node'
 
 import { GoogleGenAI } from "@google/genai";
-import { videoGenerationPrompt } from "./helper";
+import { videoGenerationPrompt } from "../helper";
 import { v } from "convex/values";
-import { action } from "./_generated/server";
-import { styleValidator, musicValidator, aspectRatioValidator, voiceValidator } from "./schema";
-import { internal } from "./_generated/api";
-import { Id } from "./_generated/dataModel";
+import { action } from "../_generated/server";
+import { styleValidator, musicValidator, aspectRatioValidator, voiceValidator } from "../schema";
+import { internal } from "../_generated/api";
+import { Id } from "../_generated/dataModel";
 
 const genai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_API_KEY,
@@ -67,7 +67,7 @@ export const createVideoBlueprint = action({
 
     const blueprint = JSON.parse(cleanJsonString);
 
-    const video = await ctx.runMutation(internal.video.createInternalVideo, {
+    const video = await ctx.runMutation(internal.video.video.createInternalVideo, {
       userId: user._id,
       prompt: args.prompt,
       style: args.style,
@@ -81,6 +81,12 @@ export const createVideoBlueprint = action({
       characters: blueprint.characters,
       scenes: blueprint.scenes,
     })
+
+    // update credits
+    await ctx.runMutation(internal.user.decreaseInternalCredits, {
+      subject: identity.subject,
+      amount: 5,
+    });
 
     return video
 

@@ -1,8 +1,8 @@
 'use node'
 
 import { v } from "convex/values";
-import { internal } from "./_generated/api";
-import { action } from "./_generated/server"
+import { internal } from "../_generated/api";
+import { action } from "../_generated/server"
 import Replicate from "replicate";
 
 const replicate = new Replicate({
@@ -33,7 +33,7 @@ export const generateAdVideo = action({
       throw new Error("Insufficient credits");
     }
 
-    const ad = await ctx.runQuery(internal.ad.getInternalAd, {
+    const ad = await ctx.runQuery(internal.ad.ad.getInternalAd, {
       _id: args.adId,
     });
 
@@ -83,7 +83,7 @@ while the background elements provide the dynamic motion and vibrance.`;
     const videoUrl = await ctx.storage.getUrl(videoStorageId);
 
     // Update ad with video url
-    await ctx.runMutation(internal.ad.updateInternalAd, {
+    await ctx.runMutation(internal.ad.ad.updateInternalAd, {
       id: ad._id,
       adVideoStorageId: videoStorageId,
       adVideoUrl: videoUrl ?? undefined,

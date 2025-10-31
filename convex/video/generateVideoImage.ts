@@ -1,11 +1,11 @@
 'use node'
 
 import { GoogleGenAI, Modality } from "@google/genai"
-import { action } from './_generated/server'
-import { internal } from './_generated/api'
+import { action } from '../_generated/server'
+import { internal } from '../_generated/api'
 import { v } from "convex/values";
-import { aspectRatioValidator } from "./schema";
-import { Id } from "./_generated/dataModel";
+import { aspectRatioValidator } from "../schema";
+import { Id } from "../_generated/dataModel";
 
 const genai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_API_KEY,
@@ -111,6 +111,7 @@ export const generateCharacterImage = action({
           if (!characterImageUrl) {
             throw new Error("Failed to generate URL for stored file");
           }
+
           // update credits
           await ctx.runMutation(internal.user.decreaseInternalCredits, {
             subject: identity.subject,

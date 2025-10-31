@@ -43,21 +43,46 @@ export const SceneCard = ({
         </div>
       </div>
 
-      {scene.imageUrl ? (
-        <div>
-          <Image
-            src={scene.imageUrl}
-            alt={`Scene ${index + 1}`}
-            width={800}
-            height={450}
-            unoptimized
-            className="w-full h-[300px] rounded-lg object-cover"
-          />
 
+      {scene.imageUrl || scene.videoUrl ? (
+        <div className="space-y-4">
+          {/* Image (if available) */}
+          {scene.imageUrl && (
+            <div>
+              <Image
+                src={scene.imageUrl}
+                alt={`Scene ${index + 1}`}
+                width={800}
+                height={450}
+                unoptimized
+                className="w-full h-[300px] rounded-lg object-cover"
+              />
+              <div className="flex justify-between items-center mt-2">
+                <Link href={scene.imageUrl} target="_blank">
+                  <Button variant="ghost">View Image</Button>
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* Video (if available) */}
+          {scene.videoUrl && (
+            <div>
+              <video
+                src={scene.videoUrl}
+                controls
+                className="w-full h-[300px] rounded-lg object-cover"
+              />
+              <div className="flex justify-between items-center mt-2">
+                <Link href={scene.videoUrl} target="_blank">
+                  <Button variant="ghost">View Video</Button>
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* Action buttons (generate, modify, etc.) */}
           <div className="flex justify-between items-center mt-4">
-            <Link href={scene.imageUrl} target="_blank">
-              <Button variant="ghost">View Image</Button>
-            </Link>
             <div className="flex gap-2">
               {/* Re-generate Image */}
               <Button
@@ -80,7 +105,7 @@ export const SceneCard = ({
                 {generatingScene === index ? 'Re-generating...' : 'Re-generate Image'}
               </Button>
 
-              {/* Modify Scene (e.g. different angle) */}
+              {/* Modify Scene */}
               <Button
                 disabled={
                   generatingScene === index ||
@@ -109,6 +134,7 @@ export const SceneCard = ({
                   generateSceneVideo({
                     index,
                     prompt: scene.videoPrompt,
+                    baseImageUrl: scene.imageUrl,
                   })
                 }
                 className={cn(
@@ -122,7 +148,7 @@ export const SceneCard = ({
                 )}
               >
                 <Video className="w-4 h-4" />
-                Generate Video
+                {scene.videoUrl ? 'Re-Generate Video' : 'Generate Video'}
               </Button>
             </div>
           </div>
@@ -131,12 +157,10 @@ export const SceneCard = ({
         <>
           <div className="h-[300px] flex flex-col items-center justify-center text-muted-foreground">
             <ImageOff className="w-12 h-12 mb-1 opacity-70" />
-            <span className="text-sm">No image yet</span>
+            <span className="text-sm">No image or video yet</span>
           </div>
           <Button
-            disabled={
-              generatingScene === index || !scene.imagePrompt.trim()
-            }
+            disabled={generatingScene === index || !scene.imagePrompt.trim()}
             onClick={() =>
               generateSceneImage({
                 index,

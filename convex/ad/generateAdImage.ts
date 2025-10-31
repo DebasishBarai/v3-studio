@@ -1,12 +1,12 @@
 'use node'
 
 import { GoogleGenAI, Modality } from "@google/genai"
-import { PROMPT, AVATAR_PROMPT } from "./helper";
-import { action } from './_generated/server'
-import { internal } from './_generated/api'
+import { PROMPT, AVATAR_PROMPT } from "../helper";
+import { action } from '../_generated/server'
+import { internal } from '../_generated/api'
 import { v } from "convex/values";
-import { Id } from "./_generated/dataModel";
-import { aspectRatioValidator } from "./schema";
+import { Id } from "../_generated/dataModel";
+import { aspectRatioValidator } from "../schema";
 
 const genai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_API_KEY,
@@ -144,7 +144,7 @@ export const createAd = action({
 
           const adImageUrl = await ctx.storage.getUrl(adImageStorageId);
 
-          const adId = await ctx.runMutation(internal.ad.createInternalAd, {
+          const adId = await ctx.runMutation(internal.ad.ad.createInternalAd, {
             userId: user._id,
             productId: args.productId,
             productUrl: productUrl,

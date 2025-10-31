@@ -28,7 +28,7 @@ export default function VideoCreatorPage() {
 
   const router = useRouter()
   const convex = useConvex()
-  const createVideoBlueprint = useAction(api.generateVideo.createVideoBlueprint)
+  const createVideoBlueprint = useAction(api.video.generateVideoScript.createVideoBlueprint)
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 

@@ -22,9 +22,9 @@ export default function CreateAdsPage() {
   const [formData, setFormData] = useState<FormData>();
   const [loading, setLoading] = useState(false);
 
-  const createAd = useAction(api.generateAdImage.createAd)
+  const createAd = useAction(api.ad.generateAdImage.createAd)
 
-  const generateProductImageUrl = useMutation(api.ad.generateProductImageUrl)
+  const generateProductImageUrl = useMutation(api.ad.ad.generateProductImageUrl)
 
   // Updated handler to process file uploads and convert to base64
   const onHandleInputChange = async (field: string, value: string) => {

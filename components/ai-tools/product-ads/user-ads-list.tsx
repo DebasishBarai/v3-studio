@@ -10,7 +10,7 @@ import { useQuery } from 'convex/react';
 
 export const UsersAdsList = () => {
 
-  const ads = useQuery(api.ad.getAds)
+  const ads = useQuery(api.ad.ad.getAds)
 
   return (
     <div className="p-10">

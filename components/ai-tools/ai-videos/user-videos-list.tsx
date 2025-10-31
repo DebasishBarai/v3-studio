@@ -9,7 +9,7 @@ import Link from 'next/link';
 import VideoCard from './video-card';
 
 export const UsersVideosList = () => {
-  const videos = useQuery(api.video.getVideos)
+  const videos = useQuery(api.video.video.getVideos)
   return (
     <div className="p-10">
       <div>

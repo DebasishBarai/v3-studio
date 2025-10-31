@@ -3,7 +3,7 @@
 import { api } from "@/convex/_generated/api"
 import { Doc, Id } from '@/convex/_generated/dataModel'
 import { useAction, useMutation, useQuery } from "convex/react"
-import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, ImagePlay, Plus, Save, Settings, Trash2, User } from 'lucide-react'
+import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, ImagePlay, Plus, Save, Settings, User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from "sonner"
 import { CharacterCard } from "../ui/custom/character-card"
@@ -12,8 +12,8 @@ import { SceneCard } from "../ui/custom/scene-card"
 
 export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const id = videoId as Id<'videos'>;
-  const video = useQuery(api.video.getVideo, { id: id });
-  const updateVideo = useMutation(api.video.updateVideo);
+  const video = useQuery(api.video.video.getVideo, { id: id });
+  const updateVideo = useMutation(api.video.video.updateVideo);
 
   const [videoData, setVideoData] = useState<Doc<'videos'>>();
   const [expandedSections, setExpandedSections] = useState({
@@ -24,8 +24,9 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const [expandedScenes, setExpandedScenes] = useState<Record<number, boolean>>({});
   const [expandedAngles, setExpandedAngles] = useState<Record<string, boolean>>({});
 
-  const generateCharacterImageAction = useAction(api.generateVideoImage.generateCharacterImage);
-  const generateSceneImageAction = useAction(api.generateVideoImage.generateSceneImage);
+  const generateCharacterImageAction = useAction(api.video.generateVideoImage.generateCharacterImage);
+  const generateSceneImageAction = useAction(api.video.generateVideoImage.generateSceneImage);
+  const generateSceneVideoAction = useAction(api.video.generateVideo.generateSceneVideo)
   const [generatingCharacter, setGeneratingCharacter] = useState<number | null>(null);
   const [generatingScene, setGeneratingScene] = useState<number | null>(null);
   const [modifyPrompts, setModifyPrompts] = useState<Record<number, string>>({});
@@ -337,7 +338,32 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
     }
   }
 
-  const generateSceneVideo = async ({ index, prompt, baseImageId, characterImageIds = [] }: { index: number, prompt: string, baseImageId: string, characterImageIds?: string[] }) => {
+  const generateSceneVideo = async ({ index, prompt, baseImageUrl }: { index: number, prompt: string, baseImageUrl: string }) => {
+    console.log('Generating scene video...');
+    setGeneratingScene(index);
+
+    if (!prompt.trim()) {
+      console.log('No prompt provided for scene video');
+      toast.error('Please enter a prompt for the scene video');
+      setGeneratingScene(null);
+      return;
+    }
+
+    try {
+      const result = await generateSceneVideoAction({
+        prompt,
+        baseImageUrl: baseImageUrl,
+      });
+      updateNestedField(`scenes[${index}].videoId`, result.videoStorageId);
+      updateNestedField(`scenes[${index}].videoUrl`, result.videoUrl);
+
+      toast.success('Scene video generated successfully!');
+    } catch (error) {
+      console.error('Error generating scene video:', error);
+      toast.error('An error occurred while generating scene video');
+    } finally {
+      setGeneratingScene(null);
+    }
   }
 
   const handleSave = async () => {

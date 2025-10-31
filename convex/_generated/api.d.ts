@@ -8,11 +8,9 @@
  * @module
  */
 
-import type * as ad from "../ad.js";
-import type * as generateAdImage from "../generateAdImage.js";
-import type * as generateAdVideo from "../generateAdVideo.js";
-import type * as generateVideo from "../generateVideo.js";
-import type * as generateVideoImage from "../generateVideoImage.js";
+import type * as ad_ad from "../ad/ad.js";
+import type * as ad_generateAdImage from "../ad/generateAdImage.js";
+import type * as ad_generateAdVideo from "../ad/generateAdVideo.js";
 import type * as helper from "../helper.js";
 import type * as http from "../http.js";
 import type * as order from "../order.js";
@@ -21,7 +19,10 @@ import type * as prompt from "../prompt.js";
 import type * as storage from "../storage.js";
 import type * as suggestion from "../suggestion.js";
 import type * as user from "../user.js";
-import type * as video from "../video.js";
+import type * as video_generateVideo from "../video/generateVideo.js";
+import type * as video_generateVideoImage from "../video/generateVideoImage.js";
+import type * as video_generateVideoScript from "../video/generateVideoScript.js";
+import type * as video_video from "../video/video.js";
 
 import type {
   ApiFromModules,
@@ -38,11 +39,9 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  ad: typeof ad;
-  generateAdImage: typeof generateAdImage;
-  generateAdVideo: typeof generateAdVideo;
-  generateVideo: typeof generateVideo;
-  generateVideoImage: typeof generateVideoImage;
+  "ad/ad": typeof ad_ad;
+  "ad/generateAdImage": typeof ad_generateAdImage;
+  "ad/generateAdVideo": typeof ad_generateAdVideo;
   helper: typeof helper;
   http: typeof http;
   order: typeof order;
@@ -51,7 +50,10 @@ declare const fullApi: ApiFromModules<{
   storage: typeof storage;
   suggestion: typeof suggestion;
   user: typeof user;
-  video: typeof video;
+  "video/generateVideo": typeof video_generateVideo;
+  "video/generateVideoImage": typeof video_generateVideoImage;
+  "video/generateVideoScript": typeof video_generateVideoScript;
+  "video/video": typeof video_video;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
 
