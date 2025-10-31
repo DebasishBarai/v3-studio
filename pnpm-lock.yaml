@@ -38,6 +38,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.8
         version: 1.2.8(@types/react-dom@19.1.9(@types/react@19.1.13))(@types/react@19.1.13)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@remotion/player':
+        specifier: ^4.0.370
+        version: 4.0.370(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -71,6 +74,9 @@ importers:
       react-fast-marquee:
         specifier: ^1.6.5
         version: 1.6.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      remotion:
+        specifier: ^4.0.370
+        version: 4.0.370(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       replicate:
         specifier: ^1.2.0
         version: 1.2.0
@@ -1149,6 +1155,12 @@ packages:
 
   '@radix-ui/rect@1.1.1':
     resolution: {integrity: sha512-HPwpGIzkl28mWyZqG52jiqDJ12waP11Pa1lGoiyUkIEuMLBP0oeK/C89esbXrxsky5we7dfd8U58nm0SgAWpVw==}
+
+  '@remotion/player@4.0.370':
+    resolution: {integrity: sha512-Pg5Asepvm3ms5gd2BxQuRHwa9T0+Zp++ZRIdh8w1+tzUGpS6aw4WILl+f3gvysPdU1tiVXRXWk/S05a3cJ14Cw==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
 
   '@rtsao/scc@1.1.0':
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
@@ -2714,6 +2726,12 @@ packages:
     resolution: {integrity: sha512-dYqgNSZbDwkaJ2ceRd9ojCGjBq+mOm9LmtXnAnEGyHhN/5R7iDW2TRw3h+o/jCFxus3P2LfWIIiwowAjANm7IA==}
     engines: {node: '>= 0.4'}
 
+  remotion@4.0.370:
+    resolution: {integrity: sha512-aYnGjV/L7ax7PCMwnKJpDM+uObAIUyQK47CH/hFZ6qYAbSXLJnbk08AeNQZOvsPqR/IirEcEt8Suj9jX9RC2ww==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
   replicate@1.2.0:
     resolution: {integrity: sha512-11A1LEP0jib+H2ISWYvW12Tg43Fs7HHZPvJvA9Naqr7/REwCWlExP6MWJHZBKe5WVs9iiFV/VYhCEcFUEIFgeg==}
     engines: {git: '>=2.11.0', node: '>=18.0.0', npm: '>=7.19.0', yarn: '>=1.7.0'}
@@ -4049,6 +4067,12 @@ snapshots:
       '@types/react-dom': 19.1.9(@types/react@19.1.13)
 
   '@radix-ui/rect@1.1.1': {}
+
+  '@remotion/player@4.0.370(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+      remotion: 4.0.370(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
   '@rtsao/scc@1.1.0': {}
 
@@ -5744,6 +5768,11 @@ snapshots:
       get-proto: 1.0.1
       gopd: 1.2.0
       set-function-name: 2.0.2
+
+  remotion@4.0.370(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   replicate@1.2.0:
     optionalDependencies:
