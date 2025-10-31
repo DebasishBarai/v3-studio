@@ -60,7 +60,6 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
     { id: 8, voice: { name: 'Coral', gender: 'Female' } }
   ];
 
-
   // Initialize videoData from query
   useEffect(() => {
     if (video) {
@@ -386,7 +385,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2">
+    <div className="w-full min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Tabs */}
         <div className="flex items-center justify-center mb-12">
@@ -642,6 +641,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
         </div>
 
       </div>
+
     </div>
   );
 };

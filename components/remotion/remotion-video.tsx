@@ -1,15 +1,18 @@
-import { VideoInputProps } from "@/remotion/root";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 
-export const RemotionVideo: React.FC<VideoInputProps> = ({ name }) => {
+type Props = {
+  text: string;
+}
+
+export const RemotionVideo: React.FC<Props> = ({ text }) => {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
 
-  const text = `This is frame: ${frame} and duration is: ${durationInFrames}. Hi ${name}`;
+  const displayText = `This is frame: ${frame} and duration is: ${durationInFrames}. Hi ${text}`;
 
   return (
     <AbsoluteFill style={{ backgroundColor: "black", fontSize: 50 }}>
-      {text}
+      {displayText}
     </AbsoluteFill>
   )
 }
