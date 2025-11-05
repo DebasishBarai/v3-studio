@@ -125,7 +125,7 @@ export default function VideoCreatorPage() {
         audioRef.current = new Audio(selectedTrack.url);
         audioRef.current.play().catch((error) => {
           console.error('Playback failed:', error);
-          
+          toast.error('An error occurred while playing the audio');
           setPlayingMusic(null);
         });
         
