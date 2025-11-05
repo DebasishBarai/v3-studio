@@ -221,7 +221,7 @@ export default function VideoCreatorPage() {
                 <button
                   key={ratio.id}
                   onClick={() => setSelectedAspectRatio(ratio.id)}
-                  className={`bg-zinc-900 rounded-lg border p-4 text-center transition ${selectedAspectRatio === ratio.id
+                  className={`bg-zinc-900 rounded-lg border cursor-pointer p-4 text-center transition ${selectedAspectRatio === ratio.id
                     ? 'border-yellow-500 bg-yellow-500/10'
                     : 'border-zinc-800 hover:border-yellow-400'
                     }`}
@@ -245,7 +245,7 @@ export default function VideoCreatorPage() {
                 <button
                   key={duration.id}
                   onClick={() => setSelectedDuration(duration.id)}
-                  className={`bg-zinc-900 rounded-lg border p-4 text-center transition ${selectedDuration === duration.id
+                  className={`bg-zinc-900 rounded-lg border cursor-pointer p-4 text-center transition ${selectedDuration === duration.id
                     ? 'border-orange-500 bg-orange-500/10'
                     : 'border-zinc-800 hover:border-orange-400'
                     }`}
@@ -274,7 +274,7 @@ export default function VideoCreatorPage() {
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => toggleMusicPlay(track.id)}
-                      className="bg-gray-700 hover:opacity-80 rounded-full p-2 transition"
+                      className="bg-gray-700 hover:opacity-80 rounded-full p-2 cursor-pointer transition"
                     >
                       {playingMusic === track.id ? (
                         <Pause className="w-5 h-5" />
@@ -288,7 +288,7 @@ export default function VideoCreatorPage() {
                   </div>
                   <button
                     onClick={() => setSelectedMusic(track.id)}
-                    className={`px-4 py-2 border rounded-md text-sm transition ${selectedMusic === track.id
+                    className={`px-4 py-2 border rounded-md text-sm cursor-pointer transition ${selectedMusic === track.id
                       ? 'border-blue-500 bg-blue-500/10 text-blue-400'
                       : 'border-zinc-500 hover:bg-zinc-700'
                       }`}
@@ -312,12 +312,12 @@ export default function VideoCreatorPage() {
                 <button
                   key={e.id}
                   onClick={() => setSelectedVoice(e.id)}
-                  className={`bg-zinc-900 rounded-lg border p-3 flex gap-3 items-center transition ${selectedVoice === e.id
+                  className={`bg-zinc-900 rounded-lg border p-3 cursor-pointer flex gap-3 items-center transition ${selectedVoice === e.id
                     ? 'border-green-500'
                     : 'border-zinc-800 hover:border-pink-400'
                     }`}
                 >
-                  <button className="w-12 h-12 border border-zinc-700 rounded-md flex items-center justify-center hover:bg-zinc-800 transition">
+                  <button className="w-12 h-12 border border-zinc-700 cursor-pointer rounded-md flex items-center justify-center hover:bg-zinc-800 transition">
                     <CirclePlay className="w-5 h-5" />
                   </button>
                   <div className="text-left">
