@@ -177,7 +177,7 @@ export default function DashboardPage() {
           <Image
             alt="AI Product Scene Generator"
             className="w-full h-72 object-cover"
-            src="/dashboard/5.png"
+            src="/dashboard/5.webp"
             width={400}
             height={288}
           />
