@@ -22,6 +22,7 @@ export default function VideoCreatorPage() {
   const [selectedMusic, setSelectedMusic] = useState<number | null>(null);
   const [selectedVoice, setSelectedVoice] = useState<number | null>(null);
   const [playingMusic, setPlayingMusic] = useState<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [selectedAspectRatio, setSelectedAspectRatio] = useState<string | null>(null);
   const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -100,7 +101,22 @@ export default function VideoCreatorPage() {
   }, [prompt]);
 
   const toggleMusicPlay = (id: number) => {
-    setPlayingMusic(playingMusic === id ? null : id);
+    if (playingMusic === id) {
+      audioRef.current?.pause();
+      setPlayingMusic(null);
+    } else {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      const selectedTrack = musics.find((track) => track.id === id);
+      if (selectedTrack) {
+        audioRef.current = new Audio(selectedTrack.url);
+        audioRef.current.play();
+        setPlayingMusic(id);
+
+        audioRef.current.onended = () => setPlayingMusic(null);
+      }
+    }
   };
 
   const getRandomPrompt = async () => {
