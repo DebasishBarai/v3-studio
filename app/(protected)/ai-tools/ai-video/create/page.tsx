@@ -100,6 +100,15 @@ export default function VideoCreatorPage() {
     }
   }, [prompt]);
 
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.onended = null;
+      }
+    };
+  }, []);
+
   const toggleMusicPlay = (id: number) => {
     if (playingMusic === id) {
       audioRef.current?.pause();
@@ -107,14 +116,23 @@ export default function VideoCreatorPage() {
     } else {
       if (audioRef.current) {
         audioRef.current.pause();
+        audioRef.current.onended = null;
       }
+      
       const selectedTrack = musics.find((track) => track.id === id);
+      
       if (selectedTrack) {
         audioRef.current = new Audio(selectedTrack.url);
-        audioRef.current.play();
+        audioRef.current.play().catch((error) => {
+          console.error('Playback failed:', error);
+          
+          setPlayingMusic(null);
+        });
+        
         setPlayingMusic(id);
 
         audioRef.current.onended = () => setPlayingMusic(null);
+        
       }
     }
   };
