@@ -57,27 +57,27 @@ export default function VideoCreatorPage() {
   ];
 
   const musics = [
-  { id: 1, title: 'Dreams of Home', url: 'https://pixabay.com/music/beautiful-plays-dreams-of-home-110624/' },
-  { id: 2, title: 'LoFi Study', url: 'https://pixabay.com/music/lofi-lofi-study-112191/' },
-  { id: 3, title: 'Sunny Morning', url: 'https://pixabay.com/music/acoustic-group-sunny-morning-5944/' },
-  { id: 4, title: 'Cinematic Inspiration', url: 'https://pixabay.com/music/inspirational-cinematic-inspiration-120417/' },
-  { id: 5, title: 'Energetic Pop', url: 'https://pixabay.com/music/pop-energetic-pop-113474/' },
-  { id: 6, title: 'Chill Vibes', url: 'https://pixabay.com/music/lofi-chill-vibes-110005/' },
-  { id: 7, title: 'Epic Adventure', url: 'https://pixabay.com/music/trailer-epic-adventure-129444/' },
-  { id: 8, title: 'Calm Piano', url: 'https://pixabay.com/music/beautiful-plays-calm-piano-122215/' },
-  { id: 9, title: 'Corporate Uplifting', url: 'https://pixabay.com/music/corporate-corporate-uplifting-111728/' },
-  { id: 10, title: 'LoFi Chillhop', url: 'https://pixabay.com/music/lofi-lofi-chillhop-110090/' },
-  { id: 11, title: 'Funky Groove', url: 'https://pixabay.com/music/funk-funky-groove-119922/' },
-  { id: 12, title: 'Ambient Flow', url: 'https://pixabay.com/music/ambient-ambient-flow-127636/' },
-  { id: 13, title: 'Motivational Journey', url: 'https://pixabay.com/music/inspirational-motivational-journey-111376/' },
-  { id: 14, title: 'Cinematic Piano', url: 'https://pixabay.com/music/beautiful-plays-cinematic-piano-111271/' },
-  { id: 15, title: 'Tropical Summer', url: 'https://pixabay.com/music/tropical-tropical-summer-116772/' },
-  { id: 16, title: 'Abstract Technology', url: 'https://pixabay.com/music/electronic-abstract-technology-115669/' },
-  { id: 17, title: 'Romantic Acoustic', url: 'https://pixabay.com/music/acoustic-group-romantic-acoustic-126408/' },
-  { id: 18, title: 'Action Trailer', url: 'https://pixabay.com/music/trailer-action-trailer-114474/' },
-  { id: 19, title: 'Peaceful Nature', url: 'https://pixabay.com/music/ambient-peaceful-nature-126995/' },
-  { id: 20, title: 'Urban Night', url: 'https://pixabay.com/music/lofi-urban-night-110093/' }
-];
+    { id: 1, title: 'Dreams of Home', url: 'https://optimistic-horse-49.convex.cloud/api/storage/ea98a0ca-e7fe-4fec-ba6e-1e4c7856c5b8', storageId: 'kg2e4h19brxspww17efjfc5ag97tvw6m' },
+    { id: 2, title: 'LoFi Study', url: 'https://optimistic-horse-49.convex.cloud/api/storage/a04959ec-316a-4c19-8a24-96718fe574a8', storageId: 'kg22tzs904dh2d1xyd5ayfk02n7tvbqc' },
+    { id: 3, title: 'Sunny Morning', url: 'https://optimistic-horse-49.convex.cloud/api/storage/fd61b75e-15be-4f43-be91-4eea23230905', storageId: 'kg2f00be6g6ega5ra4c1bj0xzh7ttrpc' },
+    { id: 4, title: 'Cinematic Inspiration', url: 'https://pixabay.com/music/inspirational-cinematic-inspiration-120417/', storageId: '' },
+    { id: 5, title: 'Energetic Pop', url: 'https://pixabay.com/music/pop-energetic-pop-113474/', storageId: '' },
+    { id: 6, title: 'Chill Vibes', url: 'https://pixabay.com/music/lofi-chill-vibes-110005/', storageId: '' },
+    { id: 7, title: 'Epic Adventure', url: 'https://pixabay.com/music/trailer-epic-adventure-129444/', storageId: '' },
+    { id: 8, title: 'Calm Piano', url: 'https://pixabay.com/music/beautiful-plays-calm-piano-122215/', storageId: '' },
+    { id: 9, title: 'Corporate Uplifting', url: 'https://pixabay.com/music/corporate-corporate-uplifting-111728/', storageId: '' },
+    { id: 10, title: 'LoFi Chillhop', url: 'https://pixabay.com/music/lofi-lofi-chillhop-110090/', storageId: '' },
+    { id: 11, title: 'Funky Groove', url: 'https://pixabay.com/music/funk-funky-groove-119922/', storageId: '' },
+    { id: 12, title: 'Ambient Flow', url: 'https://pixabay.com/music/ambient-ambient-flow-127636/', storageId: '' },
+    { id: 13, title: 'Motivational Journey', url: 'https://pixabay.com/music/inspirational-motivational-journey-111376/', storageId: '' },
+    { id: 14, title: 'Cinematic Piano', url: 'https://pixabay.com/music/beautiful-plays-cinematic-piano-111271/', storageId: '' },
+    { id: 15, title: 'Tropical Summer', url: 'https://pixabay.com/music/tropical-tropical-summer-116772/', storageId: '' },
+    { id: 16, title: 'Abstract Technology', url: 'https://pixabay.com/music/electronic-abstract-technology-115669/', storageId: '' },
+    { id: 17, title: 'Romantic Acoustic', url: 'https://pixabay.com/music/acoustic-group-romantic-acoustic-126408/', storageId: '' },
+    { id: 18, title: 'Action Trailer', url: 'https://pixabay.com/music/trailer-action-trailer-114474/', storageId: '' },
+    { id: 19, title: 'Peaceful Nature', url: 'https://pixabay.com/music/ambient-peaceful-nature-126995/', storageId: '' },
+    { id: 20, title: 'Urban Night', url: 'https://pixabay.com/music/lofi-urban-night-110093/', storageId: '' }
+  ];
 
 
   const voices: VoiceType[] = [
@@ -118,20 +118,20 @@ export default function VideoCreatorPage() {
         audioRef.current.pause();
         audioRef.current.onended = null;
       }
-      
+
       const selectedTrack = musics.find((track) => track.id === id);
-      
+
       if (selectedTrack) {
-        audioRef.current = new Audio(selectedTrack.url); 
+        audioRef.current = new Audio(selectedTrack.url);
         setPlayingMusic(id);
         audioRef.current.play().catch((error) => {
           if (error.name !== 'AbortError') {
             console.error('Playback failed:', error);
             toast.error('An error occurred while playing the audio');
           }
-            setPlayingMusic(null);
+          setPlayingMusic(null);
         });
-       
+
         audioRef.current.onended = () => setPlayingMusic(null);
       }
     }

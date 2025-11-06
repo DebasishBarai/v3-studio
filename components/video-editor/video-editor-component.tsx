@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { toast } from "sonner"
 import { CharacterCard } from "../ui/custom/character-card"
 import { SceneCard } from "../ui/custom/scene-card"
+import { VideoPlayer } from "./video-player"
 
 
 export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
@@ -32,21 +33,31 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const [modifyPrompts, setModifyPrompts] = useState<Record<number, string>>({});
   const [modifyingCharacter, setModifyingCharacter] = useState<number | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'Storyline' | 'Settings'>('Storyline');
+  const [activeTab, setActiveTab] = useState<'Storyline' | 'Settings' | 'Editor'>('Storyline');
 
   const [isSaving, setIsSaving] = useState(false);
 
   const musics = [
-    { id: 1, title: 'Else - Paris', url: '#' },
-    { id: 2, title: 'Für Elise', url: '#' },
-    { id: 3, title: 'Prelude in E minor (Op. 28 n°4)', url: '#' },
-    { id: 4, title: 'Eureka', url: '#' },
-    { id: 5, title: 'Tension In The Air', url: '#' },
-    { id: 6, title: 'Winter', url: '#' },
-    { id: 7, title: 'Bladerunner 2049', url: '#' },
-    { id: 8, title: 'Snowfall', url: '#' },
-    { id: 9, title: 'Another love', url: '#' },
-    { id: 10, title: 'String Arpeggios', url: '#' }
+    { id: 1, title: 'Dreams of Home', url: 'https://pixabay.com/music/beautiful-plays-dreams-of-home-110624/' },
+    { id: 2, title: 'LoFi Study', url: 'https://pixabay.com/music/lofi-lofi-study-112191/' },
+    { id: 3, title: 'Sunny Morning', url: 'https://pixabay.com/music/acoustic-group-sunny-morning-5944/' },
+    { id: 4, title: 'Cinematic Inspiration', url: 'https://pixabay.com/music/inspirational-cinematic-inspiration-120417/' },
+    { id: 5, title: 'Energetic Pop', url: 'https://pixabay.com/music/pop-energetic-pop-113474/' },
+    { id: 6, title: 'Chill Vibes', url: 'https://pixabay.com/music/lofi-chill-vibes-110005/' },
+    { id: 7, title: 'Epic Adventure', url: 'https://pixabay.com/music/trailer-epic-adventure-129444/' },
+    { id: 8, title: 'Calm Piano', url: 'https://pixabay.com/music/beautiful-plays-calm-piano-122215/' },
+    { id: 9, title: 'Corporate Uplifting', url: 'https://pixabay.com/music/corporate-corporate-uplifting-111728/' },
+    { id: 10, title: 'LoFi Chillhop', url: 'https://pixabay.com/music/lofi-lofi-chillhop-110090/' },
+    { id: 11, title: 'Funky Groove', url: 'https://pixabay.com/music/funk-funky-groove-119922/' },
+    { id: 12, title: 'Ambient Flow', url: 'https://pixabay.com/music/ambient-ambient-flow-127636/' },
+    { id: 13, title: 'Motivational Journey', url: 'https://pixabay.com/music/inspirational-motivational-journey-111376/' },
+    { id: 14, title: 'Cinematic Piano', url: 'https://pixabay.com/music/beautiful-plays-cinematic-piano-111271/' },
+    { id: 15, title: 'Tropical Summer', url: 'https://pixabay.com/music/tropical-tropical-summer-116772/' },
+    { id: 16, title: 'Abstract Technology', url: 'https://pixabay.com/music/electronic-abstract-technology-115669/' },
+    { id: 17, title: 'Romantic Acoustic', url: 'https://pixabay.com/music/acoustic-group-romantic-acoustic-126408/' },
+    { id: 18, title: 'Action Trailer', url: 'https://pixabay.com/music/trailer-action-trailer-114474/' },
+    { id: 19, title: 'Peaceful Nature', url: 'https://pixabay.com/music/ambient-peaceful-nature-126995/' },
+    { id: 20, title: 'Urban Night', url: 'https://pixabay.com/music/lofi-urban-night-110093/' }
   ];
 
   const voices = [
@@ -408,6 +419,15 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
             >
               Settings
             </button>
+            <button
+              onClick={() => setActiveTab('Editor')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${activeTab === 'Editor'
+                ? 'bg-background text-foreground shadow'
+                : 'text-muted-foreground hover:text-foreground'
+                }`}
+            >
+              Editor
+            </button>
           </div>
         </div>
         {/* General Settings */}
@@ -629,6 +649,13 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
             )}
           </div>
         )}
+        {/* Editor */}
+        {activeTab === 'Editor' && (
+          <div className="bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] rounded-xl mb-6 border border-white/10 overflow-hidden">
+            <VideoPlayer height={500} width={500} text={videoData.title ?? ''} />
+          </div>
+        )}
+        {/* Save Button */}
         <div className="flex items-center justify-center">
           <button
             onClick={handleSave}
