@@ -13,7 +13,7 @@ export const RemotionRoot: React.FC = () => {
         durationInFrames={30}
         component={RemotionVideo}
         defaultProps={{
-          text: "Hello World"
+          video: null,
         }}
       />
     </>

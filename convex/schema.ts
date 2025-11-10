@@ -65,6 +65,14 @@ export const sceneSchema = v.object({
   videoUrl: v.optional(v.string()),
 
   angles: v.optional(v.array(angleSchema)),
+
+  narration: v.optional(v.string()),
+})
+
+export const captionStyleSchema = v.object({
+  text: v.string(),
+  startTime: v.number(),
+  endTime: v.number(),
 })
 
 export default defineSchema({
@@ -120,6 +128,8 @@ export default defineSchema({
 
     characters: v.array(characterSchema),
     scenes: v.array(sceneSchema),
+
+    captionStyle: v.optional(captionStyleSchema),
 
     // Error handling
     error: v.optional(v.object({

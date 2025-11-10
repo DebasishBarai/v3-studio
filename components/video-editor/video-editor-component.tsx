@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react'
 import { toast } from "sonner"
 import { CharacterCard } from "../ui/custom/character-card"
 import { SceneCard } from "../ui/custom/scene-card"
-import { VideoPlayer } from "./video-player"
 
 
 export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
@@ -33,7 +32,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const [modifyPrompts, setModifyPrompts] = useState<Record<number, string>>({});
   const [modifyingCharacter, setModifyingCharacter] = useState<number | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'Storyline' | 'Settings' | 'Editor'>('Storyline');
+  const [activeTab, setActiveTab] = useState<'Storyline' | 'Settings'>('Storyline');
 
   const [isSaving, setIsSaving] = useState(false);
 
@@ -396,10 +395,10 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
+    <div className="w-full min-h-screen bg-background text-foreground pt-0 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Tabs */}
-        <div className="flex items-center justify-center mb-12">
+        <div className="flex items-center justify-between mb-12">
           <div className="inline-flex items-center bg-muted rounded-lg p-1">
             <button
               onClick={() => setActiveTab('Storyline')}
@@ -419,16 +418,15 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
             >
               Settings
             </button>
-            <button
-              onClick={() => setActiveTab('Editor')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${activeTab === 'Editor'
-                ? 'bg-background text-foreground shadow'
-                : 'text-muted-foreground hover:text-foreground'
-                }`}
-            >
-              Editor
-            </button>
           </div>
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md"
+          >
+            <Save className="w-5 h-5" />
+            {isSaving ? 'Saving...' : 'Save Changes'}
+          </button>
         </div>
         {/* General Settings */}
         {activeTab === 'Settings' && (
@@ -649,26 +647,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
             )}
           </div>
         )}
-        {/* Editor */}
-        {activeTab === 'Editor' && (
-          <div className="bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] rounded-xl mb-6 border border-white/10 overflow-hidden">
-            <VideoPlayer height={500} width={500} text={videoData.title ?? ''} />
-          </div>
-        )}
-        {/* Save Button */}
-        <div className="flex items-center justify-center">
-          <button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md"
-          >
-            <Save className="w-5 h-5" />
-            {isSaving ? 'Saving...' : 'Save Changes'}
-          </button>
-        </div>
-
       </div>
-
     </div>
   );
 };

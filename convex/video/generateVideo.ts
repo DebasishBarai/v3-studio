@@ -2,9 +2,8 @@
 
 import { v } from "convex/values";
 import { internal } from "../_generated/api";
-import { action } from "../_generated/server"
+import { action } from "../_generated/server";
 import Replicate from "replicate";
-import { aspectRatioValidator } from "../schema";
 import { Id } from "../_generated/dataModel";
 
 const replicate = new Replicate({
