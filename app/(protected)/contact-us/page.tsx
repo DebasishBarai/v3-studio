@@ -179,7 +179,7 @@ export default function ContactPage() {
             <Image
               alt="Contact Illustration"
               className="w-full h-full object-cover"
-              src="/contact.jpg"
+              src="/contact.webp"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
             />

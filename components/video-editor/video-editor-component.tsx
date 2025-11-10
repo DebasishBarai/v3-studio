@@ -6,8 +6,8 @@ import { useAction, useMutation, useQuery } from "convex/react"
 import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, ImagePlay, Plus, Save, Settings, User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from "sonner"
-import { CharacterCard } from "../ui/custom/character-card"
-import { SceneCard } from "../ui/custom/scene-card"
+import { CharacterCard } from "@/components/ui/custom/character-card"
+import { SceneCard } from "@/components/ui/custom/scene-card"
 
 
 export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
