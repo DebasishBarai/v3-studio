@@ -47,110 +47,102 @@ export const SceneCard = ({
       {scene.imageUrl || scene.videoUrl ? (
         <div className="space-y-4">
           {/* Image (if available) */}
-          {scene.imageUrl && (
-            <div>
-              <Image
-                src={scene.imageUrl}
-                alt={`Scene ${index + 1}`}
-                width={800}
-                height={450}
-                unoptimized
-                className="w-full h-[300px] rounded-lg object-cover"
-              />
-              <div className="flex justify-between items-center mt-2">
+          {(scene.videoUrl || scene.imageUrl) && (
+            <div className='flex flex-col justify-between items-between overflow-hidden'>
+              {scene.videoUrl ? (
+                <video
+                  src={scene.videoUrl}
+                  controls
+                  className="w-full rounded-lg object-cover"
+                />
+              ) : (
+                <Image
+                  src={scene.imageUrl}
+                  alt={`Scene ${index + 1}`}
+                  width={800}
+                  height={450}
+                  unoptimized
+                  className="w-full rounded-lg object-cover"
+                />
+              )}
+              <div className="flex justify-between items-center">
                 <Link href={scene.imageUrl} target="_blank">
                   <Button variant="ghost">View Image</Button>
                 </Link>
-              </div>
-            </div>
-          )}
-
-          {/* Video (if available) */}
-          {scene.videoUrl && (
-            <div>
-              <video
-                src={scene.videoUrl}
-                controls
-                className="w-full h-[300px] rounded-lg object-cover"
-              />
-              <div className="flex justify-between items-center mt-2">
-                <Link href={scene.videoUrl} target="_blank">
-                  <Button variant="ghost">View Video</Button>
-                </Link>
+                {scene.videoUrl && (
+                  <Link href={scene.videoUrl} target="_blank">
+                    <Button variant="ghost">View Video</Button>
+                  </Link>
+                )}
               </div>
             </div>
           )}
 
           {/* Action buttons (generate, modify, etc.) */}
-          <div className="flex justify-between items-center mt-4">
-            <div className="flex gap-2">
-              {/* Re-generate Image */}
-              <Button
-                disabled={generatingScene === index}
-                onClick={() =>
-                  generateSceneImage({
-                    index,
-                    prompt: scene.imagePrompt,
-                  })
+          <div className="flex justify-start gap-2">
+            {/* Re-generate Image */}
+            <CustomButton
+              disabled={generatingScene === index}
+              onClick={() =>
+                generateSceneImage({
+                  index,
+                  prompt: scene.imagePrompt,
+                })
+              }
+              className={cn(
+                'flex items-center gap-2 py-2 rounded-lg text-white transition-all',
+                {
+                  'bg-blue-600 hover:bg-blue-700 cursor-pointer': generatingScene !== index,
+                  'bg-blue-600/60 opacity-60 cursor-not-allowed': generatingScene === index,
                 }
-                className={cn(
-                  'flex items-center gap-2 px-4 py-2 rounded-lg text-white transition-all',
-                  {
-                    'bg-blue-600 hover:bg-blue-700 cursor-pointer': generatingScene !== index,
-                    'bg-blue-600/60 opacity-60 cursor-not-allowed': generatingScene === index,
-                  }
-                )}
-              >
-                <RotateCcw className="w-4 h-4" />
-                {generatingScene === index ? 'Re-generating...' : 'Re-generate Image'}
-              </Button>
+              )}
+              icon={RotateCcw}
+              tooltip="Re-generate Image"
+            />
 
-              {/* Modify Scene */}
-              <Button
-                disabled={
-                  generatingScene === index ||
-                  modifyingScene === index ||
-                  !scene.imageUrl
+            {/* Modify Scene */}
+            <CustomButton
+              disabled={
+                generatingScene === index ||
+                modifyingScene === index ||
+                !scene.imageUrl
+              }
+              onClick={() => setModifyOpen(true)}
+              className={cn(
+                'flex items-center gap-2 py-2 rounded-lg text-white transition-all',
+                {
+                  'bg-purple-600 hover:bg-purple-700 cursor-pointer':
+                    !(generatingScene === index || modifyingScene === index || !scene.imageUrl),
+                  'bg-purple-600/60 opacity-60 cursor-not-allowed':
+                    generatingScene === index || modifyingScene === index || !scene.imageUrl,
                 }
-                onClick={() => setModifyOpen(true)}
-                className={cn(
-                  'flex items-center gap-2 px-4 py-2 rounded-lg text-white transition-all',
-                  {
-                    'bg-purple-600 hover:bg-purple-700 cursor-pointer':
-                      !(generatingScene === index || modifyingScene === index || !scene.imageUrl),
-                    'bg-purple-600/60 opacity-60 cursor-not-allowed':
-                      generatingScene === index || modifyingScene === index || !scene.imageUrl,
-                  }
-                )}
-              >
-                <WandSparkles className="w-4 h-4" />
-                {modifyingScene === index ? 'Modifying...' : 'Modify Scene'}
-              </Button>
+              )}
+              icon={WandSparkles}
+              tooltip="Modify Scene"
+            />
 
-              {/* Generate Video */}
-              <Button
-                disabled={!scene.imageUrl || generatingScene === index}
-                onClick={() =>
-                  generateSceneVideo({
-                    index,
-                    prompt: scene.videoPrompt,
-                    baseImageUrl: scene.imageUrl,
-                  })
+            {/* Generate Video */}
+            <CustomButton
+              disabled={!scene.imageUrl || generatingScene === index}
+              onClick={() =>
+                generateSceneVideo({
+                  index,
+                  prompt: scene.videoPrompt,
+                  baseImageUrl: scene.imageUrl,
+                })
+              }
+              className={cn(
+                'flex items-center gap-2 py-2 rounded-lg text-white transition-all',
+                {
+                  'bg-green-600 hover:bg-green-700 cursor-pointer':
+                    !(!scene.imageUrl || generatingScene === index),
+                  'bg-green-600/60 opacity-60 cursor-not-allowed':
+                    !scene.imageUrl || generatingScene === index,
                 }
-                className={cn(
-                  'flex items-center gap-2 px-4 py-2 rounded-lg text-white transition-all',
-                  {
-                    'bg-green-600 hover:bg-green-700 cursor-pointer':
-                      !(!scene.imageUrl || generatingScene === index),
-                    'bg-green-600/60 opacity-60 cursor-not-allowed':
-                      !scene.imageUrl || generatingScene === index,
-                  }
-                )}
-              >
-                <Video className="w-4 h-4" />
-                {scene.videoUrl ? 'Re-Generate Video' : 'Generate Video'}
-              </Button>
-            </div>
+              )}
+              icon={Video}
+              tooltip="Generate Video"
+            />
           </div>
         </div>
       ) : (

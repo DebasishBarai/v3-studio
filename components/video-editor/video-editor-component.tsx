@@ -395,8 +395,8 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-background text-foreground pt-0 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="w-full min-h-screen bg-background text-foreground pt-0 px-4 lg:px-8">
+      <div className="mx-auto">
         {/* Tabs */}
         <div className="flex items-center justify-between mb-12">
           <div className="inline-flex items-center bg-muted rounded-lg p-1">
@@ -606,19 +606,12 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
             </button>
 
             {expandedSections.scenes && (
-              <div className="p-6 pt-0 space-y-4">
-                {/* Add Scene at Start Button */}
-                <button
-                  onClick={() => addScene('start')}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white/10 text-green-300 rounded-lg hover:bg-white/20 transition-all border border-white/10"
-                >
-                  <ArrowUp className="w-5 h-5" />
-                  Add Scene at Start
-                </button>
-
-                {videoData.scenes.map((scene: any, sceneIndex: number) => (
-                  <div key={sceneIndex} className='m-4'>
+              <div className="p-6 pt-0 space-y-6">
+                {/* Grid Layout for Scene Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {videoData.scenes.map((scene: any, sceneIndex: number) => (
                     <SceneCard
+                      key={sceneIndex}
                       scene={scene}
                       index={sceneIndex}
                       expandedScenes={expandedScenes}
@@ -633,16 +626,8 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                       generateSceneImage={generateSceneImage}
                       generateSceneVideo={generateSceneVideo}
                     />
-                    {/* Add Scene After Button */}
-                    <button
-                      onClick={() => addScene('after', sceneIndex)}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-3 bg-white/10 text-blue-300 rounded-lg hover:bg-white/20 transition-all border border-white/10"
-                    >
-                      <ArrowDown className="w-5 h-5" />
-                      Add Scene After
-                    </button>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
           </div>

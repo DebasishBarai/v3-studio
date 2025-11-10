@@ -11,9 +11,10 @@ interface CustomButtonProps {
   tooltip: string
   onClick?: MouseEventHandler<HTMLButtonElement>
   className?: string
+  disabled?: boolean
 }
 
-export const CustomButton = ({ icon: Icon, variant = "outline", tooltip, onClick, className = '' }: CustomButtonProps) => {
+export const CustomButton = ({ icon: Icon, variant = "outline", tooltip, onClick, className = '', disabled = false }: CustomButtonProps) => {
   return (
     <TooltipProvider>
       <Tooltip>
@@ -23,8 +24,9 @@ export const CustomButton = ({ icon: Icon, variant = "outline", tooltip, onClick
             size="sm"
             className={`h-8 w-8 p-0 ${className}`}
             onClick={onClick}
+            disabled={disabled}
           >
-            <Icon className="size-4" />
+            <Icon className="w-4 h-4" />
           </Button>
         </TooltipTrigger>
         <TooltipContent side="top">
