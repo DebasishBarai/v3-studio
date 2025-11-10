@@ -3,14 +3,17 @@
 import { api } from "@/convex/_generated/api"
 import { Doc, Id } from '@/convex/_generated/dataModel'
 import { useAction, useMutation, useQuery } from "convex/react"
-import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, ImagePlay, Plus, Save, Settings, User } from 'lucide-react'
+import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, ImagePlay, Play, Plus, Save, Settings, User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from "sonner"
 import { CharacterCard } from "@/components/ui/custom/character-card"
 import { SceneCard } from "@/components/ui/custom/scene-card"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import { VideoPlayer } from "@/components/video-editor/video-player"
 
 
 export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const id = videoId as Id<'videos'>;
   const video = useQuery(api.video.video.getVideo, { id: id });
   const updateVideo = useMutation(api.video.video.updateVideo);
@@ -419,14 +422,37 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
               Settings
             </button>
           </div>
-          <button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md"
-          >
-            <Save className="w-5 h-5" />
-            {isSaving ? 'Saving...' : 'Save Changes'}
-          </button>
+          <div className="flex items-center gap-3">
+            {/* Preview Button */}
+            {/* Preview Button with Dialog */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <button
+                  disabled={isSaving}
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:scale-105 transition-all text-white rounded-md"
+                >
+                  <Play className="w-4 h-4" />
+                  Preview Video
+                </button>
+              </DialogTrigger>
+              <DialogContent className="max-w-6xl h-[80vh]">
+                <div className="flex flex-col space-y-4 h-full">
+                  <h2 className="text-xl font-bold text-white">Video Preview</h2>
+                  <div className="flex-1 flex items-center justify-center">
+                    <VideoPlayer video={videoData} />
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+            <button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md"
+            >
+              <Save className="w-5 h-5" />
+              {isSaving ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
         </div>
         {/* General Settings */}
         {activeTab === 'Settings' && (
