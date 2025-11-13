@@ -3,21 +3,27 @@
 import { api } from "@/convex/_generated/api"
 import { Doc, Id } from '@/convex/_generated/dataModel'
 import { useAction, useMutation, useQuery } from "convex/react"
-import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, ImagePlay, Play, Plus, Save, Settings, User } from 'lucide-react'
+import { ChevronDown, ChevronUp, ImagePlay, Play, Plus, Save, Settings, User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from "sonner"
 import { CharacterCard } from "@/components/ui/custom/character-card"
 import { SceneCard } from "@/components/ui/custom/scene-card"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog"
 import { VideoPlayer } from "@/components/video-editor/video-player"
+import { DialogTitle } from "@radix-ui/react-dialog"
+import { Button } from "@/components/ui/button"
+import { parseMedia } from '@remotion/media-parser'
+import { getCachedVideoUrl } from "@/lib/video-cache"
 
 
 export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const id = videoId as Id<'videos'>;
   const video = useQuery(api.video.video.getVideo, { id: id });
   const updateVideo = useMutation(api.video.video.updateVideo);
 
+  const [durationInSeconds, setDurationInSeconds] = useState(0)
+  const [localUrl, setLocalUrl] = useState<string | null>(null)
+  const [isVideoLoading, setIsVideoLoading] = useState(true)
   const [videoData, setVideoData] = useState<Doc<'videos'>>();
   const [expandedSections, setExpandedSections] = useState({
     general: true,
@@ -79,6 +85,82 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
       setVideoData(video);
     }
   }, [video]);
+
+  useEffect(() => {
+    const loadVideoToCache = async () => {
+      if (!videoData)
+        return
+      if (videoData.videoUrl) {
+        const videoUrl = videoData.videoUrl
+        const url = await getCachedVideoUrl(videoUrl)
+        setLocalUrl(url)
+      } else {
+        if (videoData.scenes) {
+          for (const scene of videoData.scenes) {
+            if (scene.videoUrl) {
+              const videoUrl = scene.videoUrl
+              await getCachedVideoUrl(videoUrl)
+            }
+          }
+        }
+      }
+    }
+    loadVideoToCache()
+  })
+
+  useEffect(() => {
+    const loadVideoData = async () => {
+      console.log('Loading video data...')
+      if (!video || !videoData)
+        return
+      try {
+        if (video.videoUrl) {
+          const localUrl = await getCachedVideoUrl(video.videoUrl)
+          const videoMetadata = await parseMedia({
+            src: localUrl,
+            fields: {
+              slowDurationInSeconds: true,
+            }
+          })
+          setDurationInSeconds(videoMetadata.slowDurationInSeconds)
+        } else {
+          console.log('No video URL found, calculating duration...')
+          let totalDuration = 0
+
+          for (const [index, scene] of video.scenes.entries()) {
+            console.log(' inside for loop')
+            if (scene.videoUrl) {
+              if (scene.videoDurationInSeconds) {
+                totalDuration += scene.videoDurationInSeconds
+              } else {
+                const localUrl = await getCachedVideoUrl(scene.videoUrl)
+                const videoMetadata = await parseMedia({
+                  src: localUrl,
+                  fields: {
+                    slowDurationInSeconds: true,
+                  }
+                })
+                updateNestedField(`scenes[${index}].videoDurationInSeconds`, Math.round(videoMetadata.slowDurationInSeconds))
+                totalDuration += videoMetadata.slowDurationInSeconds
+                console.log('Scene duration:', videoMetadata.slowDurationInSeconds)
+              }
+            } else {
+              totalDuration += 5
+            }
+          }
+
+          setDurationInSeconds(totalDuration)
+        }
+      } catch (error) {
+        console.error('Error loading video metadata:', error)
+      } finally {
+        setIsVideoLoading(false)
+      }
+    }
+
+    loadVideoData()
+  }, [video, videoData])
+
 
   if (!video || !videoData) {
     return (
@@ -427,21 +509,34 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
             {/* Preview Button with Dialog */}
             <Dialog>
               <DialogTrigger asChild>
-                <button
-                  disabled={isSaving}
+                <Button
+                  disabled={isSaving || isVideoLoading}
                   className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:scale-105 transition-all text-white rounded-md"
                 >
                   <Play className="w-4 h-4" />
                   Preview Video
-                </button>
+                </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-6xl h-[80vh]">
-                <div className="flex flex-col space-y-4 h-full">
-                  <h2 className="text-xl font-bold text-white">Video Preview</h2>
-                  <div className="flex-1 flex items-center justify-center">
-                    <VideoPlayer video={videoData} />
+              <DialogContent className='w-[90vw] h-[90vh] overflow-hidden'>
+                <DialogHeader>
+                  <DialogTitle className='text-xl font-bold text-white'>Video Preview</DialogTitle>
+                </DialogHeader>
+                {localUrl ? (
+                  <div className="w-full h-full">
+                    <video
+                      src={localUrl}
+                      controls
+                      autoPlay
+                      loop
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                      }}
+                    />
                   </div>
-                </div>
+                ) : (
+                  <VideoPlayer video={videoData} durationInSeconds={Math.round(durationInSeconds)} />
+                )}
               </DialogContent>
             </Dialog>
             <button
