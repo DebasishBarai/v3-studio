@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button'
 import { CustomButton } from '@/components/ui/custom/custom-button'
 import { EditSceneDialog } from '@/components/ui/custom/edit-scene-dialog'
 import { ModifySceneDialog } from './modify-scene-dialog'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { getCachedVideoUrl } from "@/lib/video-cache";
 
 export const SceneCard = ({
   index,
@@ -22,6 +23,32 @@ export const SceneCard = ({
 }: any) => {
   const [open, setOpen] = useState(false)
   const [modifyOpen, setModifyOpen] = useState(false)
+
+  const [localUrl, setLocalUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+
+    if (scene.videoUrl) {
+      setIsLoading(true);
+      getCachedVideoUrl(scene.videoUrl).then((cachedUrl) => {
+        if (mounted) {
+          setLocalUrl(cachedUrl);
+          setIsLoading(false);
+        }
+      }).catch(() => {
+        if (mounted) setIsLoading(false);
+      });
+    } else {
+      setLocalUrl(null);
+      setIsLoading(false);
+    }
+
+    return () => {
+      mounted = false;
+    };
+  }, [scene.videoUrl])
 
   return (
     <div className="bg-white/5 rounded-xl p-5 border border-white/10 mb-6">
@@ -50,12 +77,21 @@ export const SceneCard = ({
           {(scene.videoUrl || scene.imageUrl) && (
             <div className='flex flex-col justify-between items-between overflow-hidden'>
               {scene.videoUrl ? (
-                <video
-                  src={scene.videoUrl}
-                  controls
-                  className="w-full rounded-lg object-cover"
-                />
-              ) : (
+                isLoading ? (
+                  <div className="w-full h-48 bg-gray-800 rounded-lg flex items-center justify-center">
+                    <span className="text-white">Loading video...</span>
+                  </div>
+                ) : localUrl ? (
+                  <video
+                    src={localUrl}
+                    controls
+                    className="w-full rounded-lg object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-48 bg-gray-800 rounded-lg flex items-center justify-center">
+                    <span className="text-white text-sm">Failed to load video</span>
+                  </div>
+                )) : (
                 <Image
                   src={scene.imageUrl}
                   alt={`Scene ${index + 1}`}
