@@ -24,6 +24,8 @@ interface StorageInfo {
 class VideoStorage {
   private db: IDBDatabase | null = null;
   private initPromise: Promise<IDBDatabase>;
+  // Track ongoing storeVideo operations to prevent duplicates
+  private pendingStoreOperations = new Map<string, Promise<string>>();
 
   constructor() {
     this.initPromise = this.init();
@@ -53,7 +55,13 @@ class VideoStorage {
   async storeVideo(videoUrl: string): Promise<string> {
     if (!this.db) await this.initPromise;
 
-    return new Promise(async (resolve, reject) => {
+    // ADD THIS: Check if this video is already being stored
+    if (this.pendingStoreOperations.has(videoUrl)) {
+      console.log('Reusing existing store operation for:', videoUrl);
+      return this.pendingStoreOperations.get(videoUrl)!;
+    }
+
+    const storePromise: Promise<string> = new Promise(async (resolve, reject) => {
       try {
         // Check if video already exists
         const existing = await this.getVideo(videoUrl);
@@ -89,8 +97,17 @@ class VideoStorage {
 
       } catch (error) {
         reject(error);
+      } finally {
+        // ADD THIS: Always clean up when operation completes
+        this.pendingStoreOperations.delete(videoUrl);
       }
     });
+
+
+    // ADD THIS: Store the promise for deduplication
+    this.pendingStoreOperations.set(videoUrl, storePromise);
+
+    return storePromise;
   }
 
   async getVideo(videoUrl: string): Promise<VideoData | undefined> {
@@ -180,6 +197,9 @@ class VideoStorage {
 
   async clearAll(): Promise<boolean> {
     if (!this.db) await this.initPromise;
+
+    // ADD THIS: Clear pending operations
+    this.pendingStoreOperations.clear();
 
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([STORE_NAME], 'readwrite');

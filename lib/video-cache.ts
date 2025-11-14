@@ -1,6 +1,7 @@
 import { videoStorage } from '@/lib/indexed-db-storage';
 
 export const getCachedVideoUrl = async (videoUrl: string): Promise<string> => {
+
   try {
     // Use IndexedDB to get cached video URL
     const cachedUrl = await videoStorage.getCachedVideoUrl(videoUrl);
