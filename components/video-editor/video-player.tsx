@@ -16,8 +16,8 @@ export const VideoPlayer = ({ video, durationInSeconds }: { video: Doc<'videos'>
         component={RemotionVideo}
         fps={30}
         durationInFrames={durationInSeconds * 30}
-        compositionHeight={1080}
-        compositionWidth={1920}
+        compositionHeight={video.aspectRatio === '16:9' ? 1080 : 1920}
+        compositionWidth={video.aspectRatio === '16:9' ? 1920 : 1080}
         inputProps={{ video: video }}
         controls
         autoPlay

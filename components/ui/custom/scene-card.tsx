@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { RotateCcw, Trash2, WandSparkles, Pencil, ImageOff, Video } from 'lucide-react'
+import { RotateCcw, Trash2, WandSparkles, Pencil, ImageOff, Video, Eye, ImageDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { CustomButton } from '@/components/ui/custom/custom-button'
@@ -20,6 +20,7 @@ export const SceneCard = ({
   updateNestedField,
   generatingScene,
   modifyingScene,
+  aspectRatio,
 }: any) => {
   const [open, setOpen] = useState(false)
   const [modifyOpen, setModifyOpen] = useState(false)
@@ -74,46 +75,54 @@ export const SceneCard = ({
       {scene.imageUrl || scene.videoUrl ? (
         <div className="space-y-4">
           {/* Image (if available) */}
-          {(scene.videoUrl || scene.imageUrl) && (
-            <div className='flex flex-col justify-between items-between overflow-hidden'>
-              {scene.videoUrl ? (
-                isLoading ? (
-                  <div className="w-full h-48 bg-gray-800 rounded-lg flex items-center justify-center">
-                    <span className="text-white">Loading video...</span>
-                  </div>
-                ) : localUrl ? (
-                  <video
-                    src={localUrl}
-                    controls
-                    className="w-full rounded-lg object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-48 bg-gray-800 rounded-lg flex items-center justify-center">
-                    <span className="text-white text-sm">Failed to load video</span>
-                  </div>
-                )) : (
-                <Image
-                  src={scene.imageUrl}
-                  alt={`Scene ${index + 1}`}
-                  width={800}
-                  height={450}
-                  unoptimized
-                  className="w-full rounded-lg object-cover"
-                />
-              )}
-              <div className="flex justify-between items-center">
-                <Link href={scene.imageUrl} target="_blank">
-                  <Button variant="ghost">View Image</Button>
-                </Link>
-                {scene.videoUrl && (
-                  <Link href={scene.videoUrl} target="_blank">
-                    <Button variant="ghost">View Video</Button>
-                  </Link>
+          <div className={cn("w-full overflow-hidden rounded-lg bg-gray-800", aspectRatio === '16:9' ? 'aspect-video' : 'aspect-9/16')}>
+            {(scene.videoUrl || scene.imageUrl) && (
+              <div className='relative rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm bg-slate-100 dark:bg-slate-800/10'>
+                {scene.videoUrl ? (
+                  isLoading ? (
+                    <div className="w-full h-48 bg-gray-800 rounded-lg flex items-center justify-center">
+                      <span className="text-white">Loading video...</span>
+                    </div>
+                  ) : localUrl ? (
+                    <video
+                      src={localUrl}
+                      controls
+                      className="w-full rounded-lg object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-48 bg-gray-800 rounded-lg flex items-center justify-center">
+                      <span className="text-white text-sm">Failed to load video</span>
+                    </div>
+                  )) : (
+                  <Image
+                    src={scene.imageUrl}
+                    alt={`Scene ${index + 1}`}
+                    width={800}
+                    height={450}
+                    unoptimized
+                    className="w-full h-[250px] lg:h-[370px] object-cover transition-all duration-700-full rounded-lg h-full object-cover" />
                 )}
+                <div className="absolute top-0 left-0 right-0 bg-transparent p-4">
+                  <div className="flex justify-end items-center gap-4">
+                    <CustomButton
+                      icon={ImageDown}
+                      tooltip="View Image"
+                      className="text-white hover:text-white hover:bg-white/20"
+                      onClick={() => window.open(scene.imageUrl, '_blank')}
+                    />
+                    {localUrl && (
+                      <CustomButton
+                        icon={Video}
+                        tooltip="View Video"
+                        className="text-white hover:text-white hover:bg-white/20"
+                        onClick={() => window.open(localUrl, '_blank')}
+                      />
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
-
+            )}
+          </div>
           {/* Action buttons (generate, modify, etc.) */}
           <div className="flex justify-start gap-2">
             {/* Re-generate Image */}
@@ -183,7 +192,7 @@ export const SceneCard = ({
         </div>
       ) : (
         <>
-          <div className="h-[300px] flex flex-col items-center justify-center text-muted-foreground">
+          <div className={cn("w-full flex flex-col items-center justify-center text-muted-foreground bg-gray-800 rounded-lg", aspectRatio === '16:9' ? 'aspect-video' : 'aspect-9/16')}>
             <ImageOff className="w-12 h-12 mb-1 opacity-70" />
             <span className="text-sm">No image or video yet</span>
           </div>

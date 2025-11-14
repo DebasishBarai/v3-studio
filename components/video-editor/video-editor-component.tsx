@@ -14,6 +14,7 @@ import { DialogTitle } from "@radix-ui/react-dialog"
 import { Button } from "@/components/ui/button"
 import { parseMedia } from '@remotion/media-parser'
 import { getCachedVideoUrl } from "@/lib/video-cache"
+import { cn } from "@/lib/utils"
 
 
 export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
@@ -733,7 +734,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
             {expandedSections.scenes && (
               <div className="p-6 pt-0 space-y-6">
                 {/* Grid Layout for Scene Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className={cn("grid grid-cols-1 gap-6", videoData.aspectRatio === '16:9' ? 'md:grid-cols-2 xl:grid-cols-3' : 'md:grid-cols-3 xl:grid-cols-4')}>
                   {videoData.scenes.map((scene: any, sceneIndex: number) => (
                     <SceneCard
                       key={sceneIndex}
@@ -750,6 +751,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                       generatingScene={generatingScene}
                       generateSceneImage={generateSceneImage}
                       generateSceneVideo={generateSceneVideo}
+                      aspectRatio={videoData.aspectRatio}
                     />
                   ))}
                 </div>
