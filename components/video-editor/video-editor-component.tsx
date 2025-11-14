@@ -517,26 +517,30 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                   Preview Video
                 </Button>
               </DialogTrigger>
-              <DialogContent className='w-[90vw] h-[90vh] overflow-hidden'>
-                <DialogHeader>
-                  <DialogTitle className='text-xl font-bold text-white'>Video Preview</DialogTitle>
+              <DialogContent className='!max-w-[98vw] !w-[98vw] max-h-[98vh] h-[98vh] p-6 flex flex-col'>
+                <DialogHeader className='flex-shrink-0'>
+                  <DialogTitle className='text-xl font-bold text-white mb-4'>Video Preview</DialogTitle>
                 </DialogHeader>
-                {localUrl ? (
-                  <div className="w-full h-full">
+                <div className="flex-1 flex items-center justify-center min-h-0">
+                  {localUrl ? (
                     <video
                       src={localUrl}
                       controls
                       autoPlay
                       loop
+                      className="rounded-lg max-w-full max-h-full"
                       style={{
                         width: '100%',
                         height: '100%',
+                        objectFit: 'contain',
                       }}
                     />
-                  </div>
-                ) : (
-                  <VideoPlayer video={videoData} durationInSeconds={Math.round(durationInSeconds)} />
-                )}
+                  ) : (
+                    <div className="w-full h-full">
+                      <VideoPlayer video={videoData} durationInSeconds={Math.round(durationInSeconds)} />
+                    </div>
+                  )}
+                </div>
               </DialogContent>
             </Dialog>
             <button
