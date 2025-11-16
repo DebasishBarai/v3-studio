@@ -37,6 +37,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const generateCharacterImageAction = useAction(api.video.generateVideoImage.generateCharacterImage);
   const generateSceneImageAction = useAction(api.video.generateVideoImage.generateSceneImage);
   const generateSceneVideoAction = useAction(api.video.generateVideo.generateSceneVideo)
+  const generateAudioAction = useAction(api.video.generateAudio.generateAudio);
   const [generatingCharacter, setGeneratingCharacter] = useState<number | null>(null);
   const [generatingScene, setGeneratingScene] = useState<number | null>(null);
   const [modifyPrompts, setModifyPrompts] = useState<Record<number, string>>({});

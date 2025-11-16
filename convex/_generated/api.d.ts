@@ -19,6 +19,7 @@ import type * as prompt from "../prompt.js";
 import type * as storage from "../storage.js";
 import type * as suggestion from "../suggestion.js";
 import type * as user from "../user.js";
+import type * as video_generateAudio from "../video/generateAudio.js";
 import type * as video_generateVideo from "../video/generateVideo.js";
 import type * as video_generateVideoImage from "../video/generateVideoImage.js";
 import type * as video_generateVideoScript from "../video/generateVideoScript.js";
@@ -42,6 +43,7 @@ declare const fullApi: ApiFromModules<{
   storage: typeof storage;
   suggestion: typeof suggestion;
   user: typeof user;
+  "video/generateAudio": typeof video_generateAudio;
   "video/generateVideo": typeof video_generateVideo;
   "video/generateVideoImage": typeof video_generateVideoImage;
   "video/generateVideoScript": typeof video_generateVideoScript;

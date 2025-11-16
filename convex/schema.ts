@@ -81,6 +81,9 @@ export const sceneSchema = v.object({
   angles: v.optional(v.array(angleSchema)),
 
   narration: v.optional(v.string()),
+
+  auidoId: v.optional(v.id('_storage')),
+  audioUrl: v.optional(v.string()),
 })
 
 export const captionStyleSchema = v.object({
