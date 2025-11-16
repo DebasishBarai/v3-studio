@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { Film, PenLine, Music, Mic, Tv, Sparkles, Play, CirclePlay, Pause } from 'lucide-react';
+import { Film, PenLine, Music, Mic, Tv, Sparkles, Play, Pause } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAction, useConvex } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -16,12 +16,18 @@ interface VoiceType {
   voice: Infer<typeof voiceValidator>;
 }
 
+interface AudioState {
+  type: 'music' | 'voice';
+  id: number | string;
+  url: string;
+}
+
 export default function VideoCreatorPage() {
   const [prompt, setPrompt] = useState('');
   const [selectedStyle, setSelectedStyle] = useState<number | null>(null);
   const [selectedMusic, setSelectedMusic] = useState<number | null>(null);
   const [selectedVoice, setSelectedVoice] = useState<number | null>(null);
-  const [playingMusic, setPlayingMusic] = useState<number | null>(null);
+  const [currentlyPlaying, setCurrentlyPlaying] = useState<AudioState | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [selectedAspectRatio, setSelectedAspectRatio] = useState<string | null>(null);
   const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
@@ -57,38 +63,41 @@ export default function VideoCreatorPage() {
   ];
 
   const musics = [
-    { id: 1, title: 'Dreams of Home', url: 'https://optimistic-horse-49.convex.cloud/api/storage/ea98a0ca-e7fe-4fec-ba6e-1e4c7856c5b8', storageId: 'kg2e4h19brxspww17efjfc5ag97tvw6m' },
-    { id: 2, title: 'LoFi Study', url: 'https://optimistic-horse-49.convex.cloud/api/storage/a04959ec-316a-4c19-8a24-96718fe574a8', storageId: 'kg22tzs904dh2d1xyd5ayfk02n7tvbqc' },
-    { id: 3, title: 'Sunny Morning', url: 'https://optimistic-horse-49.convex.cloud/api/storage/fd61b75e-15be-4f43-be91-4eea23230905', storageId: 'kg2f00be6g6ega5ra4c1bj0xzh7ttrpc' },
-    { id: 4, title: 'Cinematic Inspiration', url: 'https://pixabay.com/music/inspirational-cinematic-inspiration-120417/', storageId: '' },
-    { id: 5, title: 'Energetic Pop', url: 'https://pixabay.com/music/pop-energetic-pop-113474/', storageId: '' },
-    { id: 6, title: 'Chill Vibes', url: 'https://pixabay.com/music/lofi-chill-vibes-110005/', storageId: '' },
-    { id: 7, title: 'Epic Adventure', url: 'https://pixabay.com/music/trailer-epic-adventure-129444/', storageId: '' },
-    { id: 8, title: 'Calm Piano', url: 'https://pixabay.com/music/beautiful-plays-calm-piano-122215/', storageId: '' },
-    { id: 9, title: 'Corporate Uplifting', url: 'https://pixabay.com/music/corporate-corporate-uplifting-111728/', storageId: '' },
-    { id: 10, title: 'LoFi Chillhop', url: 'https://pixabay.com/music/lofi-lofi-chillhop-110090/', storageId: '' },
-    { id: 11, title: 'Funky Groove', url: 'https://pixabay.com/music/funk-funky-groove-119922/', storageId: '' },
-    { id: 12, title: 'Ambient Flow', url: 'https://pixabay.com/music/ambient-ambient-flow-127636/', storageId: '' },
-    { id: 13, title: 'Motivational Journey', url: 'https://pixabay.com/music/inspirational-motivational-journey-111376/', storageId: '' },
-    { id: 14, title: 'Cinematic Piano', url: 'https://pixabay.com/music/beautiful-plays-cinematic-piano-111271/', storageId: '' },
-    { id: 15, title: 'Tropical Summer', url: 'https://pixabay.com/music/tropical-tropical-summer-116772/', storageId: '' },
-    { id: 16, title: 'Abstract Technology', url: 'https://pixabay.com/music/electronic-abstract-technology-115669/', storageId: '' },
-    { id: 17, title: 'Romantic Acoustic', url: 'https://pixabay.com/music/acoustic-group-romantic-acoustic-126408/', storageId: '' },
-    { id: 18, title: 'Action Trailer', url: 'https://pixabay.com/music/trailer-action-trailer-114474/', storageId: '' },
-    { id: 19, title: 'Peaceful Nature', url: 'https://pixabay.com/music/ambient-peaceful-nature-126995/', storageId: '' },
-    { id: 20, title: 'Urban Night', url: 'https://pixabay.com/music/lofi-urban-night-110093/', storageId: '' }
+    { id: 1, title: 'Beats', previewUrl: 'https://cdn.pixabay.com/audio/2025/11/11/audio_f2cf114879.mp3', },
+    { id: 2, title: 'Future Bass', previewUrl: 'https://cdn.pixabay.com/audio/2024/11/08/audio_05b10daae7.mp3', },
+    { id: 3, title: 'Upbeat', previewUrl: 'https://cdn.pixabay.com/audio/2025/11/07/audio_a9bc5df6b9.mp3', },
+    { id: 4, title: 'Chill', previewUrl: 'https://cdn.pixabay.com/audio/2025/10/23/audio_fc19d0fae0.mp3', },
+    { id: 5, title: 'Electronic', previewUrl: 'https://cdn.pixabay.com/audio/2025/07/28/audio_944c8a9cde.mp3', },
+    { id: 6, title: 'Chill Hip Hop', previewUrl: 'https://cdn.pixabay.com/audio/2025/07/01/audio_546ec56e2a.mp3', },
+    { id: 7, title: 'Pop', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/13/audio_851cb5db32.mp3', },
+    { id: 8, title: 'Chill Electronic', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/13/audio_38278d96ea.mp3', },
+    { id: 9, title: 'Chill Pop', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/02/audio_9c1cf8951d.mp3', },
+    { id: 10, title: 'Future Beats', previewUrl: 'https://cdn.pixabay.com/audio/2024/01/25/audio_8698bda9da.mp3', },
+    { id: 11, title: 'Chill Beats', previewUrl: 'https://cdn.pixabay.com/audio/2024/01/02/audio_c88a26ff39.mp3', },
   ];
 
 
   const voices: VoiceType[] = [
-    { id: 1, voice: { name: 'Alloy', gender: 'Female' } },
-    { id: 2, voice: { name: 'Nova', gender: 'Female' } },
-    { id: 3, voice: { name: 'Onyx', gender: 'Male' } },
-    { id: 4, voice: { name: 'Sage', gender: 'Female' } },
-    { id: 5, voice: { name: 'Shimmer', gender: 'Female' } },
-    { id: 6, voice: { name: 'Verse', gender: 'Male' } },
-    { id: 7, voice: { name: 'Ballad', gender: 'Male' } },
-    { id: 8, voice: { name: 'Coral', gender: 'Female' } }
+    { id: 1, voice: { name: 'Clyde', gender: 'Male', voiceId: '2EiwWnXFnvU5JabPnv8n', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/2EiwWnXFnvU5JabPnv8n/65d80f52-703f-4cae-a91d-75d4e200ed02.mp3' } },
+    { id: 2, voice: { name: 'Roger', gender: 'Male', voiceId: 'CwhRBWXzGAHq8TQ4Fs17', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/CwhRBWXzGAHq8TQ4Fs17/58ee3ff5-f6f2-4628-93b8-e38eb31806b0.mp3' } },
+    { id: 3, voice: { name: 'Sarah', gender: 'Female', voiceId: 'EXAVITQu4vr4xnSDxMaL', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/EXAVITQu4vr4xnSDxMaL/01a3e33c-6e99-4ee7-8543-ff2216a32186.mp3' } },
+    { id: 4, voice: { name: 'Laura', gender: 'Female', voiceId: 'FGY2WhTYpPnrIDTdsKH5', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/FGY2WhTYpPnrIDTdsKH5/67341759-ad08-41a5-be6e-de12fe448618.mp3' } },
+    { id: 5, voice: { name: 'Charlie', gender: 'Male', voiceId: 'IKne3meq5aSn9XLyUdCD', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/IKne3meq5aSn9XLyUdCD/102de6f2-22ed-43e0-a1f1-111fa75c5481.mp3' } },
+    { id: 6, voice: { name: 'George', gender: 'Male', voiceId: 'JBFqnCBsd6RMkjVDRZzb', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/JBFqnCBsd6RMkjVDRZzb/e6206d1a-0721-4787-aafb-06a6e705cac5.mp3' } },
+    { id: 7, voice: { name: 'Callum', gender: 'Male', voiceId: 'N2lVS1w4EtoT3dr4eOWO', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/N2lVS1w4EtoT3dr4eOWO/ac833bd8-ffda-4938-9ebc-b0f99ca25481.mp3' } },
+    { id: 8, voice: { name: 'Bill', gender: 'Male', voiceId: 'pqHfZKP75CvOlQylNhV4', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pqHfZKP75CvOlQylNhV4/d782b3ff-84ba-4029-848c-acf01285524d.mp3' } },
+    { id: 9, voice: { name: 'Lily', gender: 'Female', voiceId: 'pFZP5JQG7iQjIQuC4Bku', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pFZP5JQG7iQjIQuC4Bku/89b68b35-b3dd-4348-a84a-a3c13a3c2b30.mp3' } },
+    { id: 10, voice: { name: 'River', gender: 'Female', voiceId: 'SAz9YHcvj6GT2YYXdXww', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/SAz9YHcvj6GT2YYXdXww/e6c95f0b-2227-491a-b3d7-2249240decb7.mp3' } },
+    { id: 11, voice: { name: 'Harry', gender: 'Male', voiceId: 'SOYHLrjzK2X1ezoPC6cr', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/SOYHLrjzK2X1ezoPC6cr/86d178f6-f4b6-4e0e-85be-3de19f490794.mp3' } },
+    { id: 12, voice: { name: 'Liam', gender: 'Male', voiceId: 'TX3LPaxmHKxFdv7VOQHJ', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/TX3LPaxmHKxFdv7VOQHJ/63148076-6363-42db-aea8-31424308b92c.mp3' } },
+    { id: 13, voice: { name: 'Chris', gender: 'Male', voiceId: 'Xb7hH8MSUJpSbSDYk0k2', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/Xb7hH8MSUJpSbSDYk0k2/d10f7534-11f6-41fe-a012-2de1e482d336.mp3' } },
+    { id: 14, voice: { name: 'Will', gender: 'Male', voiceId: 'onwK4e9ZLuTAKqWW03F9', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/onwK4e9ZLuTAKqWW03F9/7eee0236-1a72-4b86-b303-5dcadc007ba9.mp3' } },
+    { id: 15, voice: { name: 'Jessica', gender: 'Female', voiceId: 'cgSgspJ2msm6clMCkdW9', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/cgSgspJ2msm6clMCkdW9/56a97bf8-b69b-448f-846c-c3a11683d45a.mp3' } },
+    { id: 16, voice: { name: 'Brian', gender: 'Male', voiceId: 'nPczCjzI2devNBz1zQrb', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/nPczCjzI2devNBz1zQrb/2dd3e72c-4fd3-42f1-93ea-abc5d4e5aa1d.mp3' } },
+    { id: 17, voice: { name: 'Daniel', gender: 'Male', voiceId: 'onwK4e9ZLuTAKqWW03F9', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/onwK4e9ZLuTAKqWW03F9/7eee0236-1a72-4b86-b303-5dcadc007ba9.mp3' } },
+    { id: 18, voice: { name: 'Liam', gender: 'Male', voiceId: 'pFZP5JQG7iQjIQuC4Bku', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pFZP5JQG7iQjIQuC4Bku/89b68b35-b3dd-4348-a84a-a3c13a3c2b30.mp3' } },
+    { id: 19, voice: { name: 'Alice', gender: 'Female', voiceId: 'SAz9YHcvj6GT2YYXdXww', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/SAz9YHcvj6GT2YYXdXww/e6c95f0b-2227-491a-b3d7-2249240decb7.mp3' } },
+    { id: 20, voice: { name: 'Matilda', gender: 'Female', voiceId: 'SOYHLrjzK2X1ezoPC6cr', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/SOYHLrjzK2X1ezoPC6cr/86d178f6-f4b6-4e0e-85be-3de19f490794.mp3' } },
   ];
 
   useEffect(() => {
@@ -109,32 +118,46 @@ export default function VideoCreatorPage() {
     };
   }, []);
 
-  const toggleMusicPlay = (id: number) => {
-    if (playingMusic === id) {
-      audioRef.current?.pause();
-      setPlayingMusic(null);
-    } else {
+  const toggleAudioPlay = (type: 'music' | 'voice', id: number | string, url: string) => {
+    const currentAudioState: AudioState = { type, id, url };
+
+    // If clicking the same audio that's currently playing, pause it
+    if (currentlyPlaying && currentlyPlaying.type === type && currentlyPlaying.id === id) {
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.onended = null;
       }
-
-      const selectedTrack = musics.find((track) => track.id === id);
-
-      if (selectedTrack) {
-        audioRef.current = new Audio(selectedTrack.url);
-        setPlayingMusic(id);
-        audioRef.current.play().catch((error) => {
-          if (error.name !== 'AbortError') {
-            console.error('Playback failed:', error);
-            toast.error('An error occurred while playing the audio');
-          }
-          setPlayingMusic(null);
-        });
-
-        audioRef.current.onended = () => setPlayingMusic(null);
-      }
+      setCurrentlyPlaying(null);
+      return;
     }
+
+    // Stop currently playing audio if any
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.onended = null;
+    }
+
+    // Play new audio
+    const audio = new Audio(url);
+    audioRef.current = audio;
+    setCurrentlyPlaying(currentAudioState);
+
+    audio.play().catch(error => {
+      console.error('Error playing audio:', error);
+      setCurrentlyPlaying(null);
+      audioRef.current = null;
+    });
+
+    // Reset when audio ends
+    audio.onended = () => {
+      setCurrentlyPlaying(null);
+      audioRef.current = null;
+    };
+  };
+
+  // Helper function to check if a specific audio is currently playing
+  const isAudioPlaying = (type: 'music' | 'voice', id: number | string) => {
+    return currentlyPlaying?.type === type && currentlyPlaying?.id === id;
   };
 
   const getRandomPrompt = async () => {
@@ -318,10 +341,10 @@ export default function VideoCreatorPage() {
                 >
                   <div className="flex items-center gap-3">
                     <button
-                      onClick={() => toggleMusicPlay(track.id)}
+                      onClick={() => toggleAudioPlay('music', track.id, track.url)}
                       className="bg-gray-700 hover:opacity-80 rounded-full p-2 cursor-pointer transition"
                     >
-                      {playingMusic === track.id ? (
+                      {isAudioPlaying('music', track.id) ? (
                         <Pause className="w-5 h-5" />
                       ) : (
                         <Play className="w-5 h-5" />
@@ -354,22 +377,33 @@ export default function VideoCreatorPage() {
             <p className="text-gray-400 mb-4">Select a voice for narration.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[300px] overflow-auto">
               {voices.map((e) => (
-                <button
+                <div
                   key={e.id}
-                  onClick={() => setSelectedVoice(e.id)}
                   className={`bg-zinc-900 rounded-lg border p-3 cursor-pointer flex gap-3 items-center transition ${selectedVoice === e.id
                     ? 'border-green-500'
                     : 'border-zinc-800 hover:border-pink-400'
                     }`}
                 >
-                  <button className="w-12 h-12 border border-zinc-700 cursor-pointer rounded-md flex items-center justify-center hover:bg-zinc-800 transition">
-                    <CirclePlay className="w-5 h-5" />
+                  <button className="w-12 h-12 border border-zinc-700 cursor-pointer rounded-md flex items-center justify-center hover:bg-zinc-800 transition"
+                    onClick={(event) => {
+                      event.stopPropagation(); // Prevent triggering the voice selection
+                      toggleAudioPlay('voice', e.voice.voiceId, e.voice.previewUrl);
+                    }}
+                  >
+                    {isAudioPlaying('voice', e.voice.voiceId) ? (
+                      <Pause className="w-5 h-5" />
+                    ) : (
+                      <Play className="w-5 h-5" />
+                    )}
                   </button>
-                  <div className="text-left">
+                  <button
+                    onClick={() => setSelectedVoice(e.id)}
+                    className='text-left flex-1 cursor-pointer'
+                  >
                     <p className="font-semibold text-sm">{e.voice.name}</p>
                     <p className="text-xs text-gray-400">{e.voice.gender}</p>
-                  </div>
-                </button>
+                  </button>
+                </div>
               ))}
             </div>
           </div>

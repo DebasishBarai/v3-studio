@@ -2,14 +2,26 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export const voiceValidator = v.union(
-  v.object({ name: v.literal('Alloy'), gender: v.literal('Female') }),
-  v.object({ name: v.literal('Nova'), gender: v.literal('Female') }),
-  v.object({ name: v.literal('Onyx'), gender: v.literal('Male') }),
-  v.object({ name: v.literal('Sage'), gender: v.literal('Female') }),
-  v.object({ name: v.literal('Shimmer'), gender: v.literal('Female') }),
-  v.object({ name: v.literal('Verse'), gender: v.literal('Male') }),
-  v.object({ name: v.literal('Ballad'), gender: v.literal('Male') }),
-  v.object({ name: v.literal('Coral'), gender: v.literal('Female') }),
+  v.object({ name: v.literal('Clyde'), gender: v.literal('Male'), voiceId: v.literal('2EiwWnXFnvU5JabPnv8n'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/2EiwWnXFnvU5JabPnv8n/65d80f52-703f-4cae-a91d-75d4e200ed02.mp3'), }),
+  v.object({ name: v.literal('Roger'), gender: v.literal('Male'), voiceId: v.literal('CwhRBWXzGAHq8TQ4Fs17'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/CwhRBWXzGAHq8TQ4Fs17/58ee3ff5-f6f2-4628-93b8-e38eb31806b0.mp3'), }),
+  v.object({ name: v.literal('Sarah'), gender: v.literal('Female'), voiceId: v.literal('EXAVITQu4vr4xnSDxMaL'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/EXAVITQu4vr4xnSDxMaL/01a3e33c-6e99-4ee7-8543-ff2216a32186.mp3'), }),
+  v.object({ name: v.literal('Laura'), gender: v.literal('Female'), voiceId: v.literal('FGY2WhTYpPnrIDTdsKH5'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/FGY2WhTYpPnrIDTdsKH5/67341759-ad08-41a5-be6e-de12fe448618.mp3'), }),
+  v.object({ name: v.literal('Charlie'), gender: v.literal('Male'), voiceId: v.literal('IKne3meq5aSn9XLyUdCD'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/IKne3meq5aSn9XLyUdCD/102de6f2-22ed-43e0-a1f1-111fa75c5481.mp3'), }),
+  v.object({ name: v.literal('George'), gender: v.literal('Male'), voiceId: v.literal('JBFqnCBsd6RMkjVDRZzb'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/JBFqnCBsd6RMkjVDRZzb/e6206d1a-0721-4787-aafb-06a6e705cac5.mp3'), }),
+  v.object({ name: v.literal('Callum'), gender: v.literal('Male'), voiceId: v.literal('N2lVS1w4EtoT3dr4eOWO'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/N2lVS1w4EtoT3dr4eOWO/ac833bd8-ffda-4938-9ebc-b0f99ca25481.mp3'), }),
+  v.object({ name: v.literal('Bill'), gender: v.literal('Male'), voiceId: v.literal('pqHfZKP75CvOlQylNhV4'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/pqHfZKP75CvOlQylNhV4/d782b3ff-84ba-4029-848c-acf01285524d.mp3'), }),
+  v.object({ name: v.literal('Lily'), gender: v.literal('Female'), voiceId: v.literal('pFZP5JQG7iQjIQuC4Bku'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/pFZP5JQG7iQjIQuC4Bku/89b68b35-b3dd-4348-a84a-a3c13a3c2b30.mp3'), }),
+  v.object({ name: v.literal('River'), gender: v.literal('Female'), voiceId: v.literal('SAz9YHcvj6GT2YYXdXww'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/SAz9YHcvj6GT2YYXdXww/e6c95f0b-2227-491a-b3d7-2249240decb7.mp3'), }),
+  v.object({ name: v.literal('Harry'), gender: v.literal('Male'), voiceId: v.literal('SOYHLrjzK2X1ezoPC6cr'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/SOYHLrjzK2X1ezoPC6cr/86d178f6-f4b6-4e0e-85be-3de19f490794.mp3'), }),
+  v.object({ name: v.literal('Liam'), gender: v.literal('Male'), voiceId: v.literal('TX3LPaxmHKxFdv7VOQHJ'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/TX3LPaxmHKxFdv7VOQHJ/63148076-6363-42db-aea8-31424308b92c.mp3'), }),
+  v.object({ name: v.literal('Chris'), gender: v.literal('Male'), voiceId: v.literal('Xb7hH8MSUJpSbSDYk0k2'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/Xb7hH8MSUJpSbSDYk0k2/d10f7534-11f6-41fe-a012-2de1e482d336.mp3'), }),
+  v.object({ name: v.literal('Will'), gender: v.literal('Male'), voiceId: v.literal('onwK4e9ZLuTAKqWW03F9'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/onwK4e9ZLuTAKqWW03F9/7eee0236-1a72-4b86-b303-5dcadc007ba9.mp3'), }),
+  v.object({ name: v.literal('Jessica'), gender: v.literal('Female'), voiceId: v.literal('cgSgspJ2msm6clMCkdW9'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/cgSgspJ2msm6clMCkdW9/56a97bf8-b69b-448f-846c-c3a11683d45a.mp3'), }),
+  v.object({ name: v.literal('Brian'), gender: v.literal('Male'), voiceId: v.literal('nPczCjzI2devNBz1zQrb'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/nPczCjzI2devNBz1zQrb/2dd3e72c-4fd3-42f1-93ea-abc5d4e5aa1d.mp3'), }),
+  v.object({ name: v.literal('Daniel'), gender: v.literal('Male'), voiceId: v.literal('onwK4e9ZLuTAKqWW03F9'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/onwK4e9ZLuTAKqWW03F9/7eee0236-1a72-4b86-b303-5dcadc007ba9.mp3'), }),
+  v.object({ name: v.literal('Liam'), gender: v.literal('Male'), voiceId: v.literal('pFZP5JQG7iQjIQuC4Bku'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/pFZP5JQG7iQjIQuC4Bku/89b68b35-b3dd-4348-a84a-a3c13a3c2b30.mp3'), }),
+  v.object({ name: v.literal('Alice'), gender: v.literal('Female'), voiceId: v.literal('SAz9YHcvj6GT2YYXdXww'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/SAz9YHcvj6GT2YYXdXww/e6c95f0b-2227-491a-b3d7-2249240decb7.mp3'), }),
+  v.object({ name: v.literal('Matilda'), gender: v.literal('Female'), voiceId: v.literal('SOYHLrjzK2X1ezoPC6cr'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/premade/voices/SOYHLrjzK2X1ezoPC6cr/86d178f6-f4b6-4e0e-85be-3de19f490794.mp3'), }),
 )
 
 export const styleValidator = v.union(
@@ -22,16 +34,17 @@ export const styleValidator = v.union(
 )
 
 export const musicValidator = v.union(
-  v.literal('Else - Paris'),
-  v.literal('Für Elise'),
-  v.literal('Prelude in E minor (Op. 28 n°4)'),
-  v.literal('Eureka'),
-  v.literal('Tension In The Air'),
-  v.literal('Winter'),
-  v.literal('Bladerunner 2049'),
-  v.literal('Snowfall'),
-  v.literal('Another love'),
-  v.literal('String Arpeggios'),
+  v.object({ title: v.literal('Beats'), url: v.literal('https://cdn.pixabay.com/audio/2025/11/11/audio_f2cf114879.mp3'), }),
+  v.object({ title: v.literal('Future Bass'), url: v.literal('https://cdn.pixabay.com/audio/2024/11/08/audio_05b10daae7.mp3'), }),
+  v.object({ title: v.literal('Upbeat'), url: v.literal('https://cdn.pixabay.com/audio/2025/11/07/audio_a9bc5df6b9.mp3'), }),
+  v.object({ title: v.literal('Chill'), url: v.literal('https://cdn.pixabay.com/audio/2025/10/23/audio_fc19d0fae0.mp3'), }),
+  v.object({ title: v.literal('Electronic'), url: v.literal('https://cdn.pixabay.com/audio/2025/07/28/audio_944c8a9cde.mp3'), }),
+  v.object({ title: v.literal('Chill Hip Hop'), url: v.literal('https://cdn.pixabay.com/audio/2025/07/01/audio_546ec56e2a.mp3'), }),
+  v.object({ title: v.literal('Pop'), url: v.literal('https://cdn.pixabay.com/audio/2024/02/13/audio_851cb5db32.mp3'), }),
+  v.object({ title: v.literal('Chill Electronic'), url: v.literal('https://cdn.pixabay.com/audio/2024/02/13/audio_38278d96ea.mp3'), }),
+  v.object({ title: v.literal('Chill Pop'), url: v.literal('https://cdn.pixabay.com/audio/2024/02/02/audio_9c1cf8951d.mp3'), }),
+  v.object({ title: v.literal('Future Beats'), url: v.literal('https://cdn.pixabay.com/audio/2024/01/25/audio_8698bda9da.mp3'), }),
+  v.object({ title: v.literal('Chill Beats'), url: v.literal('https://cdn.pixabay.com/audio/2024/01/02/audio_c88a26ff39.mp3'), }),
 )
 
 // Video aspect ratios
@@ -84,6 +97,7 @@ export default defineSchema({
     polarCustomerId: v.string(),
     subscriptionProductId: v.optional(v.string()),
   }).index('by_subject', ['subject']),
+
   ads: defineTable({
     userId: v.id('users'),
     productId: v.id('_storage'),
@@ -96,6 +110,7 @@ export default defineSchema({
     adVideoStorageId: v.optional(v.id('_storage')),
     adVideoUrl: v.optional(v.string()),
   }).index('by_userId', ['userId']),
+
   suggestions: defineTable({
     userId: v.id('users'),
     fullName: v.string(),
@@ -105,6 +120,7 @@ export default defineSchema({
     createdAt: v.number(),
   }).index('by_userId', ['userId'])
     .index('by_createdAt', ['createdAt']),
+
   promptVariations: defineTable({
     category: v.string(), // e.g., "randomAiStory", "scaryStay", etc.
     prompt: v.string(), // prompt variations
@@ -113,6 +129,7 @@ export default defineSchema({
     userId: v.id('users'),
     orderId: v.string(),
   }).index('by_orderId', ['orderId']),
+
   videos: defineTable({
     userId: v.id('users'),
 

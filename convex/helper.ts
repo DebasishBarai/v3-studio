@@ -65,6 +65,13 @@ For each scene, provide:
   - Can be empty array [] if no defined characters appear (e.g., pure landscape shots)
   - Examples: ["Hero"], ["Hero", "Villain"], ["Dragon", "Knight"], []
 
+- **narration**: (OPTIONAL string) Voice-over narration for this scene (10-15 words)
+  - Should complement the visual storytelling, not just describe what's shown
+  - Can provide context, inner thoughts, story progression, or atmosphere
+  - Keep concise and impactful - narration should enhance, not overwhelm
+  - Use empty string "" if no narration is needed for this scene
+  - Consider pacing: narration should fit naturally within the scene duration
+
 - **imagePrompt**: EXTREMELY DETAILED description (100-200 words) for the main establishing shot. Must include:
   - **Camera angle/shot type**: (e.g., "wide shot", "close-up", "medium shot", "aerial view", "low angle", "high angle", "over-the-shoulder")
   - **Setting/Location**: Detailed environment description
@@ -124,6 +131,7 @@ For each scene, provide:
 10. **Location Logic**: Maintain consistent environmental details when scenes share locations
 11. **Story Flow**: Scenes should progress logically and tell a coherent narrative
 12. **Angle Purpose**: Each angle should add value - better detail, emotional impact, or visual variety
+13. **Narration Purpose**: Include narration to add meaningful story context, emotional depth, or transitions between scenes
 
 ## Animation Guidelines for videoPrompt:
 - **Camera movements should be smooth and professional** (dolly, pan, tilt, zoom, orbit, or static)
@@ -152,6 +160,7 @@ Output ONLY valid JSON with NO additional text or explanations:
     {
       "index": 0,
       "charactersInTheScene": ["CharacterName1", "CharacterName2"],
+      "narration": "string (10-15 words)",
       "imagePrompt": "string (100-200 words, extremely detailed)",
       "videoPrompt": "string (80-150 words, focused on animation and movement)",
       "angles": [

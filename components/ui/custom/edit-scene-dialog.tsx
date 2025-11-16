@@ -46,6 +46,20 @@ export const EditSceneDialog = ({
             />
           </div>
 
+          {/* Narration */}
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Narration</label>
+            <textarea
+              value={scene.narration}
+              onChange={(e) =>
+                updateNestedField(`scenes[${index}].narration`, e.target.value)
+              }
+              rows={4}
+              className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+              placeholder="Describe the scene's voice over narration..."
+            />
+          </div>
+
           {/* Characters In Scene */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
