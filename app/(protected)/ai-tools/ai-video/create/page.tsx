@@ -346,7 +346,7 @@ export default function VideoCreatorPage() {
                 >
                   <div className="flex items-center gap-3">
                     <button
-                      onClick={() => toggleAudioPlay('music', track.id, track.url)}
+                      onClick={() => toggleAudioPlay('music', track.id, track.music.previewUrl)}
                       className="bg-gray-700 hover:opacity-80 rounded-full p-2 cursor-pointer transition"
                     >
                       {isAudioPlaying('music', track.id) ? (
@@ -356,7 +356,7 @@ export default function VideoCreatorPage() {
                       )}
                     </button>
                     <div>
-                      <p className="font-thin text-sm">{track.title}</p>
+                      <p className="font-thin text-sm">{track.music.title}</p>
                     </div>
                   </div>
                   <button
