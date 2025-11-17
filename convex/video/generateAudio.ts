@@ -13,7 +13,7 @@ const elevenLabsClient = new ElevenLabsClient({
 export const generateAudio = action({
   args: {
     text: v.string(),
-    voiceId: v.id('voices'),
+    voiceId: v.string(),
   },
   handler: async (ctx, args): Promise<{ audioStorageId: Id<'_storage'>, audioUrl: string }> => {
     console.log('generate audio');

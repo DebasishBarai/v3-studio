@@ -1,15 +1,14 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
-import { RotateCcw, Trash2, WandSparkles, Pencil, ImageOff, Video, Eye, ImageDown } from 'lucide-react'
+import { RotateCcw, Trash2, WandSparkles, Pencil, ImageOff, Video, ImageDown, AudioLines } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { CustomButton } from '@/components/ui/custom/custom-button'
 import { EditSceneDialog } from '@/components/ui/custom/edit-scene-dialog'
 import { ModifySceneDialog } from './modify-scene-dialog'
 import { useEffect, useState } from 'react'
-import { getCachedVideoUrl } from "@/lib/video-cache";
+import { getCachedVideoUrl } from "@/lib/video-cache"
 
 export const SceneCard = ({
   index,
@@ -17,6 +16,7 @@ export const SceneCard = ({
   removeScene,
   generateSceneImage,
   generateSceneVideo,
+  generateSceneAudio,
   updateNestedField,
   generatingScene,
   modifyingScene,
@@ -186,6 +186,28 @@ export const SceneCard = ({
                 }
               )}
               icon={Video}
+              tooltip="Generate Video"
+            />
+
+            {/* Generate Audio */}
+            <CustomButton
+              disabled={scene.audioUrl || !scene.narration.trim() || generatingScene === index}
+              onClick={() =>
+                generateSceneAudio({
+                  index,
+                  text: scene.narration,
+                })
+              }
+              className={cn(
+                'flex items-center gap-2 py-2 rounded-lg text-white transition-all',
+                {
+                  'bg-green-600 hover:bg-green-700 cursor-pointer':
+                    !(scene.audioUrl || !scene.narration.trim() || generatingScene === index),
+                  'bg-green-600/60 opacity-60 cursor-not-allowed':
+                    scene.audioUrl || !scene.narration.trim() || generatingScene === index,
+                }
+              )}
+              icon={AudioLines}
               tooltip="Generate Video"
             />
           </div>

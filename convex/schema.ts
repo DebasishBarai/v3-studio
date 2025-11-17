@@ -34,17 +34,17 @@ export const styleValidator = v.union(
 )
 
 export const musicValidator = v.union(
-  v.object({ title: v.literal('Beats'), url: v.literal('https://cdn.pixabay.com/audio/2025/11/11/audio_f2cf114879.mp3'), }),
-  v.object({ title: v.literal('Future Bass'), url: v.literal('https://cdn.pixabay.com/audio/2024/11/08/audio_05b10daae7.mp3'), }),
-  v.object({ title: v.literal('Upbeat'), url: v.literal('https://cdn.pixabay.com/audio/2025/11/07/audio_a9bc5df6b9.mp3'), }),
-  v.object({ title: v.literal('Chill'), url: v.literal('https://cdn.pixabay.com/audio/2025/10/23/audio_fc19d0fae0.mp3'), }),
-  v.object({ title: v.literal('Electronic'), url: v.literal('https://cdn.pixabay.com/audio/2025/07/28/audio_944c8a9cde.mp3'), }),
-  v.object({ title: v.literal('Chill Hip Hop'), url: v.literal('https://cdn.pixabay.com/audio/2025/07/01/audio_546ec56e2a.mp3'), }),
-  v.object({ title: v.literal('Pop'), url: v.literal('https://cdn.pixabay.com/audio/2024/02/13/audio_851cb5db32.mp3'), }),
-  v.object({ title: v.literal('Chill Electronic'), url: v.literal('https://cdn.pixabay.com/audio/2024/02/13/audio_38278d96ea.mp3'), }),
-  v.object({ title: v.literal('Chill Pop'), url: v.literal('https://cdn.pixabay.com/audio/2024/02/02/audio_9c1cf8951d.mp3'), }),
-  v.object({ title: v.literal('Future Beats'), url: v.literal('https://cdn.pixabay.com/audio/2024/01/25/audio_8698bda9da.mp3'), }),
-  v.object({ title: v.literal('Chill Beats'), url: v.literal('https://cdn.pixabay.com/audio/2024/01/02/audio_c88a26ff39.mp3'), }),
+  v.object({ title: v.literal('Beats'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2025/11/11/audio_f2cf114879.mp3'), }),
+  v.object({ title: v.literal('Future Bass'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2024/11/08/audio_05b10daae7.mp3'), }),
+  v.object({ title: v.literal('Upbeat'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2025/11/07/audio_a9bc5df6b9.mp3'), }),
+  v.object({ title: v.literal('Chill'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2025/10/23/audio_fc19d0fae0.mp3'), }),
+  v.object({ title: v.literal('Electronic'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2025/07/28/audio_944c8a9cde.mp3'), }),
+  v.object({ title: v.literal('Chill Hip Hop'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2025/07/01/audio_546ec56e2a.mp3'), }),
+  v.object({ title: v.literal('Pop'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2024/02/13/audio_851cb5db32.mp3'), }),
+  v.object({ title: v.literal('Chill Electronic'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2024/02/13/audio_38278d96ea.mp3'), }),
+  v.object({ title: v.literal('Chill Pop'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2024/02/02/audio_9c1cf8951d.mp3'), }),
+  v.object({ title: v.literal('Future Beats'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2024/01/25/audio_8698bda9da.mp3'), }),
+  v.object({ title: v.literal('Chill Beats'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2024/01/02/audio_c88a26ff39.mp3'), }),
 )
 
 // Video aspect ratios

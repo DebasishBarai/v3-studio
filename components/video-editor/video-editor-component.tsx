@@ -37,7 +37,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const generateCharacterImageAction = useAction(api.video.generateVideoImage.generateCharacterImage);
   const generateSceneImageAction = useAction(api.video.generateVideoImage.generateSceneImage);
   const generateSceneVideoAction = useAction(api.video.generateVideo.generateSceneVideo)
-  const generateAudioAction = useAction(api.video.generateAudio.generateAudio);
+  const generateSceneAudioAction = useAction(api.video.generateAudio.generateAudio);
   const [generatingCharacter, setGeneratingCharacter] = useState<number | null>(null);
   const [generatingScene, setGeneratingScene] = useState<number | null>(null);
   const [modifyPrompts, setModifyPrompts] = useState<Record<number, string>>({});
@@ -48,17 +48,17 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const [isSaving, setIsSaving] = useState(false);
 
   const musics = [
-    { id: 1, title: 'Beats', previewUrl: 'https://cdn.pixabay.com/audio/2025/11/11/audio_f2cf114879.mp3', },
-    { id: 2, title: 'Future Bass', previewUrl: 'https://cdn.pixabay.com/audio/2024/11/08/audio_05b10daae7.mp3', },
-    { id: 3, title: 'Upbeat', previewUrl: 'https://cdn.pixabay.com/audio/2025/11/07/audio_a9bc5df6b9.mp3', },
-    { id: 4, title: 'Chill', previewUrl: 'https://cdn.pixabay.com/audio/2025/10/23/audio_fc19d0fae0.mp3', },
-    { id: 5, title: 'Electronic', previewUrl: 'https://cdn.pixabay.com/audio/2025/07/28/audio_944c8a9cde.mp3', },
-    { id: 6, title: 'Chill Hip Hop', previewUrl: 'https://cdn.pixabay.com/audio/2025/07/01/audio_546ec56e2a.mp3', },
-    { id: 7, title: 'Pop', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/13/audio_851cb5db32.mp3', },
-    { id: 8, title: 'Chill Electronic', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/13/audio_38278d96ea.mp3', },
-    { id: 9, title: 'Chill Pop', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/02/audio_9c1cf8951d.mp3', },
-    { id: 10, title: 'Future Beats', previewUrl: 'https://cdn.pixabay.com/audio/2024/01/25/audio_8698bda9da.mp3', },
-    { id: 11, title: 'Chill Beats', previewUrl: 'https://cdn.pixabay.com/audio/2024/01/02/audio_c88a26ff39.mp3', },
+    { id: 1, music: { title: 'Beats', previewUrl: 'https://cdn.pixabay.com/audio/2025/11/11/audio_f2cf114879.mp3' }, },
+    { id: 2, music: { title: 'Future Bass', previewUrl: 'https://cdn.pixabay.com/audio/2024/11/08/audio_05b10daae7.mp3' }, },
+    { id: 3, music: { title: 'Upbeat', previewUrl: 'https://cdn.pixabay.com/audio/2025/11/07/audio_a9bc5df6b9.mp3' }, },
+    { id: 4, music: { title: 'Chill', previewUrl: 'https://cdn.pixabay.com/audio/2025/10/23/audio_fc19d0fae0.mp3' }, },
+    { id: 5, music: { title: 'Electronic', previewUrl: 'https://cdn.pixabay.com/audio/2025/07/28/audio_944c8a9cde.mp3' }, },
+    { id: 6, music: { title: 'Chill Hip Hop', previewUrl: 'https://cdn.pixabay.com/audio/2025/07/01/audio_546ec56e2a.mp3' }, },
+    { id: 7, music: { title: 'Pop', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/13/audio_851cb5db32.mp3' }, },
+    { id: 8, music: { title: 'Chill Electronic', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/13/audio_38278d96ea.mp3' }, },
+    { id: 9, music: { title: 'Chill Pop', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/02/audio_9c1cf8951d.mp3' }, },
+    { id: 10, music: { title: 'Future Beats', previewUrl: 'https://cdn.pixabay.com/audio/2024/01/25/audio_8698bda9da.mp3' }, },
+    { id: 11, music: { title: 'Chill Beats', previewUrl: 'https://cdn.pixabay.com/audio/2024/01/02/audio_c88a26ff39.mp3' }, },
   ];
 
   const voices = [
@@ -465,6 +465,35 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
     }
   }
 
+  const generateSceneAudio = async ({ index, text }: { index: number, text: string }) => {
+    console.log('Generating scene audio...');
+    setGeneratingScene(index);
+
+    if (!text.trim()) {
+      console.log('No prompt provided for scene audio');
+      toast.error('Please enter a prompt for the scene audio');
+      setGeneratingScene(null);
+      return;
+    }
+
+    try {
+      const result = await generateSceneAudioAction({
+        text,
+        voiceId: videoData.voice.voiceId,
+      });
+
+      updateNestedField(`scenes[${index}].audioId`, result.audioStorageId);
+      updateNestedField(`scenes[${index}].audioUrl`, result.audioUrl);
+
+      toast.success('Scene audio generated successfully!');
+    } catch (error) {
+      console.error('Error generating scene audio:', error);
+      toast.error('An error occurred while generating scene audio');
+    } finally {
+      setGeneratingScene(null);
+    }
+  }
+
   const handleSave = async () => {
     setIsSaving(true);
     try {
@@ -607,14 +636,20 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">Music</label>
                       <select
-                        value={videoData.music}
-                        onChange={(e) => updateField('music', e.target.value)}
+                        value={videoData.music.title}
+                        onChange={(e) => {
+                          const selected = musics.find(m => `${m.music.title}` === e.target.value);
+                          if (selected) {
+                            updateNestedField('music.title', selected.music.title);
+                            updateNestedField('music.previewUrl', selected.music.previewUrl);
+                          }
+                        }}
                         className="w-full px-4 py-2 bg-white/5 cursor-pointer border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                       >
                         <option value="" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>Select Music</option>
                         {musics.map((music) => (
-                          <option key={music.id} value={music.title} style={{ backgroundColor: '#1E1E2D', color: 'white' }}>
-                            {music.title}
+                          <option key={music.id} value={music.music.title} style={{ backgroundColor: '#1E1E2D', color: 'white' }}>
+                            {music.music.title}
                           </option>
                         ))}
                       </select>
@@ -645,6 +680,8 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                           if (selected) {
                             updateNestedField('voice.name', selected.voice.name);
                             updateNestedField('voice.gender', selected.voice.gender);
+                            updateNestedField('voice.voiceId', selected.voice.voiceId);
+                            updateNestedField('voice.previewUrl', selected.voice.previewUrl);
                           }
                         }}
                         className="w-full px-4 py-2 bg-white/5 cursor-pointer border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -755,6 +792,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                       generatingScene={generatingScene}
                       generateSceneImage={generateSceneImage}
                       generateSceneVideo={generateSceneVideo}
+                      generateSceneAudio={generateSceneAudio}
                       aspectRatio={videoData.aspectRatio}
                     />
                   ))}

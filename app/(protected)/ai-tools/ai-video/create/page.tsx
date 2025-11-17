@@ -16,6 +16,11 @@ interface VoiceType {
   voice: Infer<typeof voiceValidator>;
 }
 
+interface MusicType {
+  id: number;
+  music: Infer<typeof musicValidator>;
+}
+
 interface AudioState {
   type: 'music' | 'voice';
   id: number | string;
@@ -62,18 +67,18 @@ export default function VideoCreatorPage() {
     { id: 120, label: '120s', description: 'Long' },
   ];
 
-  const musics = [
-    { id: 1, title: 'Beats', previewUrl: 'https://cdn.pixabay.com/audio/2025/11/11/audio_f2cf114879.mp3', },
-    { id: 2, title: 'Future Bass', previewUrl: 'https://cdn.pixabay.com/audio/2024/11/08/audio_05b10daae7.mp3', },
-    { id: 3, title: 'Upbeat', previewUrl: 'https://cdn.pixabay.com/audio/2025/11/07/audio_a9bc5df6b9.mp3', },
-    { id: 4, title: 'Chill', previewUrl: 'https://cdn.pixabay.com/audio/2025/10/23/audio_fc19d0fae0.mp3', },
-    { id: 5, title: 'Electronic', previewUrl: 'https://cdn.pixabay.com/audio/2025/07/28/audio_944c8a9cde.mp3', },
-    { id: 6, title: 'Chill Hip Hop', previewUrl: 'https://cdn.pixabay.com/audio/2025/07/01/audio_546ec56e2a.mp3', },
-    { id: 7, title: 'Pop', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/13/audio_851cb5db32.mp3', },
-    { id: 8, title: 'Chill Electronic', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/13/audio_38278d96ea.mp3', },
-    { id: 9, title: 'Chill Pop', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/02/audio_9c1cf8951d.mp3', },
-    { id: 10, title: 'Future Beats', previewUrl: 'https://cdn.pixabay.com/audio/2024/01/25/audio_8698bda9da.mp3', },
-    { id: 11, title: 'Chill Beats', previewUrl: 'https://cdn.pixabay.com/audio/2024/01/02/audio_c88a26ff39.mp3', },
+  const musics: MusicType[] = [
+    { id: 1, music: { title: 'Beats', previewUrl: 'https://cdn.pixabay.com/audio/2025/11/11/audio_f2cf114879.mp3' }, },
+    { id: 2, music: { title: 'Future Bass', previewUrl: 'https://cdn.pixabay.com/audio/2024/11/08/audio_05b10daae7.mp3' }, },
+    { id: 3, music: { title: 'Upbeat', previewUrl: 'https://cdn.pixabay.com/audio/2025/11/07/audio_a9bc5df6b9.mp3' }, },
+    { id: 4, music: { title: 'Chill', previewUrl: 'https://cdn.pixabay.com/audio/2025/10/23/audio_fc19d0fae0.mp3' }, },
+    { id: 5, music: { title: 'Electronic', previewUrl: 'https://cdn.pixabay.com/audio/2025/07/28/audio_944c8a9cde.mp3' }, },
+    { id: 6, music: { title: 'Chill Hip Hop', previewUrl: 'https://cdn.pixabay.com/audio/2025/07/01/audio_546ec56e2a.mp3' }, },
+    { id: 7, music: { title: 'Pop', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/13/audio_851cb5db32.mp3' }, },
+    { id: 8, music: { title: 'Chill Electronic', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/13/audio_38278d96ea.mp3' }, },
+    { id: 9, music: { title: 'Chill Pop', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/02/audio_9c1cf8951d.mp3' }, },
+    { id: 10, music: { title: 'Future Beats', previewUrl: 'https://cdn.pixabay.com/audio/2024/01/25/audio_8698bda9da.mp3' }, },
+    { id: 11, music: { title: 'Chill Beats', previewUrl: 'https://cdn.pixabay.com/audio/2024/01/02/audio_c88a26ff39.mp3' }, },
   ];
 
 
@@ -180,7 +185,7 @@ export default function VideoCreatorPage() {
       const videoId = await createVideoBlueprint({
         prompt,
         style: styles.find(s => s.id === selectedStyle)!.name as Infer<typeof styleValidator>,
-        music: musics.find(s => s.id === selectedMusic)!.title as Infer<typeof musicValidator>,
+        music: musics.find(s => s.id === selectedMusic)!.music as Infer<typeof musicValidator>,
         voice: voices.find(s => s.id === selectedVoice)!.voice as Infer<typeof voiceValidator>,
         aspectRatio: aspectRatios.find(s => s.id === selectedAspectRatio)!.label as Infer<typeof aspectRatioValidator>,
         durationInSecs: selectedDuration,
