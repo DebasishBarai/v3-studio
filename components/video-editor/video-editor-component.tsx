@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button"
 import { parseMedia } from '@remotion/media-parser'
 import { getCachedVideoUrl } from "@/lib/video-cache"
 import { cn } from "@/lib/utils"
+import { musicValidator, voiceValidator } from "@/convex/schema"
+import { Infer } from "convex/values"
 
 
 export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
@@ -47,42 +49,25 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
 
   const [isSaving, setIsSaving] = useState(false);
 
-  const musics = [
-    { id: 1, music: { title: 'Beats', previewUrl: 'https://cdn.pixabay.com/audio/2025/11/11/audio_f2cf114879.mp3' }, },
-    { id: 2, music: { title: 'Future Bass', previewUrl: 'https://cdn.pixabay.com/audio/2024/11/08/audio_05b10daae7.mp3' }, },
-    { id: 3, music: { title: 'Upbeat', previewUrl: 'https://cdn.pixabay.com/audio/2025/11/07/audio_a9bc5df6b9.mp3' }, },
-    { id: 4, music: { title: 'Chill', previewUrl: 'https://cdn.pixabay.com/audio/2025/10/23/audio_fc19d0fae0.mp3' }, },
-    { id: 5, music: { title: 'Electronic', previewUrl: 'https://cdn.pixabay.com/audio/2025/07/28/audio_944c8a9cde.mp3' }, },
-    { id: 6, music: { title: 'Chill Hip Hop', previewUrl: 'https://cdn.pixabay.com/audio/2025/07/01/audio_546ec56e2a.mp3' }, },
-    { id: 7, music: { title: 'Pop', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/13/audio_851cb5db32.mp3' }, },
-    { id: 8, music: { title: 'Chill Electronic', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/13/audio_38278d96ea.mp3' }, },
-    { id: 9, music: { title: 'Chill Pop', previewUrl: 'https://cdn.pixabay.com/audio/2024/02/02/audio_9c1cf8951d.mp3' }, },
-    { id: 10, music: { title: 'Future Beats', previewUrl: 'https://cdn.pixabay.com/audio/2024/01/25/audio_8698bda9da.mp3' }, },
-    { id: 11, music: { title: 'Chill Beats', previewUrl: 'https://cdn.pixabay.com/audio/2024/01/02/audio_c88a26ff39.mp3' }, },
-  ];
+  // Generate the array from the music validator's members
+  const musics = musicValidator.members.map((member, index) => ({
+    id: index + 1,
+    music: {
+      title: member.fields.title.value,
+      previewUrl: member.fields.previewUrl.value,
+    } as Infer<typeof musicValidator>,
+  }));
 
-  const voices = [
-    { id: 1, voice: { name: 'Clyde', gender: 'Male', voiceId: '2EiwWnXFnvU5JabPnv8n', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/2EiwWnXFnvU5JabPnv8n/65d80f52-703f-4cae-a91d-75d4e200ed02.mp3' } },
-    { id: 2, voice: { name: 'Roger', gender: 'Male', voiceId: 'CwhRBWXzGAHq8TQ4Fs17', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/CwhRBWXzGAHq8TQ4Fs17/58ee3ff5-f6f2-4628-93b8-e38eb31806b0.mp3' } },
-    { id: 3, voice: { name: 'Sarah', gender: 'Female', voiceId: 'EXAVITQu4vr4xnSDxMaL', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/EXAVITQu4vr4xnSDxMaL/01a3e33c-6e99-4ee7-8543-ff2216a32186.mp3' } },
-    { id: 4, voice: { name: 'Laura', gender: 'Female', voiceId: 'FGY2WhTYpPnrIDTdsKH5', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/FGY2WhTYpPnrIDTdsKH5/67341759-ad08-41a5-be6e-de12fe448618.mp3' } },
-    { id: 5, voice: { name: 'Charlie', gender: 'Male', voiceId: 'IKne3meq5aSn9XLyUdCD', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/IKne3meq5aSn9XLyUdCD/102de6f2-22ed-43e0-a1f1-111fa75c5481.mp3' } },
-    { id: 6, voice: { name: 'George', gender: 'Male', voiceId: 'JBFqnCBsd6RMkjVDRZzb', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/JBFqnCBsd6RMkjVDRZzb/e6206d1a-0721-4787-aafb-06a6e705cac5.mp3' } },
-    { id: 7, voice: { name: 'Callum', gender: 'Male', voiceId: 'N2lVS1w4EtoT3dr4eOWO', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/N2lVS1w4EtoT3dr4eOWO/ac833bd8-ffda-4938-9ebc-b0f99ca25481.mp3' } },
-    { id: 8, voice: { name: 'Bill', gender: 'Male', voiceId: 'pqHfZKP75CvOlQylNhV4', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pqHfZKP75CvOlQylNhV4/d782b3ff-84ba-4029-848c-acf01285524d.mp3' } },
-    { id: 9, voice: { name: 'Lily', gender: 'Female', voiceId: 'pFZP5JQG7iQjIQuC4Bku', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pFZP5JQG7iQjIQuC4Bku/89b68b35-b3dd-4348-a84a-a3c13a3c2b30.mp3' } },
-    { id: 10, voice: { name: 'River', gender: 'Female', voiceId: 'SAz9YHcvj6GT2YYXdXww', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/SAz9YHcvj6GT2YYXdXww/e6c95f0b-2227-491a-b3d7-2249240decb7.mp3' } },
-    { id: 11, voice: { name: 'Harry', gender: 'Male', voiceId: 'SOYHLrjzK2X1ezoPC6cr', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/SOYHLrjzK2X1ezoPC6cr/86d178f6-f4b6-4e0e-85be-3de19f490794.mp3' } },
-    { id: 12, voice: { name: 'Liam', gender: 'Male', voiceId: 'TX3LPaxmHKxFdv7VOQHJ', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/TX3LPaxmHKxFdv7VOQHJ/63148076-6363-42db-aea8-31424308b92c.mp3' } },
-    { id: 13, voice: { name: 'Chris', gender: 'Male', voiceId: 'Xb7hH8MSUJpSbSDYk0k2', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/Xb7hH8MSUJpSbSDYk0k2/d10f7534-11f6-41fe-a012-2de1e482d336.mp3' } },
-    { id: 14, voice: { name: 'Will', gender: 'Male', voiceId: 'onwK4e9ZLuTAKqWW03F9', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/onwK4e9ZLuTAKqWW03F9/7eee0236-1a72-4b86-b303-5dcadc007ba9.mp3' } },
-    { id: 15, voice: { name: 'Jessica', gender: 'Female', voiceId: 'cgSgspJ2msm6clMCkdW9', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/cgSgspJ2msm6clMCkdW9/56a97bf8-b69b-448f-846c-c3a11683d45a.mp3' } },
-    { id: 16, voice: { name: 'Brian', gender: 'Male', voiceId: 'nPczCjzI2devNBz1zQrb', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/nPczCjzI2devNBz1zQrb/2dd3e72c-4fd3-42f1-93ea-abc5d4e5aa1d.mp3' } },
-    { id: 17, voice: { name: 'Daniel', gender: 'Male', voiceId: 'onwK4e9ZLuTAKqWW03F9', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/onwK4e9ZLuTAKqWW03F9/7eee0236-1a72-4b86-b303-5dcadc007ba9.mp3' } },
-    { id: 18, voice: { name: 'Liam', gender: 'Male', voiceId: 'pFZP5JQG7iQjIQuC4Bku', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/pFZP5JQG7iQjIQuC4Bku/89b68b35-b3dd-4348-a84a-a3c13a3c2b30.mp3' } },
-    { id: 19, voice: { name: 'Alice', gender: 'Female', voiceId: 'SAz9YHcvj6GT2YYXdXww', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/SAz9YHcvj6GT2YYXdXww/e6c95f0b-2227-491a-b3d7-2249240decb7.mp3' } },
-    { id: 20, voice: { name: 'Matilda', gender: 'Female', voiceId: 'SOYHLrjzK2X1ezoPC6cr', previewUrl: 'https://storage.googleapis.com/eleven-public-prod/premade/voices/SOYHLrjzK2X1ezoPC6cr/86d178f6-f4b6-4e0e-85be-3de19f490794.mp3' } },
-  ];
+  // Generate the array from the voice validator's members
+  const voices = voiceValidator.members.map((member, index) => ({
+    id: index + 1,
+    voice: {
+      name: member.fields.name.value,
+      gender: member.fields.gender.value,
+      voiceId: member.fields.voiceId.value,
+      previewUrl: member.fields.previewUrl.value,
+    } as Infer<typeof voiceValidator>,
+  }));
 
   // Initialize videoData from query
   useEffect(() => {
