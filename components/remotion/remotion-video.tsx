@@ -1,8 +1,8 @@
 "use client";
 
 import { AbsoluteFill, Series, Html5Audio } from "remotion";
-import { Doc } from "@/convex/_generated/dataModel";
-import { CachedOffthreadVideo } from "@/components/video-editor/cached-off-thread-video";
+import { Doc } from "../../convex/_generated/dataModel";
+import { CachedOffthreadVideo } from "../../components/video-editor/cached-off-thread-video";
 import Image from "next/image";
 import { Pacifico } from 'next/font/google';
 

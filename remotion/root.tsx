@@ -1,6 +1,6 @@
 import React from "react";
 import { Composition } from "remotion";
-import { RemotionVideo } from "@/components/remotion/remotion-video";
+import { RemotionVideo } from "../components/remotion/remotion-video";
 
 export const RemotionRoot: React.FC = () => {
   return (

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { OffthreadVideo } from "remotion";
-import { getCachedVideoUrl } from "@/lib/video-cache";
+import { getCachedVideoUrl } from "../../lib/video-cache";
 
 type Props = {
   src: string;
