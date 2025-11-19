@@ -208,7 +208,7 @@ export const SceneCard = ({
                 }
               )}
               icon={AudioLines}
-              tooltip="Generate Video"
+              tooltip="Generate Audio"
             />
           </div>
         </div>
