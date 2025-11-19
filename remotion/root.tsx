@@ -14,6 +14,7 @@ export const RemotionRoot: React.FC = () => {
         component={RemotionVideo}
         defaultProps={{
           video: null,
+          isSubscribed: false,
         }}
       />
     </>

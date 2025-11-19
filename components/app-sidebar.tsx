@@ -19,14 +19,12 @@ import {
 } from "@/components/ui/sidebar";
 import {
   Home,
-  Clapperboard,
-  Play,
-  Package,
+  Clapperboard, Package,
   Folder,
   CreditCard,
   Settings,
   Coins,
-  LucideIcon,
+  LucideIcon
 } from "lucide-react";
 import { useAction, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";

@@ -4,7 +4,7 @@ import { Player } from '@remotion/player'
 import { RemotionVideo } from '@/components/remotion/remotion-video'
 import { Doc } from '@/convex/_generated/dataModel'
 
-export const VideoPlayer = ({ video, durationInSeconds }: { video: Doc<'videos'>, durationInSeconds: number }) => {
+export const VideoPlayer = ({ video, durationInSeconds, isSubscribed }: { video: Doc<'videos'>, durationInSeconds: number, isSubscribed?: boolean }) => {
 
   if (!video) {
     return null
@@ -18,7 +18,7 @@ export const VideoPlayer = ({ video, durationInSeconds }: { video: Doc<'videos'>
         durationInFrames={durationInSeconds * 30}
         compositionHeight={video.aspectRatio === '16:9' ? 1080 : 1920}
         compositionWidth={video.aspectRatio === '16:9' ? 1920 : 1080}
-        inputProps={{ video: video }}
+        inputProps={{ video: video, isSubscribed: isSubscribed }}
         controls
         autoPlay
         loop

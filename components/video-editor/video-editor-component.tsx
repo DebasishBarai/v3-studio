@@ -24,6 +24,8 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const video = useQuery(api.video.video.getVideo, { id: id });
   const updateVideo = useMutation(api.video.video.updateVideo);
 
+  const user = useQuery(api.user.getUser)
+
   const [durationInSeconds, setDurationInSeconds] = useState(0)
   const [localUrl, setLocalUrl] = useState<string | null>(null)
   const [isVideoLoading, setIsVideoLoading] = useState(true)
@@ -556,7 +558,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                     />
                   ) : (
                     <div className="w-full h-full">
-                      <VideoPlayer video={videoData} durationInSeconds={Math.round(durationInSeconds)} />
+                      <VideoPlayer video={videoData} durationInSeconds={Math.round(durationInSeconds)} isSubscribed={!!user?.subscriptionProductId} />
                     </div>
                   )}
                 </div>
