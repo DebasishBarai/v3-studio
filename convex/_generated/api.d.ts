@@ -16,6 +16,7 @@ import type * as http from "../http.js";
 import type * as order from "../order.js";
 import type * as polar from "../polar.js";
 import type * as prompt from "../prompt.js";
+import type * as render from "../render.js";
 import type * as storage from "../storage.js";
 import type * as suggestion from "../suggestion.js";
 import type * as user from "../user.js";
@@ -40,6 +41,7 @@ declare const fullApi: ApiFromModules<{
   order: typeof order;
   polar: typeof polar;
   prompt: typeof prompt;
+  render: typeof render;
   storage: typeof storage;
   suggestion: typeof suggestion;
   user: typeof user;

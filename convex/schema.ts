@@ -163,6 +163,10 @@ export default defineSchema({
     numberOfImagesPerPrompt: v.number(), // How many variations to generate
     generateMultipleAngles: v.boolean(), // Whether to create extra angles
 
+    // Rendering settings
+    renderId: v.optional(v.string()),
+    bucketName: v.optional(v.string()),
+
     // Usage tracking
     creditsUsed: v.optional(v.number()),
     imagesGenerated: v.optional(v.number()),
