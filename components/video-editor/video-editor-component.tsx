@@ -98,7 +98,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
       }
     }
     loadVideoToCache()
-  })
+  }, [videoData])
 
   useEffect(() => {
     const loadVideoData = async () => {
@@ -106,8 +106,8 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
       if (!video || !videoData)
         return
       try {
-        if (video.videoUrl) {
-          const localUrl = await getCachedVideoUrl(video.videoUrl)
+        if (videoData.videoUrl) {
+          const localUrl = await getCachedVideoUrl(videoData.videoUrl)
           const videoMetadata = await parseMedia({
             src: localUrl,
             fields: {
@@ -119,7 +119,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
           console.log('No video URL found, calculating duration...')
           let totalDuration = 0
 
-          for (const [index, scene] of video.scenes.entries()) {
+          for (const [index, scene] of videoData.scenes.entries()) {
             console.log(' inside for loop')
             if (scene.videoUrl) {
               if (scene.videoDurationInSeconds) {
