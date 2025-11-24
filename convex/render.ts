@@ -4,7 +4,7 @@ import { v } from "convex/values";
 import { internal } from "./_generated/api";
 import { action } from "./_generated/server";
 
-import { getFunctions, renderMediaOnLambda } from '@remotion/lambda/client';
+import { renderMediaOnLambda } from '@remotion/lambda/client';
 
 export const renderVideo = action({
   args: {
@@ -37,29 +37,28 @@ export const renderVideo = action({
       userId: user._id,
     });
 
+    console.log({ video })
+
     if (!video) {
       throw new Error("Video not found");
     }
 
-    if (video.renderId) {
+    if (video.videoUrl) {
       throw new Error("Video already rendered");
+    }
+
+    if (video.renderId) {
+      throw new Error("Video rendering in progress");
     }
 
     // [TODO] Render video
 
-    const functions = await getFunctions({
-      region: 'us-east-1',
-      compatibleOnly: true,
-    });
-
-    const functionName = functions[0].functionName;
-
     console.log(`rendering video: ${args.videoId}`)
 
     const { renderId, bucketName } = await renderMediaOnLambda({
-      region: 'us-east-1',
-      functionName,
-      serveUrl: process.env.SERVE_URL || '',
+      region: 'ap-south-1',
+      functionName: process.env.REMOTION_FUNCTION_NAME || '',
+      serveUrl: process.env.REMOTION_SERVE_URL || '',
       composition: 'my-video',
       inputProps: {
         video: video,
@@ -73,6 +72,10 @@ export const renderVideo = action({
       webhook: {
         url: `${process.env.REMOTION_WEBHOOK_URL}`,
         secret: process.env.REMOTION_WEBHOOK_SECRET || '',
+        customData: {
+          videoId: args.videoId,
+          userId: user._id,
+        }
       }
     });
 

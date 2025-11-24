@@ -3,7 +3,7 @@
 import { api } from "@/convex/_generated/api"
 import { Doc, Id } from '@/convex/_generated/dataModel'
 import { useAction, useMutation, useQuery } from "convex/react"
-import { ChevronDown, ChevronUp, ImagePlay, Play, Plus, Save, Settings, User } from 'lucide-react'
+import { ChevronDown, ChevronUp, Download, ImagePlay, Play, Plus, Save, Settings, User, Video } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from "sonner"
 import { CharacterCard } from "@/components/ui/custom/character-card"
@@ -46,6 +46,10 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const [generatingScene, setGeneratingScene] = useState<number | null>(null);
   const [modifyPrompts, setModifyPrompts] = useState<Record<number, string>>({});
   const [modifyingCharacter, setModifyingCharacter] = useState<number | null>(null);
+
+  const renderVideoAction = useAction(api.render.renderVideo);
+
+  const [isRenderEligible, setIsRenderEligible] = useState(false);
 
   const [activeTab, setActiveTab] = useState<'Storyline' | 'Settings'>('Storyline');
 
@@ -152,6 +156,23 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
 
     loadVideoData()
   }, [video, videoData])
+
+  useEffect(() => {
+    if (!video) {
+      return;
+    }
+
+    if (video.videoUrl && video.videoUrl !== "") {
+      setIsRenderEligible(false)
+      return;
+    }
+
+    const allScenesHaveUrl =
+      video?.scenes?.length > 0 &&
+      video.scenes.every((scene) => scene.videoUrl && scene.videoUrl !== "");
+
+    setIsRenderEligible(allScenesHaveUrl);
+  }, [video]);
 
 
   if (!video || !videoData) {
@@ -500,6 +521,47 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
     }
   };
 
+  const renderVideo = async () => {
+    if (video.videoUrl) {
+      toast.error('Video is already rendered!');
+      return;
+    }
+
+    if (video.renderId) {
+      toast.error('Video is already rendering!');
+    }
+
+    if (!isRenderEligible) {
+      toast.error('Video is not ready to render!');
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+      await renderVideoAction({
+        videoId: id,
+      });
+    } catch (error) {
+      toast.error('Failed to render video. Please try again.');
+      console.error('Error rendering video:', error);
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  const downloadVideo = async () => {
+    if (!localUrl) {
+      toast.error('Video is not rendered!');
+      return;
+    }
+    const link = document.createElement('a');
+    link.href = localUrl;
+    link.download = `${video.title || 'video'}.mp4`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   return (
     <div className="w-full min-h-screen bg-background text-foreground pt-0 px-4 lg:px-8">
       <div className="mx-auto">
@@ -526,7 +588,30 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
             </button>
           </div>
           <div className="flex items-center gap-3">
-            {/* Preview Button */}
+            {/* Download button */}
+            {localUrl && (
+              <button
+                onClick={downloadVideo}
+                disabled={isSaving}
+                className={cn("mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md")}
+              >
+                <Download className="w-5 h-5" />
+                Download Video
+              </button>
+            )}
+            {/* Render button */}
+            {isRenderEligible && (
+              <button
+                onClick={renderVideo}
+                disabled={isSaving}
+                className={cn("mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-yellow-600 to-yellow-600 hover:scale-105 transition-all text-white rounded-md")}
+              >
+                <Video className="w-5 h-5" />
+                <span className='hidden md:inline'>
+                  {(!video.videoUrl && video.renderId) ? 'Rendering...' : 'Render Video'}
+                </span>
+              </button>
+            )}
             {/* Preview Button with Dialog */}
             <Dialog>
               <DialogTrigger asChild>
@@ -535,7 +620,9 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                   className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:scale-105 transition-all text-white rounded-md"
                 >
                   <Play className="w-4 h-4" />
-                  Preview Video
+                  <span className='hidden md:inline'>
+                    Preview Video
+                  </span>
                 </Button>
               </DialogTrigger>
               <DialogContent className='!max-w-[98vw] !w-[98vw] max-h-[98vh] h-[98vh] p-6 flex flex-col'>
@@ -566,11 +653,13 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
             </Dialog>
             <button
               onClick={handleSave}
-              disabled={isSaving}
+              disabled={isSaving || !!video.renderId || !!video.videoUrl}
               className="mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md"
             >
               <Save className="w-5 h-5" />
-              {isSaving ? 'Saving...' : 'Save Changes'}
+              <span className='hidden md:inline'>
+                {isSaving ? 'Saving...' : 'Save Changes'}
+              </span>
             </button>
           </div>
         </div>

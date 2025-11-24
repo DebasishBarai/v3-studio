@@ -1,20 +1,17 @@
 "use client";
 
-import { AbsoluteFill, Series, Html5Audio } from "remotion";
+import { AbsoluteFill, Series, Html5Audio, Audio } from "remotion";
 import { Doc } from "../../convex/_generated/dataModel";
 import { CachedOffthreadVideo } from "../../components/video-editor/cached-off-thread-video";
 import Image from "next/image";
-import { Pacifico } from 'next/font/google';
+import { loadFont } from '@remotion/google-fonts/Pacifico';
 
-type Props = {
+export type Props = {
   video: Doc<"videos"> | null;
   isSubscribed?: boolean;
 };
 
-const pacifico = Pacifico({
-  weight: '400',
-  subsets: ['latin'],
-})
+const { fontFamily } = loadFont();
 
 export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
   return (
@@ -31,7 +28,7 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
                 )}
 
                 {scene.videoUrl ? (
-                  <CachedOffthreadVideo
+                  <CachedOffthreadVideo // change to OffthreadVideo for lambda
                     src={scene.videoUrl}
                     style={{
                       width: "100%",
@@ -39,7 +36,7 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
                       objectFit: "cover",
                       borderRadius: "0.5rem",
                     }}
-                    muted
+                    muted={false}
                   />
                 ) : (
                   <AbsoluteFill className="flex items-center justify-center text-white">
@@ -55,9 +52,12 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
         <AbsoluteFill>
           <div className="w-full h-full flex items-center justify-center">
             <Image alt="logo" src="/logo.png" width={80} height={80} />
-            <h1 className={`text-2xl font-bold text-yellow-500 ${pacifico.className}`}>V3 Studio</h1>
+            <h1 className={`text-2xl font-bold text-yellow-500`} style={{ fontFamily }}>V3 Studio</h1>
           </div>
         </AbsoluteFill>
+      )}
+      {video && video.music && (
+        <Html5Audio src={video.music.previewUrl} />
       )}
     </AbsoluteFill>
   );

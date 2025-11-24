@@ -1,6 +1,8 @@
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
 import { internal } from "./_generated/api";
+import { WebhookPayload } from "@remotion/lambda/client";
+import { Id } from "./_generated/dataModel";
 
 const http = httpRouter();
 
@@ -152,5 +154,50 @@ const getCredits = (productId: string) => {
 
   return 0;
 }
+
+http.route({
+  path: "/remotion-webhook",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    const body = await request.json();
+    const signatureHeader = request.headers.get("X-Remotion-Signature");
+
+    // Validate webhook signature
+    /*
+     const isSignatureValid = await ctx.runAction(internal.validateWebhookSignature.internalValidateRemotionWebhookSignature, {
+      body: body,
+      signatureHeader: signatureHeader as string,
+    });
+
+    if (!isSignatureValid) {
+      return new Response("Invalid signature", { status: 401 });
+    }
+    */
+
+    // If code reaches here, the webhook is authentic
+    const payload = body as WebhookPayload;
+
+    if (payload.type === "success") {
+      await ctx.runMutation(internal.video.video.updateInternalVideo, {
+        id: payload.customData?.videoId as Id<'videos'>,
+        userId: payload.customData?.userId as Id<'users'>,
+        update: {
+          videoUrl: payload.outputUrl,
+        }
+      });
+    } else if (payload.type === "error") {
+      console.error(`Render of ${payload.customData?.videoId} failed:`, payload.errors);
+      // Handle error
+    } else if (payload.type === "timeout") {
+      console.warn(`Render ${payload.customData?.videoId} timed out`);
+      // Handle timeout
+    }
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+    });
+  }),
+});
+
 
 export default http;
