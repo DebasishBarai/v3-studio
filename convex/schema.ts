@@ -82,7 +82,7 @@ export const sceneSchema = v.object({
 
   narration: v.optional(v.string()),
 
-  auidoId: v.optional(v.id('_storage')),
+  audioId: v.optional(v.id('_storage')),
   audioUrl: v.optional(v.string()),
 })
 

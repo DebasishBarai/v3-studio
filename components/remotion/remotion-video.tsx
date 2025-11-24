@@ -1,6 +1,7 @@
 "use client";
 
-import { AbsoluteFill, Series, Html5Audio, Audio } from "remotion";
+import { AbsoluteFill, Series } from "remotion";
+import { Audio } from "@remotion/media";
 import { Doc } from "../../convex/_generated/dataModel";
 import { CachedOffthreadVideo } from "../../components/video-editor/cached-off-thread-video";
 import Image from "next/image";
@@ -24,7 +25,7 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
 
                 {/* Add Audio for each scene */}
                 {scene.audioUrl && (
-                  <Html5Audio src={scene.audioUrl} />
+                  <Audio src={scene.audioUrl} volume={1} />
                 )}
 
                 {scene.videoUrl ? (
@@ -56,9 +57,9 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
           </div>
         </AbsoluteFill>
       )}
-      {video && video.music && (
-        <Html5Audio src={video.music.previewUrl} />
-      )}
+      {/* {video && video.music && ( */}
+      {/*   <Audio src={video.music.previewUrl} loop={true} volume={0.1} /> */}
+      {/* )} */}
     </AbsoluteFill>
   );
 };
