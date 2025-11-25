@@ -91,10 +91,18 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
         const url = await getCachedVideoUrl(videoUrl)
         setLocalUrl(url)
       } else {
+        if (videoData.music) {
+          const videoUrl = videoData.music.previewUrl
+          await getCachedVideoUrl(videoUrl)
+        }
         if (videoData.scenes) {
           for (const scene of videoData.scenes) {
             if (scene.videoUrl) {
               const videoUrl = scene.videoUrl
+              await getCachedVideoUrl(videoUrl)
+            }
+            if (scene.audioUrl) {
+              const videoUrl = scene.audioUrl
               await getCachedVideoUrl(videoUrl)
             }
           }
