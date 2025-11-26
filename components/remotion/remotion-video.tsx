@@ -25,7 +25,7 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
 
                 {/* Add Audio for each scene */}
                 {scene.audioUrl && (
-                  <CachedAudio src={scene.audioUrl} volume={1} />
+                  <CachedAudio src={scene.audioUrl} volume={1} /> // change to Audio for lambda
                 )}
 
                 {scene.videoUrl ? (
@@ -58,7 +58,7 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
         </AbsoluteFill>
       )}
       {video && video.music && (
-        <CachedAudio src={video.music.previewUrl} loop={true} volume={0.1} />
+        <CachedAudio src={video.music.previewUrl} loop={true} volume={0.1} /> // change to Audio for lambda
       )}
     </AbsoluteFill>
   );

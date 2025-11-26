@@ -41,7 +41,7 @@ export const HeroSection = () => {
 
       <h1 className="z-20 text-4xl md:text-6xl font-light leading-tight mb-4">
         Create Stunning{" "}
-        <strong className="font-bold">Movies &amp; Episodes</strong> With <br />
+        <strong className="font-bold">Viral Videos</strong> With <br />
         <span className="text-pink-400">AI-Powered Storytelling</span>
       </h1>
 
