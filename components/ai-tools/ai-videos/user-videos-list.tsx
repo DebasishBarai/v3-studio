@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { api } from '@/convex/_generated/api';
 import { useQuery } from 'convex/react';
-import { ImageOff, Play, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import VideoCard from './video-card';
@@ -16,14 +16,14 @@ export const UsersVideosList = () => {
         {/* Page header */}
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-2xl mb-2 mt-5">My Videos</h2>
-          <div className="flex items-center gap-5">
+          <div className="hidden md:flex items-center gap-5">
             <Link href="/ai-tools/ai-video/create">
               <Button
                 className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md"
                 type="button"
               >
                 <Plus />
-                Create New Project
+                Create New Video
               </Button>
             </Link>
           </div>
@@ -50,13 +50,13 @@ export const UsersVideosList = () => {
                 className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow hover:bg-primary/90 h-9 mt-6 px-5 py-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md"
                 type="button"
               >
-                Create New Project
+                Create New Video
               </Button>
             </Link>
           </div>
         )}
 
-        <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5'>
+        <div className='grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-5'>
           {videos && videos.map((video, index) => (
             <div key={index}
             >
