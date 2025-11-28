@@ -428,7 +428,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
           }
 
           if (charactersWithoutImages.length > 0) {
-            toast.error(`Images not yet generated for characters: ${charactersWithoutImages.join(", ")}. Please generate images for these characters first.`);
+            toast.error(`Images not yet generated for characters: ${charactersWithoutImages.join(", ")}. Please go to Settings tab and generate images for these characters first.`);
             throw new Error(
               `Images not yet generated for characters: ${charactersWithoutImages.join(", ")}. Please generate images for these characters first.`
             );
@@ -447,7 +447,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
       toast.success('Scene image generated successfully!');
     } catch (error) {
       console.error('Error generating scene image:', error);
-      toast.error('An error occurred while generating scene image');
+      toast.error(`Error: ${error}`);
     } finally {
       setGeneratingScene(null);
     }
@@ -577,15 +577,6 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
         <div className="flex items-center justify-between mb-12">
           <div className="inline-flex items-center bg-muted rounded-lg p-1">
             <button
-              onClick={() => setActiveTab('Storyline')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${activeTab === 'Storyline'
-                ? 'bg-background text-foreground shadow'
-                : 'text-muted-foreground hover:text-foreground'
-                }`}
-            >
-              Storyline
-            </button>
-            <button
               onClick={() => setActiveTab('Settings')}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${activeTab === 'Settings'
                 ? 'bg-background text-foreground shadow'
@@ -593,6 +584,15 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                 }`}
             >
               Settings
+            </button>
+            <button
+              onClick={() => setActiveTab('Storyline')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${activeTab === 'Storyline'
+                ? 'bg-background text-foreground shadow'
+                : 'text-muted-foreground hover:text-foreground'
+                }`}
+            >
+              Storyline
             </button>
           </div>
           <div className="flex items-center gap-3">
