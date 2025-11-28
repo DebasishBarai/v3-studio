@@ -32,7 +32,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const [videoData, setVideoData] = useState<Doc<'videos'>>();
   const [expandedSections, setExpandedSections] = useState({
     general: true,
-    characters: false,
+    characters: true,
     scenes: true
   });
   const [expandedScenes, setExpandedScenes] = useState<Record<number, boolean>>({});
