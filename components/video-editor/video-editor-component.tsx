@@ -51,7 +51,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
 
   const [isRenderEligible, setIsRenderEligible] = useState(false);
 
-  const [activeTab, setActiveTab] = useState<'Storyline' | 'Settings'>('Storyline');
+  const [activeTab, setActiveTab] = useState<'Storyline' | 'Settings'>('Settings');
 
   const [isSaving, setIsSaving] = useState(false);
 
