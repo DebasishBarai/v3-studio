@@ -56,7 +56,6 @@ export default function VideoCreatorPage() {
   const aspectRatios = [
     { id: '16:9', label: '16:9', description: 'Landscape' },
     { id: '9:16', label: '9:16', description: 'Portrait' },
-    { id: '1:1', label: '1:1', description: 'Square' },
   ];
 
   const durations = [
@@ -449,7 +448,7 @@ export default function VideoCreatorPage() {
               <Sparkles className="w-6 h-6" />
               {isLoading ? 'Generating...' : 'Generate Outline'}
             </h2>
-            <p className="text-white/70 text-sm mt-1">10 Credits to Generate Outline</p>
+            <p className="text-white/70 text-sm mt-1">5 Credits to Generate Outline</p>
           </button>
         </div>
       </div>
