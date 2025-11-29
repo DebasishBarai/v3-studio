@@ -266,6 +266,8 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
         result = await generateCharacterImageAction({
           prompt,
           aspectRatio: videoData.aspectRatio,
+          videoId: videoData._id,
+          characterIndex: index,
         });
 
       } else {
@@ -273,11 +275,13 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
           prompt,
           baseImageId: baseImageId as Id<'_storage'>,
           aspectRatio: videoData.aspectRatio,
+          videoId: videoData._id,
+          characterIndex: index,
         });
       }
 
-      updateNestedField(`characters[${index}].imageStorageId`, result.imageStorageId);
-      updateNestedField(`characters[${index}].imageUrl`, result.imageUrl);
+      // updateNestedField(`characters[${index}].imageStorageId`, result.imageStorageId);
+      // updateNestedField(`characters[${index}].imageUrl`, result.imageUrl);
 
       toast.success('Character image generated successfully!');
     } catch (error) {
@@ -382,6 +386,8 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
           prompt,
           baseImageId: baseImageId as Id<'_storage'>,
           aspectRatio: videoData.aspectRatio,
+          videoId: videoData._id,
+          sceneIndex: index,
         });
 
       } else {
@@ -389,6 +395,8 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
           result = await generateSceneImageAction({
             prompt,
             aspectRatio: videoData.aspectRatio,
+            videoId: videoData._id,
+            sceneIndex: index,
           });
 
         } else {
@@ -437,6 +445,8 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
             prompt,
             characterImageIds,
             aspectRatio: videoData.aspectRatio,
+            videoId: videoData._id,
+            sceneIndex: index,
           });
         }
       }

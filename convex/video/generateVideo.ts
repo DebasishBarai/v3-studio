@@ -39,6 +39,16 @@ export const generateSceneVideo = action({
       throw new Error("Insufficient credits");
     }
 
+    // Get video
+    const video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+      id: args.videoId,
+      userId: user._id,
+    });
+
+    if (!video) {
+      throw new Error("Video not found");
+    }
+
     const input = {
       image: args.baseImageUrl,
       prompt: args.prompt,
@@ -60,16 +70,6 @@ export const generateSceneVideo = action({
 
     if (!videoUrl) {
       throw new Error("Failed to generate URL for stored file");
-    }
-
-    // Get video
-    const video = await ctx.runQuery(internal.video.video.getInternalVideo, {
-      id: args.videoId,
-      userId: user._id,
-    });
-
-    if (!video) {
-      throw new Error("Video not found");
     }
 
     // Update only the scenes array

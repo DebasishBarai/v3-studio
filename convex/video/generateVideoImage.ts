@@ -16,6 +16,8 @@ export const generateCharacterImage = action({
     prompt: v.string(),
     aspectRatio: v.optional(aspectRatioValidator),
     baseImageId: v.optional(v.id('_storage')),
+    videoId: v.id('videos'),
+    characterIndex: v.number(),
   },
   handler: async (ctx, args): Promise<{ imageStorageId: Id<'_storage'>, imageUrl: string }> => {
 
@@ -37,6 +39,16 @@ export const generateCharacterImage = action({
 
     if (user.credits < 5) {
       throw new Error("Insufficient credits");
+    }
+
+    // Get video
+    const video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+      id: args.videoId,
+      userId: user._id,
+    });
+
+    if (!video) {
+      throw new Error("Video not found");
     }
 
     let baseImage = '';
@@ -112,6 +124,22 @@ export const generateCharacterImage = action({
             throw new Error("Failed to generate URL for stored file");
           }
 
+          // Update only the characters array
+          const updatedCharacters = video.characters.map((character, index) =>
+            index === args.characterIndex
+              ? { ...character, imageId: characterImageStorageId, imageUrl: characterImageUrl }
+              : character
+          );
+
+          // Update video
+          await ctx.runMutation(internal.video.video.updateInternalVideo, {
+            id: args.videoId,
+            userId: user._id,
+            update: {
+              characters: updatedCharacters,
+            },
+          });
+
           // update credits
           await ctx.runMutation(internal.user.decreaseInternalCredits, {
             subject: identity.subject,
@@ -138,8 +166,11 @@ export const generateSceneImage = action({
     aspectRatio: v.optional(aspectRatioValidator),
     baseImageId: v.optional(v.id('_storage')),
     characterImageIds: v.optional(v.array(v.id('_storage'))),
+    videoId: v.id('videos'),
+    sceneIndex: v.number(),
+
   },
-  handler: async (ctx, args): Promise<{ imageStorageId: Id<'_storage'>, imageUrl: string }> => {
+  handler: async (ctx, args) => {
 
     console.log('generate scene image');
 
@@ -159,6 +190,16 @@ export const generateSceneImage = action({
 
     if (user.credits < 5) {
       throw new Error("Insufficient credits");
+    }
+
+    // Get video
+    const video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+      id: args.videoId,
+      userId: user._id,
+    });
+
+    if (!video) {
+      throw new Error("Video not found");
     }
 
     let baseImage = '';
@@ -253,6 +294,23 @@ export const generateSceneImage = action({
           if (!characterImageUrl) {
             throw new Error("Failed to generate URL for stored file");
           }
+
+          // Update only the scenes array
+          const updatedScenes = video.scenes.map((scene, index) =>
+            index === args.sceneIndex
+              ? { ...scene, imageId: characterImageStorageId, imageUrl: characterImageUrl }
+              : scene
+          );
+
+          // Update video
+          await ctx.runMutation(internal.video.video.updateInternalVideo, {
+            id: args.videoId,
+            userId: user._id,
+            update: {
+              scenes: updatedScenes,
+            },
+          });
+
           // update credits
           await ctx.runMutation(internal.user.decreaseInternalCredits, {
             subject: identity.subject,
@@ -260,7 +318,6 @@ export const generateSceneImage = action({
           });
 
           return { imageStorageId: characterImageStorageId, imageUrl: characterImageUrl }
-
         }
       }
 
