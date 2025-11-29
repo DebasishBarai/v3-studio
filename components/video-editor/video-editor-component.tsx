@@ -465,12 +465,14 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
     }
 
     try {
-      const result = await generateSceneVideoAction({
+      await generateSceneVideoAction({
         prompt,
         baseImageUrl: baseImageUrl,
+        videoId: videoData._id,
+        sceneIndex: index,
       });
-      updateNestedField(`scenes[${index}].videoId`, result.videoStorageId);
-      updateNestedField(`scenes[${index}].videoUrl`, result.videoUrl);
+      // updateNestedField(`scenes[${index}].videoId`, result.videoStorageId);
+      // updateNestedField(`scenes[${index}].videoUrl`, result.videoUrl);
 
       toast.success('Scene video generated successfully!');
     } catch (error) {

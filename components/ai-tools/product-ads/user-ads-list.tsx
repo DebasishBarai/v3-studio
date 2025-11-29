@@ -30,7 +30,7 @@ export const UsersAdsList = () => {
         </div>
       }
 
-      <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5'>
+      <div className='grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-5'>
         {ads && ads.map((ad, index) => (
           <div key={index}>
             <Image src={ad.adImageUrl ?? ''} alt={ad.adImageUrl ?? ''}

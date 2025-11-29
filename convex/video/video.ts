@@ -160,7 +160,6 @@ export const getInternalVideo = internalQuery({
   }
 })
 
-
 export const updateInternalVideo = internalMutation({
   args: {
     id: v.id("videos"),

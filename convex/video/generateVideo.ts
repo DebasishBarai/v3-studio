@@ -14,6 +14,8 @@ export const generateSceneVideo = action({
   args: {
     prompt: v.string(),
     baseImageUrl: v.string(),
+    videoId: v.id('videos'),
+    sceneIndex: v.number(),
   },
   handler: async (ctx, args): Promise<{ videoStorageId: Id<'_storage'>, videoUrl: string }> => {
 
@@ -59,6 +61,32 @@ export const generateSceneVideo = action({
     if (!videoUrl) {
       throw new Error("Failed to generate URL for stored file");
     }
+
+    // Get video
+    const video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+      id: args.videoId,
+      userId: user._id,
+    });
+
+    if (!video) {
+      throw new Error("Video not found");
+    }
+
+    // Update only the scenes array
+    const updatedScenes = video.scenes.map((scene, index) =>
+      index === args.sceneIndex
+        ? { ...scene, videoId: videoStorageId, videoUrl: videoUrl }
+        : scene
+    );
+
+    // Update video
+    await ctx.runMutation(internal.video.video.updateInternalVideo, {
+      id: args.videoId,
+      userId: user._id,
+      update: {
+        scenes: updatedScenes,
+      },
+    });
 
     // update credits
     await ctx.runMutation(internal.user.decreaseInternalCredits, {
