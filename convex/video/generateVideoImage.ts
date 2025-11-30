@@ -127,7 +127,7 @@ export const generateCharacterImage = action({
           // Update only the characters array
           const updatedCharacters = video.characters.map((character, index) =>
             index === args.characterIndex
-              ? { ...character, imageId: characterImageStorageId, imageUrl: characterImageUrl }
+              ? { ...character, imageStorageId: characterImageStorageId, imageUrl: characterImageUrl }
               : character
           );
 

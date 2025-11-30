@@ -1,18 +1,27 @@
 "use client";
 
-import { AbsoluteFill, Series } from "remotion";
+import { AbsoluteFill, Img, Series, staticFile } from "remotion";
 import { CachedAudio } from "../../components/video-editor/cached-audio";
 import { Doc } from "../../convex/_generated/dataModel";
 import { CachedOffthreadVideo } from "../../components/video-editor/cached-off-thread-video";
-import Image from "next/image";
-import { loadFont } from '@remotion/google-fonts/Pacifico';
+import { loadFont } from '@remotion/fonts';
+// import { Audio } from "@remotion/media"
+// import { OffthreadVideo } from "remotion";
 
 export type Props = {
   video: Doc<"videos"> | null;
   isSubscribed?: boolean;
 };
 
-const { fontFamily } = loadFont();
+const fontFamily = "Pacifico"
+
+loadFont({
+  family: fontFamily,
+  url: staticFile("/font/Pacifico-Regular.ttf"),
+  weight: "400",
+}).then(() => {
+  console.log("Font loaded successfully");
+})
 
 export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
   return (
@@ -51,9 +60,21 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
       </AbsoluteFill>
       {!isSubscribed && (
         <AbsoluteFill>
-          <div className="w-full h-full flex items-center justify-center">
-            <Image alt="logo" src="/logo.png" width={80} height={80} />
-            <h1 className={`text-2xl font-bold text-yellow-500`} style={{ fontFamily }}>V3 Studio</h1>
+          <div style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <Img alt="logo" src={staticFile("/logo.png")} width={80} height={80} />
+            <h1 style={{
+              fontSize: '1.5rem',      // text-2xl
+              fontWeight: 'bold',      // font-bold
+              color: '#eab308',        // text-yellow-500
+              fontFamily: fontFamily,
+              marginLeft: '10px'
+            }}>V3 Studio</h1>
           </div>
         </AbsoluteFill>
       )}

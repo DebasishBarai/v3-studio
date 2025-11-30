@@ -451,8 +451,8 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
         }
       }
 
-      updateNestedField(`scenes[${index}].imageId`, result.imageStorageId);
-      updateNestedField(`scenes[${index}].imageUrl`, result.imageUrl);
+      // updateNestedField(`scenes[${index}].imageId`, result.imageStorageId);
+      // updateNestedField(`scenes[${index}].imageUrl`, result.imageUrl);
 
       toast.success('Scene image generated successfully!');
     } catch (error) {
