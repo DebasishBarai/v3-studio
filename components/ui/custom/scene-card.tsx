@@ -163,7 +163,7 @@ export const SceneCard = ({
                 }
               )}
               icon={WandSparkles}
-              tooltip="Modify Scene"
+              tooltip="Modify Scene Image"
             />
 
             {/* Generate Video */}

@@ -46,7 +46,7 @@ export const ModifySceneDialog = ({
       <DialogContent className="sm:max-w-lg bg-zinc-900 border border-zinc-800">
         <DialogHeader>
           <DialogTitle className="text-white">
-            Modify Scene {index + 1}
+            Modify Scene Image {index + 1}
           </DialogTitle>
         </DialogHeader>
 
