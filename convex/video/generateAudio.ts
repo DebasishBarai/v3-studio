@@ -6,14 +6,22 @@ import { action } from "../_generated/server";
 import { internal } from "../_generated/api";
 import { Id } from "../_generated/dataModel";
 
+import { AssemblyAI, SpeechModel } from "assemblyai";
+
 const elevenLabsClient = new ElevenLabsClient({
   apiKey: process.env.ELEVENLABS_API_KEY,
+});
+
+const assemblyAiClient = new AssemblyAI({
+  apiKey: process.env.ASSEMBLYAI_API_KEY as string,
 });
 
 export const generateAudio = action({
   args: {
     text: v.string(),
     voiceId: v.string(),
+    videoId: v.id('videos'),
+    sceneIndex: v.number(),
   },
   handler: async (ctx, args): Promise<{ audioStorageId: Id<'_storage'>, audioUrl: string }> => {
     console.log('generate audio');
@@ -34,6 +42,16 @@ export const generateAudio = action({
 
     if (user.credits < 5) {
       throw new Error("Insufficient credits");
+    }
+
+    // Get video
+    const video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+      id: args.videoId,
+      userId: user._id,
+    });
+
+    if (!video) {
+      throw new Error("Video not found");
     }
 
     const audio = await elevenLabsClient.textToSpeech.convert(
@@ -71,6 +89,43 @@ export const generateAudio = action({
     if (!audioUrl) {
       throw new Error("Failed to generate URL for stored file");
     }
+
+    // Generate captions with AssemblyAI
+
+    const speechModel: SpeechModel = "universal"
+    const params = {
+      audio: audioUrl as string,
+      speech_model: speechModel,
+    }
+
+    const captionResponse = await assemblyAiClient.transcripts.transcribe(params);
+
+    if (!captionResponse.words) {
+      throw new Error("Failed to generate captions");
+    }
+
+    // Store captions in video
+    const words = captionResponse.words.map((word) => ({
+      text: word.text,
+      startMs: word.start,
+      endMs: word.end,
+    }));
+
+    // Update only the scenes array
+    const updatedScenes = video.scenes.map((scene, index) =>
+      index === args.sceneIndex
+        ? { ...scene, audioId: audioStorageId, audioUrl: audioUrl, words: words }
+        : scene
+    );
+
+    // Update video
+    await ctx.runMutation(internal.video.video.updateInternalVideo, {
+      id: args.videoId,
+      userId: user._id,
+      update: {
+        scenes: updatedScenes,
+      },
+    });
 
     // update credits
     await ctx.runMutation(internal.user.decreaseInternalCredits, {

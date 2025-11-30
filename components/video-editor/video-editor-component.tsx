@@ -475,7 +475,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
     }
 
     try {
-      await generateSceneVideoAction({
+      const result = await generateSceneVideoAction({
         prompt,
         baseImageUrl: baseImageUrl,
         videoId: videoData._id,
@@ -508,10 +508,12 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
       const result = await generateSceneAudioAction({
         text,
         voiceId: videoData.voice.voiceId,
+        videoId: videoData._id,
+        sceneIndex: index,
       });
 
-      updateNestedField(`scenes[${index}].audioId`, result.audioStorageId);
-      updateNestedField(`scenes[${index}].audioUrl`, result.audioUrl);
+      // updateNestedField(`scenes[${index}].audioId`, result.audioStorageId);
+      // updateNestedField(`scenes[${index}].audioUrl`, result.audioUrl);
 
       toast.success('Scene audio generated successfully!');
     } catch (error) {

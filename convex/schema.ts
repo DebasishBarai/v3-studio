@@ -61,6 +61,12 @@ export const characterSchema = v.object({
   imageUrl: v.optional(v.string()),
 })
 
+export const wordSchema = v.object({
+  text: v.string(),
+  startMs: v.number(),
+  endMs: v.number(),
+})
+
 export const angleSchema = v.object({
   index: v.number(),
   angleVideoPrompt: v.string(),
@@ -81,6 +87,8 @@ export const sceneSchema = v.object({
   angles: v.optional(v.array(angleSchema)),
 
   narration: v.optional(v.string()),
+
+  words: v.optional(v.array(wordSchema)),
 
   audioId: v.optional(v.id('_storage')),
   audioUrl: v.optional(v.string()),

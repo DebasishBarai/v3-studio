@@ -1,6 +1,6 @@
 "use client";
 
-import { AbsoluteFill, Img, Series, staticFile } from "remotion";
+import { AbsoluteFill, Img, Series, staticFile, useCurrentFrame } from "remotion";
 import { CachedAudio } from "../../components/video-editor/cached-audio";
 import { Doc } from "../../convex/_generated/dataModel";
 import { CachedOffthreadVideo } from "../../components/video-editor/cached-off-thread-video";
@@ -53,6 +53,12 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
                     No video URL for scene {i + 1}
                   </AbsoluteFill>
                 )}
+                {/* Add Caption */}
+                {scene.words && scene.words.length > 0 && (
+                  <Caption
+                    words={scene.words}
+                  />
+                )}
               </Series.Sequence>
             );
           })}
@@ -81,6 +87,46 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
       {video && video.music && (
         <CachedAudio src={video.music.previewUrl} loop={true} volume={0.1} /> // change to Audio for lambda
       )}
+    </AbsoluteFill>
+  );
+};
+
+const Caption: React.FC<{
+  words: Doc<"videos">["scenes"][0]["words"];
+}> = ({ words }) => {
+  const frame = useCurrentFrame();
+
+  if (!words) return null;
+
+  const currentWord = words.find(word => {
+    const wordStartFrame = (word.startMs / 1000) * 30;
+    const wordEndFrame = (word.endMs / 1000) * 30;
+    return frame >= wordStartFrame && frame <= wordEndFrame;
+  });
+
+  if (!currentWord) return null;
+
+  return (
+    <AbsoluteFill
+      style={{
+        display: "flex",
+        justifyContent: "flex-end",   // push to bottom
+        alignItems: "center",
+        paddingBottom: 80,            // adjust height from bottom
+        pointerEvents: "none",        // prevent blocking clicks
+      }}>
+      <div style={{
+        fontSize: "2.5rem",
+        color: "white",
+        textAlign: "center",
+        background: "rgba(0,0,0,0.35)", // subtle subtitle background
+        padding: "0.6rem 1.2rem",
+        borderRadius: "0.5rem",
+        maxWidth: "90%",
+        lineHeight: 1.3,
+      }}>
+        {currentWord.text}
+      </div>
     </AbsoluteFill>
   );
 };
