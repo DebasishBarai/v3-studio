@@ -2,32 +2,32 @@ export const avatars = [
   {
     name: 'Avatar 1',
     imageUrl: '/products/avatar1.avif',
-    storageId: 'kg26mhbz9e8jpjpgktw1ftf6a57r2k1t',
+    storageId: 'kg2ay54e7sdfbc59zswch46k357wkac8', //'kg26mhbz9e8jpjpgktw1ftf6a57r2k1t',
   },
   {
     name: 'Avatar 2',
     imageUrl: '/products/avatar2.webp',
-    storageId: 'kg28q8wr4me05qn6mnbjfbe9qd7r2met',
+    storageId: 'kg21gzpf53928n46ceec01c2vx7wjepv', //'kg28q8wr4me05qn6mnbjfbe9qd7r2met',
   },
   {
     name: 'Avatar 3',
     imageUrl: '/products/avatar3.avif',
-    storageId: 'kg2464nsb07ad18czf8w2evb3x7r2vew',
+    storageId: 'kg21242jp7vbmy69k8zamgfe4d7wk8a7', //'kg2464nsb07ad18czf8w2evb3x7r2vew',
   },
   {
     name: 'Avatar 4',
     imageUrl: '/products/avatar4.webp',
-    storageId: 'kg225213e6nrbehg2f7bksfs6n7r2xan',
+    storageId: 'kg2554zbp691c42rkc0j08gex17wj7fj', //'kg225213e6nrbehg2f7bksfs6n7r2xan',
   },
   {
     name: 'Avatar 5',
     imageUrl: '/products/avatar5.webp',
-    storageId: 'kg22qp611nb3gmb5bjrs1ega9n7r2cys',
+    storageId: 'kg2619dq6pr95pt33qf69jmsnd7wjxgs', //'kg22qp611nb3gmb5bjrs1ega9n7r2cys',
   },
   {
     name: 'Avatar 6',
     imageUrl: '/products/avatar6.webp',
-    storageId: 'kg278q1td5tekc7bdgcpj2080d7r3q7c',
+    storageId: 'kg2a0f60y9htx3rf7115v9tv117wknnf', //'kg278q1td5tekc7bdgcpj2080d7r3q7c',
   },
 ]
 
@@ -35,27 +35,27 @@ export const sampleProduct = [
   {
     name: 'headphone',
     imageUrl: '/products/headphone.png',
-    storageId: 'kg23jn89wm4gj02rcsd8t4p1rx7r6fwn',
+    storageId: 'kg2c8ahhdn6ws0b8wvb3k30jxn7wkhpd', //'kg23jn89wm4gj02rcsd8t4p1rx7r6fwn',
   },
   {
     name: 'juice can',
     imageUrl: '/products/juice-can.png',
-    storageId: 'kg2bqkrrpcswss91hd47mdz8z17r6c4z',
+    storageId: 'kg21awzfpd1w0p8f7ez9nwjbgd7wk82k', //'kg2bqkrrpcswss91hd47mdz8z17r6c4z',
   },
   {
     name: 'perfume',
     imageUrl: '/products/perfume2.png',
-    storageId: 'kg2dr4cct54m5vv7vaknp795457r7q53',
+    storageId: 'kg2988b4zv7h37gsd9m09sq3k97wk7y4', //'kg2dr4cct54m5vv7vaknp795457r7q53',
   },
   {
     name: 'burger',
     imageUrl: '/products/burger.png',
-    storageId: 'kg23ny4bv1b9h9pdk8h0tg3ykd7r72kd',
+    storageId: 'kg2d3z6grvpws05pegpnm3awfs7wkv2d', //'kg23ny4bv1b9h9pdk8h0tg3ykd7r72kd',
   },
   {
     name: 'ice cream',
     imageUrl: '/products/ice-creame.png',
-    storageId: 'kg27kfpr2wanta0t4vzgz412xh7r67gy',
+    storageId: 'kg24803p3w79ztfsgf7tf9qa7x7wkt4g', //'kg27kfpr2wanta0t4vzgz412xh7r67gy',
   },
 ]
 
