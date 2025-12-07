@@ -13,7 +13,7 @@ const Footer = () => {
             Privacy Policy
           </Link>
           <div className="hidden md:block text-muted-foreground">•</div>
-          <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary">
+          <Link href="/contact-us" className="text-sm text-muted-foreground hover:text-primary">
             Contact Us
           </Link>
         </div>
