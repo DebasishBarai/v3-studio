@@ -588,10 +588,10 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   }
 
   return (
-    <div className="w-full min-h-screen bg-background text-foreground pt-0 px-4 lg:px-8">
+    <div className="w-full min-h-screen bg-background text-foreground pt-0 md:px-4 lg:px-8">
       <div className="mx-auto">
         {/* Tabs */}
-        <div className="flex items-center justify-between mb-12">
+        <div className="flex flex-col md:flex-row items-center justify-start md:justify-between mb-12 space-y-4 md:space-y-0">
           <div className="inline-flex items-center bg-muted rounded-lg p-1">
             <button
               onClick={() => setActiveTab('Settings')}

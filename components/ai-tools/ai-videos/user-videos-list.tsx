@@ -11,7 +11,7 @@ import VideoCard from './video-card';
 export const UsersVideosList = () => {
   const videos = useQuery(api.video.video.getVideos)
   return (
-    <div className="p-10">
+    <div>
       <div>
         {/* Page header */}
         <div className="flex justify-between items-center">

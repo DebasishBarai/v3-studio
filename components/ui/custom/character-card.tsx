@@ -74,7 +74,7 @@ export const CharacterCard = ({
                 )}
               >
                 <RotateCcw className="w-4 h-4" />
-                {generatingCharacter === index ? 'Re-generating...' : 'Re-generate'}
+                <span className='hidden md:inline'>{generatingCharacter === index ? 'Re-generating...' : 'Re-generate'}</span>
               </Button>
 
               <Button
@@ -110,7 +110,7 @@ export const CharacterCard = ({
                 )}
               >
                 <WandSparkles className="w-4 h-4" />
-                {generatingCharacter === index ? 'Modifying...' : 'Modify'}
+                <span className='hidden md:inline'>{generatingCharacter === index ? 'Modifying...' : 'Modify'}</span>
               </Button>
             </div>
           </div>

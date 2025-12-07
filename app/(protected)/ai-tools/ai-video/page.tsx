@@ -3,7 +3,7 @@ import { UsersVideosList } from '@/components/ai-tools/ai-videos/user-videos-lis
 export default function ShortVideoPage() {
   return (
     <main className="w-full">
-      <div className="p-10">
+      <div>
         <div>
           {/* Page header */}
           <div className="flex justify-between items-center">

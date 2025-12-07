@@ -13,7 +13,7 @@ export const UsersAdsList = () => {
   const ads = useQuery(api.ad.ad.getAds)
 
   return (
-    <div className="p-10">
+    <div>
       <h2 className='font-bold text-2xl mb-2 mt-5'>My Ads</h2>
 
       {ads?.length == 0 &&
