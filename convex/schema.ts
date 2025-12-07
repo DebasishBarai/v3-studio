@@ -95,10 +95,28 @@ export const sceneSchema = v.object({
 })
 
 export const captionStyleSchema = v.object({
-  text: v.string(),
-  startTime: v.number(),
-  endTime: v.number(),
-})
+  textColor: v.string(), // CSS color value
+  backgroundColor: v.string(), // CSS color value
+  backgroundOpacity: v.number(), // 0-1
+  textSize: v.union(
+    v.literal('1.5rem'),
+    v.literal('2rem'),
+    v.literal('2.5rem'),
+    v.literal('3rem'),
+    v.literal('3.5rem')
+  ),
+  position: v.union(
+    v.literal('top'),
+    v.literal('middle'),
+    v.literal('bottom')
+  ),
+  showBackground: v.boolean(),
+  textAlign: v.optional(v.union(
+    v.literal('left'),
+    v.literal('center'),
+    v.literal('right')
+  )),
+});
 
 export default defineSchema({
   users: defineTable({

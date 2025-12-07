@@ -17,6 +17,7 @@ import { getCachedVideoUrl } from "@/lib/video-cache"
 import { cn } from "@/lib/utils"
 import { musicValidator, voiceValidator } from "@/convex/schema"
 import { Infer } from "convex/values"
+import { CaptionStyleControls } from "./caption-style-control"
 
 
 export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
@@ -115,6 +116,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   useEffect(() => {
     const loadVideoData = async () => {
       console.log('Loading video data...')
+      console.log({ videoData })
       if (!video || !videoData)
         return
       try {
@@ -205,6 +207,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   };
 
   const updateField = (field: string, value: any) => {
+    console.log('Updating field:', field, 'with value:', value);
     setVideoData((prev: any) => ({ ...prev, [field]: value }));
   };
 
@@ -666,8 +669,16 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                       }}
                     />
                   ) : (
-                    <div className="w-full h-full">
+                    <div className="relative w-full h-full">
                       <VideoPlayer video={videoData} durationInSeconds={Math.round(durationInSeconds)} isSubscribed={!!user?.subscriptionProductId} />
+                      <div className="absolute bottom-4 left-1/4 -translate-x-1/2 bg-transparent p-4 rounded-lg w-[90%] max-w-xl pointer-events-auto z-50">
+                        <CaptionStyleControls
+                          value={videoData.captionStyle}
+                          updateCaptionStyleAction={(newStyle) =>
+                            updateField('captionStyle', newStyle)
+                          }
+                        />
+                      </div>
                     </div>
                   )}
                 </div>

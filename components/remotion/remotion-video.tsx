@@ -5,6 +5,8 @@ import { CachedAudio } from "../../components/video-editor/cached-audio";
 import { Doc } from "../../convex/_generated/dataModel";
 import { CachedOffthreadVideo } from "../../components/video-editor/cached-off-thread-video";
 import { loadFont } from '@remotion/fonts';
+import { captionStyleSchema } from "@/convex/schema";
+import { Infer } from "convex/values";
 // import { Audio } from "@remotion/media"
 // import { OffthreadVideo } from "remotion";
 
@@ -56,6 +58,7 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
                 {/* Add Caption */}
                 {scene.words && scene.words.length > 0 && (
                   <Caption
+                    captionStyle={video?.captionStyle}
                     words={scene.words}
                   />
                 )}
@@ -92,8 +95,9 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
 };
 
 const Caption: React.FC<{
+  captionStyle?: Infer<typeof captionStyleSchema>;
   words: Doc<"videos">["scenes"][0]["words"];
-}> = ({ words }) => {
+}> = ({ captionStyle, words }) => {
   const frame = useCurrentFrame();
 
   if (!words) return null;
@@ -104,29 +108,55 @@ const Caption: React.FC<{
     return frame >= wordStartFrame && frame <= wordEndFrame;
   });
 
+  // Default values
+  const textColor = captionStyle?.textColor ?? "#ffffff";
+  const backgroundColor = captionStyle?.backgroundColor ?? "#000000";
+  const backgroundOpacity = captionStyle?.backgroundOpacity ?? 0.35;
+  const textSize = captionStyle?.textSize ?? "2.5rem";
+  const position = captionStyle?.position ?? "bottom";
+  const showBackground = captionStyle?.showBackground ?? true;
+  const textAlign = captionStyle?.textAlign ?? "center";
+
+  // Position mapping
+  const positionStyles = {
+    top: { justifyContent: "flex-start", paddingTop: 80 },
+    middle: { justifyContent: "center" },
+    bottom: { justifyContent: "flex-end", paddingBottom: 80 },
+  };
+
+  // Convert hex + opacity to rgba
+  const hexToRgba = (hex: string, opacity: number) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  };
   if (!currentWord) return null;
 
   return (
     <AbsoluteFill
       style={{
         display: "flex",
-        justifyContent: "flex-end",   // push to bottom
         alignItems: "center",
-        paddingBottom: 80,            // adjust height from bottom
-        pointerEvents: "none",        // prevent blocking clicks
-      }}>
-      <div style={{
-        fontSize: "2.5rem",
-        color: "white",
-        textAlign: "center",
-        background: "rgba(0,0,0,0.35)", // subtle subtitle background
-        padding: "0.6rem 1.2rem",
-        borderRadius: "0.5rem",
-        maxWidth: "90%",
-        lineHeight: 1.3,
-      }}>
+        pointerEvents: "none",
+        ...positionStyles[position as keyof typeof positionStyles],
+      }}
+    >
+      <div
+        style={{
+          fontSize: textSize,
+          color: textColor,
+          textAlign: textAlign as "left" | "center" | "right",
+          background: showBackground ? hexToRgba(backgroundColor, backgroundOpacity) : "transparent",
+          padding: showBackground ? "0.6rem 1.2rem" : "0",
+          borderRadius: showBackground ? "0.5rem" : "0",
+          maxWidth: "90%",
+          lineHeight: 1.3,
+        }}
+      >
         {currentWord.text}
       </div>
     </AbsoluteFill>
   );
 };
+

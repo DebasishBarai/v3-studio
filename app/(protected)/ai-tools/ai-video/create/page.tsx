@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { aspectRatioValidator, musicValidator, styleValidator, voiceValidator } from '@/convex/schema';
 import { Infer } from 'convex/values';
 import { useRouter } from 'next/navigation';
+import { Spinner } from '@/components/ui/spinner';
 
 interface VoiceType {
   id: number;
@@ -445,7 +446,7 @@ export default function VideoCreatorPage() {
             onClick={generateVideo}
           >
             <h2 className="text-xl flex gap-2 items-center justify-center text-white font-semibold">
-              <Sparkles className="w-6 h-6" />
+              {isLoading ? <Spinner /> : <Sparkles className="w-6 h-6" />}
               {isLoading ? 'Generating...' : 'Generate Outline'}
             </h2>
             <p className="text-white/70 text-sm mt-1">5 Credits to Generate Outline</p>
