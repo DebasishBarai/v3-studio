@@ -16,6 +16,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   Home,
@@ -64,7 +65,13 @@ const pacifico = Pacifico({
 })
 
 // Custom menu item component
-const CustomMenuItem = ({ item }: { item: MenuItem }) => {
+const CustomMenuItem = ({
+  item,
+  onClick,
+}: {
+  item: MenuItem
+  onClick?: () => void
+}) => {
 
   const pathname = usePathname();
 
@@ -73,7 +80,10 @@ const CustomMenuItem = ({ item }: { item: MenuItem }) => {
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild isActive={isActive}>
-        <Link href={item.url} className="p-2 text-lg font-light flex gap-2 items-center hover:bg-secondary rounded-lg w-full">
+        <Link href={item.url}
+          onClick={onClick}
+          className="p-2 text-lg font-light flex gap-2 items-center hover:bg-secondary rounded-lg w-full"
+        >
           <item.icon className="h-5 w-5" />
           <span className="flex-1">{item.title}</span>
           {item.badge && <Badge>{item.badge}</Badge>}
@@ -84,6 +94,8 @@ const CustomMenuItem = ({ item }: { item: MenuItem }) => {
 };
 
 export function AppSidebar() {
+
+  const { isMobile, setOpenMobile } = useSidebar()
 
   const user = useQuery(api.user.getUser)
 
@@ -96,6 +108,13 @@ export function AppSidebar() {
   }, [user, addUser])
 
   const credits = user?.credits ?? 0;
+
+  const handleMenuItemClick = () => {
+    // Only close sidebar on mobile
+    if (isMobile) {
+      setOpenMobile(false)
+    }
+  }
 
   return (
     <Sidebar>
@@ -117,7 +136,11 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {creativeToolsItems.map((item) => (
-                <CustomMenuItem key={item.title} item={item} />
+                <CustomMenuItem
+                  key={item.title}
+                  item={item}
+                  onClick={handleMenuItemClick}
+                />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -129,7 +152,11 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {userItems.map((item) => (
-                <CustomMenuItem key={item.title} item={item} />
+                <CustomMenuItem
+                  key={item.title}
+                  item={item}
+                  onClick={handleMenuItemClick}
+                />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>

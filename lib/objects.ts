@@ -710,4 +710,3 @@ export const promptVariations = {
 // 2. Create options for the captions and the user should be able to tweak it on the go
 // 3. Add scene option to be provided with moving scenes by draging
 // 4. Write blogs for improving SEO
-
