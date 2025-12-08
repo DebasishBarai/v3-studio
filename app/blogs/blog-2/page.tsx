@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     type: 'article',
     images: [
       {
-        url: 'https://ik.imagekit.io/vchtech/v3-blogs/blog-2.png',
+        url: 'https://ik.imagekit.io/vchtech/v3-blogs/blog-1.png',
         width: 1200,
         height: 630,
         alt: 'YouTube Shorts Growth with AI',
