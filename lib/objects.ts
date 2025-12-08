@@ -707,6 +707,6 @@ export const promptVariations = {
 
 // [TODO]
 // 1. Create a demo video for the app and put it in the landing page
-// 2. Create options for the captions and the user should be able to tweak it on the go
+// 2. Create options for the captions and the user should be able to tweak it on the go - done
 // 3. Add scene option to be provided with moving scenes by draging
 // 4. Write blogs for improving SEO
