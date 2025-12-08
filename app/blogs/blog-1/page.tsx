@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import { LogoSection } from '@/components/landing-components/logo-section';
 import Footer from '@/components/footer';
-import { FeaturedHeroImage } from '@/components/blogs/featured-hero-image.tsx';
+import { FeaturedHeroImage } from '@/components/blogs/featured-hero-image';
 
 export const metadata: Metadata = {
   title: 'How to Create Viral Faceless Videos with AI: Complete 2025 Guide | V3 Studio',
