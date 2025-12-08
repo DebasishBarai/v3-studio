@@ -29,7 +29,7 @@ const BLOG_POSTS = [
     title: 'How to Create Viral Faceless Videos with AI',
     description:
       'A complete 2025 guide to building viral faceless content using AI tools.',
-    href: '/blog/how-to-create-viral-faceless-videos-with-ai',
+    href: '/blogs/blog-1',
     image:
       'https://ik.imagekit.io/vchtech/v3-blogs/blog-1.png',
     tag: 'Complete Guide',
