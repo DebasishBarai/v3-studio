@@ -56,26 +56,28 @@ export default function BlogPost() {
 
         {/* Hero */}
         <section className="max-w-4xl mx-auto px-4 pt-12 pb-8 text-center">
-          <span className="inline-flex items-center gap-2 bg-red-500/20 text-red-400 border border-red-500/30 px-4 py-2 rounded-full text-sm mb-6">
-            <PlayCircle className="w-4 h-4" />
-            YouTube Shorts 2025
-          </span>
-
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            How to Grow on YouTube Shorts Using AI
-          </h1>
-
-          <p className="text-xl text-slate-300 mb-6">
-            Learn how creators are getting millions of views on YouTube Shorts
-            using AI-powered workflows — without editing or filming.
-          </p>
-
-          <div className="text-sm text-slate-400 flex justify-center gap-6">
-            <span>📅 Updated December 2025</span>
-            <span>⏱️ 12 min read</span>
-            <span>👤 V3 Studio Team</span>
+          <div className="text-center mb-8">
+            <span className="inline-flex items-center gap-2 bg-red-500/20 text-red-400 border border-red-500/30 px-4 py-2 rounded-full text-sm mb-6">
+              <PlayCircle className="w-4 h-4" />
+              YouTube Shorts 2025
+            </span>
+  
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              How to Grow on YouTube Shorts Using AI
+            </h1>
+  
+            <p className="text-xl text-slate-300 mb-6">
+              Learn how creators are getting millions of views on YouTube Shorts
+              using AI-powered workflows — without editing or filming.
+            </p>
+  
+            <div className="text-sm text-slate-400 flex justify-center gap-6">
+              <span>📅 Updated December 2025</span>
+              <span>⏱️ 12 min read</span>
+              <span>👤 V3 Studio Team</span>
+            </div>
           </div>
-
+          
           <FeaturedHeroImage imageUrl="https://ik.imagekit.io/vchtech/v3-blogs/blog-1.png" />
         </section>
 
