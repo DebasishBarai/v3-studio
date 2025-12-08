@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         hostname: '**.convex.cloud',
         pathname: '/**',
       },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+        pathname: "/vchtech/**",
+      },
     ],
   }
 };
