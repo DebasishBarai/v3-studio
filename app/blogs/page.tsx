@@ -40,7 +40,7 @@ const BLOG_POSTS = [
 
 export default function BlogLandingPage() {
   return (
-    <>
+    <div className="bg-black text-white min-h-screen min-w-full flex flex-col justify-start items-center">
       <LogoSection />
 
       {/* ================= HERO ================= */}
@@ -167,6 +167,6 @@ export default function BlogLandingPage() {
       </section>
 
       <Footer />
-    </>
+    </div>
   );
 }
