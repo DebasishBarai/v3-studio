@@ -40,6 +40,7 @@ const BLOG_POSTS = [
 
 export default function BlogLandingPage() {
   return (
+    <>
     <div className="bg-black text-white min-h-screen min-w-full flex flex-col justify-start items-center">
       <LogoSection />
 
@@ -165,8 +166,8 @@ export default function BlogLandingPage() {
           </Link>
         </div>
       </section>
-
-      <Footer />
     </div>
+      <Footer />
+    </>
   );
 }
