@@ -62,7 +62,7 @@ export default function BlogPost() {
           </div>
 
           {/* Featured Image Placeholder */}
-          <FeaturedHeroImage imageUrl = '' />
+          <FeaturedHeroImage imageUrl = 'https://ik.imagekit.io/vchtech/v3-blogs/blog-1.png' />
         </section>
 
         {/* Main Content */}
