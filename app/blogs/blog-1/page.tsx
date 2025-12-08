@@ -251,7 +251,7 @@ export default function BlogPost() {
   </div>
 
   <Link
-    href="/signup"
+    href="/dashboard"
     className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-lg"
   >
     Start Creating with V3 Studio
