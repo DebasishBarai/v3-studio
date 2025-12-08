@@ -186,67 +186,79 @@ export default function BlogPost() {
           </section>
 
           {/* V3 Studio Section */}
-          <section className="mb-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-8 md:p-12 text-white shadow-2xl shadow-purple-500/30">
-            <div className="flex items-center gap-3 mb-6">
-              <Zap className="w-10 h-10" />
-              <h2 className="text-3xl font-bold">Creating Faceless Videos with V3 Studio</h2>
+<section className="mb-16">
+  <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+    <Zap className="w-8 h-8 text-purple-400" />
+    Creating Faceless Videos with V3 Studio
+  </h2>
+
+  <p className="text-lg text-slate-300 mb-8">
+    V3 Studio simplifies faceless video creation using AI-powered automation —
+    from idea to published video — without requiring editing experience.
+  </p>
+
+  <div className="grid md:grid-cols-2 gap-8 mb-8">
+    {/* Quick Start */}
+    <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8 shadow-lg">
+      <h3 className="text-xl font-semibold text-white mb-6">
+        Quick Start Workflow
+      </h3>
+      <div className="space-y-4">
+        {[
+          'Describe your video idea',
+          'AI generates an engaging script',
+          'Smart visuals are auto-selected',
+          'Natural AI voiceover is added',
+          'Captions, transitions & music applied',
+          'Export or publish directly',
+        ].map((step, i) => (
+          <div
+            key={i}
+            className="flex gap-4 pb-4 border-b border-slate-700 last:border-b-0 last:pb-0"
+          >
+            <div className="bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-lg w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">
+              {i + 1}
             </div>
-            <p className="text-lg mb-8 text-purple-100">
-              V3 Studio streamlines the entire video creation process with AI-powered automation. The platform handles everything from script generation to final video production, making it accessible even for complete beginners.
-            </p>
+            <p className="text-slate-400">{step}</p>
+          </div>
+        ))}
+      </div>
+    </div>
 
-            <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <h3 className="text-xl font-semibold mb-4">Quick Start Process:</h3>
-                <ol className="space-y-3">
-                  {[
-                    'Input Your Idea: Describe your video concept',
-                    'AI Script Generation: Automatic engaging scripts',
-                    'Visual Selection: AI chooses relevant footage',
-                    'Voiceover Creation: Natural-sounding narration',
-                    'Auto-Editing: Smooth transitions and effects',
-                    'Export & Share: Direct publishing to platforms',
-                  ].map((step, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <span className="bg-white/20 rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 font-semibold text-sm">
-                        {i + 1}
-                      </span>
-                      <span className="text-purple-100">{step}</span>
-                    </li>
-                  ))}
-                </ol>
-              </div>
+    {/* Features */}
+    <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8 shadow-lg">
+      <h3 className="text-xl font-semibold text-white mb-6">
+        Core AI Capabilities
+      </h3>
+      <ul className="space-y-4">
+        {[
+          'AI-powered script writing',
+          'Context-aware visual selection',
+          'Multiple AI voice options',
+          'Automatic captions & subtitles',
+          'Built-in music library',
+          'Trend-based content insights',
+          'Bulk video generation',
+          'Direct platform publishing',
+        ].map((feature, i) => (
+          <li key={i} className="flex items-start gap-3">
+            <CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+            <span className="text-slate-400">{feature}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
 
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <h3 className="text-xl font-semibold mb-4">Core AI Features:</h3>
-                <ul className="space-y-3">
-                  {[
-                    'Intelligent Script Writing',
-                    'Smart Visual Matching',
-                    'Multi-Voice AI Narration',
-                    'Auto-Captioning',
-                    'Music Library Access',
-                    'Trend Analysis',
-                    'Batch Production',
-                    'Direct Publishing',
-                  ].map((feature, i) => (
-                    <li key={i} className="flex items-center gap-3">
-                      <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
-                      <span className="text-purple-100">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+  <Link
+    href="/signup"
+    className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-lg"
+  >
+    Start Creating with V3 Studio
+    <ArrowRight className="w-5 h-5" />
+  </Link>
+</section>
 
-            <Link
-              href="/signup"
-              className="inline-flex items-center gap-2 bg-white text-purple-600 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all"
-            >
-              Start Creating with V3 Studio
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </section>
 
           {/* Video Quality Optimization */}
           <section className="mb-16">
