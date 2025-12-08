@@ -186,78 +186,78 @@ export default function BlogPost() {
           </section>
 
           {/* V3 Studio Section */}
-<section className="mb-16">
-  <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
-    <Zap className="w-8 h-8 text-purple-400" />
-    Creating Faceless Videos with V3 Studio
-  </h2>
-
-  <p className="text-lg text-slate-300 mb-8">
-    V3 Studio simplifies faceless video creation using AI-powered automation —
-    from idea to published video — without requiring editing experience.
-  </p>
-
-  <div className="grid md:grid-cols-2 gap-8 mb-8">
-    {/* Quick Start */}
-    <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8 shadow-lg">
-      <h3 className="text-xl font-semibold text-white mb-6">
-        Quick Start Workflow
-      </h3>
-      <div className="space-y-4">
-        {[
-          'Describe your video idea',
-          'AI generates an engaging script',
-          'Smart visuals are auto-selected',
-          'Natural AI voiceover is added',
-          'Captions, transitions & music applied',
-          'Export or publish directly',
-        ].map((step, i) => (
-          <div
-            key={i}
-            className="flex gap-4 pb-4 border-b border-slate-700 last:border-b-0 last:pb-0"
-          >
-            <div className="bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-lg w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">
-              {i + 1}
+          <section className="mb-16">
+            <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+              <Zap className="w-8 h-8 text-purple-400" />
+              Creating Faceless Videos with V3 Studio
+            </h2>
+          
+            <p className="text-lg text-slate-300 mb-8">
+              V3 Studio simplifies faceless video creation using AI-powered automation —
+              from idea to published video — without requiring editing experience.
+            </p>
+            
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              {/* Quick Start */}
+              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8 shadow-lg">
+                <h3 className="text-xl font-semibold text-white mb-6">
+                  Quick Start Workflow
+                </h3>
+                <div className="space-y-4">
+                  {[
+                    'Describe your video idea',
+                    'AI generates an engaging script',
+                    'Smart visuals are auto-selected',
+                    'Natural AI voiceover is added',
+                    'Captions, transitions & music applied',
+                    'Export or publish directly',
+                  ].map((step, i) => (
+                    <div
+                      key={i}
+                      className="flex gap-4 pb-4 border-b border-slate-700 last:border-b-0 last:pb-0"
+                    >
+                      <div className="bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-lg w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">
+                        {i + 1}
+                      </div>
+                      <p className="text-slate-400">{step}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+          
+              {/* Features */}
+              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8 shadow-lg">
+                <h3 className="text-xl font-semibold text-white mb-6">
+                  Core AI Capabilities
+                </h3>
+                <ul className="space-y-4">
+                  {[
+                    'AI-powered script writing',
+                    'Context-aware visual selection',
+                    'Multiple AI voice options',
+                    'Automatic captions & subtitles',
+                    'Built-in music library',
+                    'Trend-based content insights',
+                    'Bulk video generation',
+                    'Direct platform publishing',
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                      <span className="text-slate-400">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            <p className="text-slate-400">{step}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-
-    {/* Features */}
-    <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8 shadow-lg">
-      <h3 className="text-xl font-semibold text-white mb-6">
-        Core AI Capabilities
-      </h3>
-      <ul className="space-y-4">
-        {[
-          'AI-powered script writing',
-          'Context-aware visual selection',
-          'Multiple AI voice options',
-          'Automatic captions & subtitles',
-          'Built-in music library',
-          'Trend-based content insights',
-          'Bulk video generation',
-          'Direct platform publishing',
-        ].map((feature, i) => (
-          <li key={i} className="flex items-start gap-3">
-            <CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
-            <span className="text-slate-400">{feature}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
-
-  <Link
-    href="/dashboard"
-    className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-lg"
-  >
-    Start Creating with V3 Studio
-    <ArrowRight className="w-5 h-5" />
-  </Link>
-</section>
+          
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-lg"
+            >
+              Start Creating with V3 Studio
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </section>
 
 
           {/* Video Quality Optimization */}
@@ -919,28 +919,31 @@ export default function BlogPost() {
           </section>
 
           {/* CTA Section */}
-          <section className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-8 md:p-12 text-center text-white shadow-2xl shadow-purple-500/30">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Create Your First Viral Video?</h2>
-            <p className="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
-              Join thousands of successful creators using V3 Studio to generate engaging faceless videos with AI. Start your journey today.
+          <section className="bg-slate-800/60 border border-slate-700 rounded-2xl p-8 md:p-12 text-center shadow-lg">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Ready to Create Your First Faceless Video?
+            </h2>
+          
+            <p className="text-lg md:text-xl text-slate-400 mb-8 max-w-2xl mx-auto">
+              Join creators using V3 Studio to turn ideas into high-quality, viral-ready
+              faceless videos — without editing skills or expensive tools.
             </p>
+          
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/signup"
-                className="inline-flex items-center justify-center gap-2 bg-white text-purple-600 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all"
+                href="/dashboard"
+                className="inline-flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-lg hover:shadow-purple-500/20"
               >
                 Get Started Free
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              <Link
-                href="/examples"
-                className="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm border-2 border-white text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/20 transition-all"
-              >
-                View Examples
-                <PlayCircle className="w-5 h-5" />
-              </Link>
             </div>
+          
+            <p className="text-sm text-slate-500 mt-4">
+              No credit card required • Start in minutes
+            </p>
           </section>
+
         </article>
 
         {/* Footer */}
