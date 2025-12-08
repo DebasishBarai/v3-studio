@@ -76,7 +76,7 @@ export default function BlogPost() {
             <span>👤 V3 Studio Team</span>
           </div>
 
-          <FeaturedHeroImage imageUrl="https://ik.imagekit.io/vchtech/v3-blogs/blog-2.png" />
+          <FeaturedHeroImage imageUrl="https://ik.imagekit.io/vchtech/v3-blogs/blog-1.png" />
         </section>
 
         {/* Content */}
