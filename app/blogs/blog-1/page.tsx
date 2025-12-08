@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { LogoSection } from '@/components/landing-components/logo-section';
 import Footer from '@/components/footer';
+import { FeaturedHeroImage } from '@/components/blogs/featured-hero-image.tsx';
 
 export const metadata: Metadata = {
   title: 'How to Create Viral Faceless Videos with AI: Complete 2025 Guide | V3 Studio',
@@ -61,12 +62,7 @@ export default function BlogPost() {
           </div>
 
           {/* Featured Image Placeholder */}
-          <div className="w-full h-80 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl mb-12 flex items-center justify-center shadow-2xl shadow-purple-500/20">
-            <div className="text-center text-white">
-              <Video className="w-20 h-20 mx-auto mb-4 opacity-80" />
-              <p className="text-lg font-medium">AI-Powered Faceless Video Creation</p>
-            </div>
-          </div>
+          <FeaturedHeroImage imageUrl = '' />
         </section>
 
         {/* Main Content */}
