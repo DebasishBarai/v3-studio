@@ -973,10 +973,12 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                           addAngle={addAngle}
                           updateNestedField={updateNestedField}
                           generatingScene={generatingScene}
+                          modifyingScene={generatingScene}
                           generateSceneImage={generateSceneImage}
                           generateSceneVideo={generateSceneVideo}
                           generateSceneAudio={generateSceneAudio}
                           aspectRatio={videoData.aspectRatio}
+                          availableCharacters={videoData.characters.map(c => c.name)}
                         />
                       </DraggableSceneCard>
                     ))}

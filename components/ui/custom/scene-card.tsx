@@ -10,18 +10,52 @@ import { ModifySceneDialog } from './modify-scene-dialog'
 import { useEffect, useState } from 'react'
 import { getCachedVideoUrl } from "@/lib/video-cache"
 
+interface SceneCardProps {
+  // Core props
+  key: number
+  scene: any
+  index: number
+
+  // State
+  expandedScenes: Record<number, boolean>
+  expandedAngles: Record<string, boolean>
+
+  // Callbacks
+  toggleScene: (idx: number) => void
+  toggleAngle: (sceneIdx: number, angleIdx: number) => void
+  removeScene: (idx: number) => void
+  removeAngle: (sceneIdx: number, angleIdx: number) => void
+  addAngle: (sceneIdx: number) => void
+  updateNestedField: (path: string, value: any) => void
+  generatingScene: number | null
+  modifyingScene: number | null
+  generateSceneImage: (args: any) => Promise<void>
+  generateSceneVideo: (args: any) => Promise<void>
+  generateSceneAudio: (args: any) => Promise<void>
+
+  aspectRatio: string
+  availableCharacters: string[]
+}
+
 export const SceneCard = ({
   index,
   scene,
+  aspectRatio,
+  expandedScenes,
+  expandedAngles,
+  toggleScene,
+  toggleAngle,
   removeScene,
-  generateSceneImage,
-  generateSceneVideo,
-  generateSceneAudio,
+  removeAngle,
+  addAngle,
   updateNestedField,
   generatingScene,
   modifyingScene,
-  aspectRatio,
-}: any) => {
+  generateSceneImage,
+  generateSceneVideo,
+  generateSceneAudio,
+  availableCharacters,   // ← defaults to empty array
+}: SceneCardProps) => {
   const [open, setOpen] = useState(false)
   const [modifyOpen, setModifyOpen] = useState(false)
 
@@ -249,6 +283,7 @@ export const SceneCard = ({
         index={index}
         scene={scene}
         updateNestedField={updateNestedField}
+        availableCharacters={availableCharacters}
       />
 
       <ModifySceneDialog
