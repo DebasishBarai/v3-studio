@@ -4,7 +4,7 @@ import { Features } from '@/components/landing-components/features-section';
 import { Features2 } from '@/components/landing-components/features-2-section';
 import { VideoGallery } from '@/components/landing-components/video-gallery';
 import { CallToAction } from '@/components/landing-components/call-to-action';
-// import { PricingCards } from './PricingCards';
+import { PricingPage } from '@/components/billing';
 
 export const LandingPage = () => {
   return (
@@ -15,7 +15,7 @@ export const LandingPage = () => {
       <Features2 />
       <VideoGallery />
       <CallToAction />
-      {/* <PricingCards /> */}
+      <PricingPage />
     </div>
   );
 };

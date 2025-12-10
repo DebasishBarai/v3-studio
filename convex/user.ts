@@ -162,7 +162,7 @@ export const createInternalUser = internalMutation({
     await ctx.db.insert('users', {
       subject: args.subject,
       name: args.name ?? 'Anonymous',
-      credits: 100,
+      credits: 400,
       polarCustomerId: args.polarCustomerId,
     });
   }
