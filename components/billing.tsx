@@ -43,7 +43,7 @@ const subscriptionTiers: PricingTier[] = [
   */
   {
     name: 'Starter Plan',
-    description: 'Great for casual creators who want more flexibility and creative power.',
+    description: 'Perfect for beginners exploring AI video creation and short-form storytelling.',
     price: 39.99,
     period: 'month',
     features: [
@@ -57,7 +57,7 @@ const subscriptionTiers: PricingTier[] = [
   },
   {
     name: 'Creator Plan',
-    description: 'Great for casual creators who want more flexibility and creative power.',
+    description: 'Built for growing creators who want more control, output, and creative freedom.',
     price: 69.99,
     period: 'month',
     features: [
