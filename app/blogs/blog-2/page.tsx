@@ -24,6 +24,8 @@ import {
 import { LogoSection } from '@/components/landing-components/logo-section';
 import Footer from '@/components/footer';
 import { FeaturedHeroImage } from '@/components/blogs/featured-hero-image';
+import { FadeUp } from '@/components/motion/motion';
+import { QuickStats } from '@/components/blogs/quick-stats';
 
 export const metadata: Metadata = {
   title: 'How to Grow on YouTube Shorts Using AI (2025 Guide) | V3 Studio',
@@ -119,12 +121,16 @@ export default function BlogPost() {
               <Sparkles className="w-4 h-4" />
               Complete YouTube Shorts Guide 2025
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-              How to Grow on YouTube Shorts Using AI
-            </h1>
-            <p className="text-xl text-slate-300 mb-8">
-              Master YouTube Shorts growth with AI-powered automation. Get millions of views without complex editing or expensive equipment.
-            </p>
+            <FadeUp>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                How to Grow on YouTube Shorts Using AI
+              </h1>
+            </FadeUp>
+            <FadeUp delay={0.1}>
+              <p className="text-xl text-slate-300 mb-8">
+                Master YouTube Shorts growth with AI-powered automation. Get millions of views without complex editing or expensive equipment.
+              </p>
+            </FadeUp>
             <div className="flex items-center justify-center gap-6 text-sm text-slate-400">
               <span>📅 Updated December 2025</span>
               <span>⏱️ 18 min read</span>
@@ -146,20 +152,14 @@ export default function BlogPost() {
           </div>
 
           {/* Quick Stats */}
-          <div className="grid md:grid-cols-4 gap-4 mb-12">
-            {[
-              { icon: TrendingUp, label: 'Daily Views', value: '70B+' },
-              { icon: Video, label: 'Avg. Watch Time', value: '45 sec' },
-              { icon: DollarSign, label: 'Monthly Earnings', value: '$3K+' },
-              { icon: Users, label: 'New Creators', value: '100K+' },
-            ].map((stat, i) => (
-              <div key={i} className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 text-center shadow-lg hover:shadow-red-500/20 hover:border-red-500/50 transition-all">
-                <stat.icon className="w-8 h-8 mx-auto mb-3 text-red-400" />
-                <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-sm text-slate-400">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+          <QuickStats
+            stats={[
+              { icon: 'trending', label: 'Daily Views', value: '70B+' },
+              { icon: 'video', label: 'Avg. Watch Time', value: '45 sec' },
+              { icon: 'dollar', label: 'Monthly Earnings', value: '$3K+' },
+              { icon: 'users', label: 'New Creators', value: '100K+' },
+            ]}
+          />
 
           {/* Why YouTube Shorts */}
           <section className="mb-16">

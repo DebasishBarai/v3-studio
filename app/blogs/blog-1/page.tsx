@@ -22,6 +22,9 @@ import {
 import { LogoSection } from '@/components/landing-components/logo-section';
 import Footer from '@/components/footer';
 import { FeaturedHeroImage } from '@/components/blogs/featured-hero-image';
+import { FadeUp } from '@/components/motion/motion';
+import { motion } from 'framer-motion';
+import { QuickStats } from '@/components/blogs/quick-stats';
 
 export const metadata: Metadata = {
   title:
@@ -108,7 +111,7 @@ export default function BlogPost() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      
+
       <div className="bg-black text-white min-h-screen min-w-full flex flex-col justify-start items-center">
         {/* Header */}
         <LogoSection />
@@ -120,12 +123,16 @@ export default function BlogPost() {
               <Sparkles className="w-4 h-4" />
               Complete Guide 2025
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-              How to Create Viral Faceless Videos with AI
-            </h1>
-            <p className="text-xl text-slate-300 mb-8">
-              Master the art of faceless video creation using AI-powered tools. No camera, no editing skills required.
-            </p>
+            <FadeUp>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                How to Create Viral Faceless Videos with AI
+              </h1>
+            </FadeUp>
+            <FadeUp delay={0.1}>
+              <p className="text-xl text-slate-300 mb-8">
+                Master the art of faceless video creation using AI-powered tools. No camera, no editing skills required.
+              </p>
+            </FadeUp>
             <div className="flex items-center justify-center gap-6 text-sm text-slate-400">
               <span>📅 Updated December 2025</span>
               <span>⏱️ 15 min read</span>
@@ -134,7 +141,7 @@ export default function BlogPost() {
           </div>
 
           {/* Featured Image Placeholder */}
-          <FeaturedHeroImage imageUrl = 'https://ik.imagekit.io/vchtech/v3-blogs/blog-1.png' />
+          <FeaturedHeroImage imageUrl='https://ik.imagekit.io/vchtech/v3-blogs/blog-1.png' />
         </section>
 
         {/* Main Content */}
@@ -147,20 +154,15 @@ export default function BlogPost() {
           </div>
 
           {/* Quick Stats */}
-          <div className="grid md:grid-cols-4 gap-4 mb-12">
-            {[
-              { icon: TrendingUp, label: 'Avg. Growth Rate', value: '300%' },
-              { icon: Video, label: 'Videos/Day', value: '10+' },
-              { icon: DollarSign, label: 'Potential Revenue', value: '$5K+/mo' },
-              { icon: Users, label: 'Active Creators', value: '50K+' },
-            ].map((stat, i) => (
-              <div key={i} className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 text-center shadow-lg hover:shadow-purple-500/20 hover:border-purple-500/50 transition-all">
-                <stat.icon className="w-8 h-8 mx-auto mb-3 text-purple-400" />
-                <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-sm text-slate-400">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+
+          <QuickStats
+            stats={[
+              { icon: 'trending', label: 'Avg. Growth Rate', value: '300%' },
+              { icon: 'video', label: 'Videos/Day', value: '10+' },
+              { icon: 'dollar', label: 'Potential Revenue', value: '$5K+/mo' },
+              { icon: 'users', label: 'Active Creators', value: '50K+' },
+            ]}
+          />
 
           {/* Why Faceless Video Content */}
           <section className="mb-16">
@@ -259,12 +261,12 @@ export default function BlogPost() {
               <Zap className="w-8 h-8 text-purple-400" />
               Creating Faceless Videos with V3 Studio
             </h2>
-          
+
             <p className="text-lg text-slate-300 mb-8">
               V3 Studio simplifies faceless video creation using AI-powered automation —
               from idea to published video — without requiring editing experience.
             </p>
-            
+
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               {/* Quick Start */}
               <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8 shadow-lg">
@@ -292,7 +294,7 @@ export default function BlogPost() {
                   ))}
                 </div>
               </div>
-          
+
               {/* Features */}
               <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8 shadow-lg">
                 <h3 className="text-xl font-semibold text-white mb-6">
@@ -317,7 +319,7 @@ export default function BlogPost() {
                 </ul>
               </div>
             </div>
-          
+
             <Link
               href="/dashboard"
               className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-lg"
@@ -991,12 +993,12 @@ export default function BlogPost() {
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Ready to Create Your First Faceless Video?
             </h2>
-          
+
             <p className="text-lg md:text-xl text-slate-400 mb-8 max-w-2xl mx-auto">
               Join creators using V3 Studio to turn ideas into high-quality, viral-ready
               faceless videos — without editing skills or expensive tools.
             </p>
-          
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/dashboard"
@@ -1006,7 +1008,7 @@ export default function BlogPost() {
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
-          
+
             <p className="text-sm text-slate-500 mt-4">
               No credit card required • Start in minutes
             </p>

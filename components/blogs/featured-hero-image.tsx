@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Video } from "lucide-react";
+import { motion } from "framer-motion";
 
 export function FeaturedHeroImage({
   imageUrl,
@@ -23,17 +24,23 @@ export function FeaturedHeroImage({
 
       {/* ✅ Featured Image */}
       {!showFallback && (
-        <Image
-          src={imageUrl}
-          alt="AI-Powered Faceless Video Creation"
-          fill
-          priority
-          className={`object-cover transition-opacity duration-700 ${
-            isLoaded ? "opacity-100" : "opacity-0"
-          }`}
-          onLoadingComplete={() => setIsLoaded(true)}
-          onError={() => setHasError(true)}
-        />
+
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="relative w-full h-80 rounded-2xl overflow-hidden"
+        >
+          <Image
+            src={imageUrl}
+            alt="AI-Powered Faceless Video Creation"
+            fill
+            priority
+            className={`object-cover transition-opacity duration-700 ${isLoaded ? "opacity-100" : "opacity-0"
+              }`}
+            onLoadingComplete={() => setIsLoaded(true)}
+            onError={() => setHasError(true)}
+          />
+        </motion.div>
       )}
 
       {/* ✅ Fallback UI */}
