@@ -116,7 +116,20 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* css class to hide volume controls in scene card */
+/* Chrome, Safari, Edge */
+.hide-volume::-webkit-media-controls-mute-button,
+.hide-volume::-webkit-media-controls-volume-slider {
+  display: none !important;
+}
+
+/* Firefox */
+.hide-volume::-moz-volume-control {
+  display: none !important;
 }

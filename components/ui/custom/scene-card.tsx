@@ -9,6 +9,7 @@ import { EditSceneDialog } from '@/components/ui/custom/edit-scene-dialog'
 import { ModifySceneDialog } from './modify-scene-dialog'
 import { useEffect, useState } from 'react'
 import { getCachedVideoUrl } from "@/lib/video-cache"
+import VideoWithAudio from '@/components/ui/custom/video-with-audio'
 
 interface SceneCardProps {
   // Core props
@@ -59,8 +60,10 @@ export const SceneCard = ({
   const [open, setOpen] = useState(false)
   const [modifyOpen, setModifyOpen] = useState(false)
 
-  const [localUrl, setLocalUrl] = useState<string | null>(null);
+  const [localVideoUrl, setLocalVideoUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [localAudioUrl, setLocalAudioUrl] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -69,14 +72,14 @@ export const SceneCard = ({
       setIsLoading(true);
       getCachedVideoUrl(scene.videoUrl).then((cachedUrl) => {
         if (mounted) {
-          setLocalUrl(cachedUrl);
+          setLocalVideoUrl(cachedUrl);
           setIsLoading(false);
         }
       }).catch(() => {
         if (mounted) setIsLoading(false);
       });
     } else {
-      setLocalUrl(null);
+      setLocalVideoUrl(null);
       setIsLoading(false);
     }
 
@@ -84,6 +87,29 @@ export const SceneCard = ({
       mounted = false;
     };
   }, [scene.videoUrl])
+
+  useEffect(() => {
+    let mounted = true;
+
+    if (scene.audioUrl) {
+      setIsLoading(true);
+      getCachedVideoUrl(scene.audioUrl).then((cachedUrl) => {
+        if (mounted) {
+          setLocalAudioUrl(cachedUrl);
+          setIsLoading(false);
+        }
+      }).catch(() => {
+        if (mounted) setIsLoading(false);
+      });
+    } else {
+      setLocalAudioUrl(null);
+      setIsLoading(false);
+    }
+
+    return () => {
+      mounted = false;
+    };
+  }, [scene.audioUrl])
 
   return (
     <div className="bg-white/5 rounded-xl p-5 border border-white/10 mb-6">
@@ -117,12 +143,16 @@ export const SceneCard = ({
                     <div className="w-full h-48 bg-gray-800 rounded-lg flex items-center justify-center">
                       <span className="text-white">Loading video...</span>
                     </div>
-                  ) : localUrl ? (
-                    <video
-                      src={localUrl}
-                      controls
-                      className="w-full rounded-lg object-cover"
-                    />
+                  ) : localVideoUrl ? (
+                    localAudioUrl ? (
+                      <VideoWithAudio videoUrl={localVideoUrl} audioUrl={localAudioUrl} />
+                    ) : (
+                      <video
+                        src={localVideoUrl}
+                        controls
+                        className="w-full rounded-lg object-cover hide-volume"
+                      />
+                    )
                   ) : (
                     <div className="w-full h-48 bg-gray-800 rounded-lg flex items-center justify-center">
                       <span className="text-white text-sm">Failed to load video</span>
@@ -144,12 +174,12 @@ export const SceneCard = ({
                       className="text-white hover:text-white hover:bg-white/20"
                       onClick={() => window.open(scene.imageUrl, '_blank')}
                     />
-                    {localUrl && (
+                    {localVideoUrl && (
                       <CustomButton
                         icon={Video}
                         tooltip="View Video"
                         className="text-white hover:text-white hover:bg-white/20"
-                        onClick={() => window.open(localUrl, '_blank')}
+                        onClick={() => window.open(localVideoUrl, '_blank')}
                       />
                     )}
                   </div>
