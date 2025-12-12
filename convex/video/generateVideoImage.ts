@@ -51,111 +51,148 @@ export const generateCharacterImage = action({
       throw new Error("Video not found");
     }
 
-    let baseImage = '';
-
-    if (args.baseImageId) {
-      const baseImageBlob = await ctx.storage.get(args.baseImageId);
-
-      if (!baseImageBlob) {
-        throw new Error("Base image not found");
-      }
-
-      baseImage = Buffer.from(await baseImageBlob.arrayBuffer()).toString("base64");
-    }
-
-
     try {
-      const finalPrompt = args.prompt;
+      // update character InProcess
+      const updatedCharacters = video.characters.map((character, index) =>
+        index === args.characterIndex
+          ? { ...character, inProcess: true }
+          : character
+      );
 
-      const prompt = args.baseImageId ? [
-        { text: `${finalPrompt}` }, {
-          inlineData: {
-            mimeType: "image/png",
-            data: baseImage,
-          },
-        },
-      ] : [
-        { text: `${finalPrompt}` },
-      ]
-
-      const response = await genai.models.generateContent({
-        model: "gemini-2.5-flash-image",
-        contents: prompt,
-        config: {
-          responseModalities: [Modality.IMAGE],
-          ...(args.aspectRatio && {
-            imageConfig: {
-              aspectRatio: args.aspectRatio,
-            },
-          }),
+      // Update video
+      await ctx.runMutation(internal.video.video.updateInternalVideo, {
+        id: args.videoId,
+        userId: user._id,
+        update: {
+          characters: updatedCharacters,
         },
       });
 
-      // Check if response has candidates
-      if (!response.candidates || response.candidates.length === 0) {
-        throw new Error("No candidates returned in response");
-      }
+      let baseImage = '';
 
-      // Find and return the first (and only) generated image
-      for (const part of response.candidates[0].content?.parts || []) {
-        if (part.inlineData) {
-          const characterImage = {
-            data: part.inlineData.data,
-            mimeType: part.inlineData.mimeType,
-          };
-          if (!characterImage || !characterImage.data) {
-            throw new Error('No image generated');
-          }
+      if (args.baseImageId) {
+        const baseImageBlob = await ctx.storage.get(args.baseImageId);
 
-          // convert base64 to blob
-          const cleaned = characterImage.data.includes(',') ? characterImage.data.split(',')[1] : characterImage.data;
-          const byteCharacters = atob(cleaned); // decode base64
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-          }
-          const byteArray = new Uint8Array(byteNumbers);
-          const blob = new Blob([byteArray], { type: characterImage.mimeType });
-
-          const characterImageStorageId = await ctx.storage.store(blob);
-
-          const characterImageUrl = await ctx.storage.getUrl(characterImageStorageId);
-          if (!characterImageUrl) {
-            throw new Error("Failed to generate URL for stored file");
-          }
-
-          // Update only the characters array
-          const updatedCharacters = video.characters.map((character, index) =>
-            index === args.characterIndex
-              ? { ...character, imageStorageId: characterImageStorageId, imageUrl: characterImageUrl }
-              : character
-          );
-
-          // Update video
-          await ctx.runMutation(internal.video.video.updateInternalVideo, {
-            id: args.videoId,
-            userId: user._id,
-            update: {
-              characters: updatedCharacters,
-            },
-          });
-
-          // update credits
-          await ctx.runMutation(internal.user.decreaseInternalCredits, {
-            subject: identity.subject,
-            amount: 5,
-          });
-
-          return { imageStorageId: characterImageStorageId, imageUrl: characterImageUrl }
-
+        if (!baseImageBlob) {
+          throw new Error("Base image not found");
         }
+
+        baseImage = Buffer.from(await baseImageBlob.arrayBuffer()).toString("base64");
       }
 
-      throw new Error("No image generated in response");
 
+      try {
+        const finalPrompt = args.prompt;
+
+        const prompt = args.baseImageId ? [
+          { text: `${finalPrompt}` }, {
+            inlineData: {
+              mimeType: "image/png",
+              data: baseImage,
+            },
+          },
+        ] : [
+          { text: `${finalPrompt}` },
+        ]
+
+        const response = await genai.models.generateContent({
+          model: "gemini-2.5-flash-image",
+          contents: prompt,
+          config: {
+            responseModalities: [Modality.IMAGE],
+            ...(args.aspectRatio && {
+              imageConfig: {
+                aspectRatio: args.aspectRatio,
+              },
+            }),
+          },
+        });
+
+        // Check if response has candidates
+        if (!response.candidates || response.candidates.length === 0) {
+          throw new Error("No candidates returned in response");
+        }
+
+        // Find and return the first (and only) generated image
+        for (const part of response.candidates[0].content?.parts || []) {
+          if (part.inlineData) {
+            const characterImage = {
+              data: part.inlineData.data,
+              mimeType: part.inlineData.mimeType,
+            };
+            if (!characterImage || !characterImage.data) {
+              throw new Error('No image generated');
+            }
+
+            // convert base64 to blob
+            const cleaned = characterImage.data.includes(',') ? characterImage.data.split(',')[1] : characterImage.data;
+            const byteCharacters = atob(cleaned); // decode base64
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: characterImage.mimeType });
+
+            const characterImageStorageId = await ctx.storage.store(blob);
+
+            const characterImageUrl = await ctx.storage.getUrl(characterImageStorageId);
+            if (!characterImageUrl) {
+              throw new Error("Failed to generate URL for stored file");
+            }
+
+            // Update only the characters array
+            const updatedCharacters = video.characters.map((character, index) =>
+              index === args.characterIndex
+                ? { ...character, imageStorageId: characterImageStorageId, imageUrl: characterImageUrl }
+                : character
+            );
+
+            // Update video
+            await ctx.runMutation(internal.video.video.updateInternalVideo, {
+              id: args.videoId,
+              userId: user._id,
+              update: {
+                characters: updatedCharacters,
+              },
+            });
+
+            // update credits
+            await ctx.runMutation(internal.user.decreaseInternalCredits, {
+              subject: identity.subject,
+              amount: 5,
+            });
+
+            return { imageStorageId: characterImageStorageId, imageUrl: characterImageUrl }
+
+          }
+        }
+
+        throw new Error("No image generated in response");
+
+      } catch (error) {
+        console.error('generateAdsImageWithNanoBanana error:', error);
+        throw error;
+      }
     } catch (error) {
-      console.error('generateAdsImageWithNanoBanana error:', error);
+      console.error(error);
       throw error;
+    } finally {
+      // update character InProcess
+      const updatedCharacters = video.characters.map((character, index) =>
+        index === args.characterIndex
+          ? { ...character, inProcess: false }
+          : character
+      );
+
+      // Update video
+      await ctx.runMutation(internal.video.video.updateInternalVideo, {
+        id: args.videoId,
+        userId: user._id,
+        update: {
+          characters: updatedCharacters,
+        },
+      });
     }
   }
 })
@@ -202,130 +239,167 @@ export const generateSceneImage = action({
       throw new Error("Video not found");
     }
 
-    let baseImage = '';
-
-    if (args.baseImageId) {
-      const baseImageBlob = await ctx.storage.get(args.baseImageId);
-
-      if (!baseImageBlob) {
-        throw new Error("Base image not found");
-      }
-
-      baseImage = Buffer.from(await baseImageBlob.arrayBuffer()).toString("base64");
-    }
-
-    const characterImages = []
-    if (args.characterImageIds && args.characterImageIds.length > 0) {
-      for (const imageId of args.characterImageIds) {
-        const imageBlob = await ctx.storage.get(imageId);
-        if (!imageBlob) {
-          throw new Error(`Character image not found: ${imageId}`);
-        }
-        const base64Image = Buffer.from(await imageBlob.arrayBuffer()).toString("base64");
-        characterImages.push(base64Image);
-      }
-    }
-
-
     try {
-      const finalPrompt = args.prompt;
+      // update scene videoInProcess
+      const updatedScenesWithInProcess = video.scenes.map((scene, index) =>
+        index === args.sceneIndex
+          ? { ...scene, imageInProcess: true }
+          : scene
+      );
 
-      const prompt = args.baseImageId ? [
-        { text: `${finalPrompt}` }, {
-          inlineData: {
-            mimeType: "image/png",
-            data: baseImage,
-          },
-        },
-      ] : ((!args.characterImageIds || args.characterImageIds.length === 0) ? [
-        { text: `${finalPrompt}` },
-      ] : [
-        { text: `${finalPrompt}` },
-        ...characterImages.map(image => ({
-          inlineData: {
-            mimeType: "image/png",
-            data: image,
-          },
-        }))
-      ])
-
-      const response = await genai.models.generateContent({
-        model: "gemini-2.5-flash-image",
-        contents: prompt,
-        config: {
-          responseModalities: [Modality.IMAGE],
-          ...(args.aspectRatio && {
-            imageConfig: {
-              aspectRatio: args.aspectRatio,
-            },
-          }),
+      // Update video
+      await ctx.runMutation(internal.video.video.updateInternalVideo, {
+        id: args.videoId,
+        userId: user._id,
+        update: {
+          scenes: updatedScenesWithInProcess,
         },
       });
 
-      // Check if response has candidates
-      if (!response.candidates || response.candidates.length === 0) {
-        throw new Error("No candidates returned in response");
+      let baseImage = '';
+
+      if (args.baseImageId) {
+        const baseImageBlob = await ctx.storage.get(args.baseImageId);
+
+        if (!baseImageBlob) {
+          throw new Error("Base image not found");
+        }
+
+        baseImage = Buffer.from(await baseImageBlob.arrayBuffer()).toString("base64");
       }
 
-      // Find and return the first (and only) generated image
-      for (const part of response.candidates[0].content?.parts || []) {
-        if (part.inlineData) {
-          const characterImage = {
-            data: part.inlineData.data,
-            mimeType: part.inlineData.mimeType,
-          };
-          if (!characterImage || !characterImage.data) {
-            throw new Error('No image generated');
+      const characterImages = []
+      if (args.characterImageIds && args.characterImageIds.length > 0) {
+        for (const imageId of args.characterImageIds) {
+          const imageBlob = await ctx.storage.get(imageId);
+          if (!imageBlob) {
+            throw new Error(`Character image not found: ${imageId}`);
           }
-
-          // convert base64 to blob
-          const cleaned = characterImage.data.includes(',') ? characterImage.data.split(',')[1] : characterImage.data;
-          const byteCharacters = atob(cleaned); // decode base64
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-          }
-          const byteArray = new Uint8Array(byteNumbers);
-          const blob = new Blob([byteArray], { type: characterImage.mimeType });
-
-          const characterImageStorageId = await ctx.storage.store(blob);
-
-          const characterImageUrl = await ctx.storage.getUrl(characterImageStorageId);
-          if (!characterImageUrl) {
-            throw new Error("Failed to generate URL for stored file");
-          }
-
-          // Update only the scenes array
-          const updatedScenes = video.scenes.map((scene, index) =>
-            index === args.sceneIndex
-              ? { ...scene, imageId: characterImageStorageId, imageUrl: characterImageUrl }
-              : scene
-          );
-
-          // Update video
-          await ctx.runMutation(internal.video.video.updateInternalVideo, {
-            id: args.videoId,
-            userId: user._id,
-            update: {
-              scenes: updatedScenes,
-            },
-          });
-
-          // update credits
-          await ctx.runMutation(internal.user.decreaseInternalCredits, {
-            subject: identity.subject,
-            amount: 5,
-          });
-
-          return { imageStorageId: characterImageStorageId, imageUrl: characterImageUrl }
+          const base64Image = Buffer.from(await imageBlob.arrayBuffer()).toString("base64");
+          characterImages.push(base64Image);
         }
       }
 
-      throw new Error("No image generated in response");
+      try {
+        const finalPrompt = args.prompt;
 
+        const prompt = args.baseImageId ? [
+          { text: `${finalPrompt}` }, {
+            inlineData: {
+              mimeType: "image/png",
+              data: baseImage,
+            },
+          },
+        ] : ((!args.characterImageIds || args.characterImageIds.length === 0) ? [
+          { text: `${finalPrompt}` },
+        ] : [
+          { text: `${finalPrompt}` },
+          ...characterImages.map(image => ({
+            inlineData: {
+              mimeType: "image/png",
+              data: image,
+            },
+          }))
+        ])
+
+        const response = await genai.models.generateContent({
+          model: "gemini-2.5-flash-image",
+          contents: prompt,
+          config: {
+            responseModalities: [Modality.IMAGE],
+            ...(args.aspectRatio && {
+              imageConfig: {
+                aspectRatio: args.aspectRatio,
+              },
+            }),
+          },
+        });
+
+        // Check if response has candidates
+        if (!response.candidates || response.candidates.length === 0) {
+          throw new Error("No candidates returned in response");
+        }
+
+        // Find and return the first (and only) generated image
+        for (const part of response.candidates[0].content?.parts || []) {
+          if (part.inlineData) {
+            const characterImage = {
+              data: part.inlineData.data,
+              mimeType: part.inlineData.mimeType,
+            };
+            if (!characterImage || !characterImage.data) {
+              throw new Error('No image generated');
+            }
+
+            // convert base64 to blob
+            const cleaned = characterImage.data.includes(',') ? characterImage.data.split(',')[1] : characterImage.data;
+            const byteCharacters = atob(cleaned); // decode base64
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: characterImage.mimeType });
+
+            const characterImageStorageId = await ctx.storage.store(blob);
+
+            const characterImageUrl = await ctx.storage.getUrl(characterImageStorageId);
+            if (!characterImageUrl) {
+              throw new Error("Failed to generate URL for stored file");
+            }
+
+            // Update only the scenes array
+            const updatedScenes = video.scenes.map((scene, index) =>
+              index === args.sceneIndex
+                ? { ...scene, imageId: characterImageStorageId, imageUrl: characterImageUrl }
+                : scene
+            );
+
+            // Update video
+            await ctx.runMutation(internal.video.video.updateInternalVideo, {
+              id: args.videoId,
+              userId: user._id,
+              update: {
+                scenes: updatedScenes,
+              },
+            });
+
+            // update credits
+            await ctx.runMutation(internal.user.decreaseInternalCredits, {
+              subject: identity.subject,
+              amount: 5,
+            });
+
+            return { imageStorageId: characterImageStorageId, imageUrl: characterImageUrl }
+          }
+        }
+
+        throw new Error("No image generated in response");
+
+      } catch (error) {
+        console.error('generateAdsImageWithNanoBanana error:', error);
+        throw error;
+      }
     } catch (error) {
-      console.error('generateAdsImageWithNanoBanana error:', error);
+      console.error(error);
       throw error;
+    } finally {
+      // update scene videoInProcess
+      const updatedScenesWithInProcess = video.scenes.map((scene, index) =>
+        index === args.sceneIndex
+          ? { ...scene, imageInProcess: false }
+          : scene
+      );
+
+      // Update video
+      await ctx.runMutation(internal.video.video.updateInternalVideo, {
+        id: args.videoId,
+        userId: user._id,
+        update: {
+          scenes: updatedScenesWithInProcess,
+        },
+      });
     }
+
   }
 })

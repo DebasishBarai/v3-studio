@@ -49,51 +49,88 @@ export const generateSceneVideo = action({
       throw new Error("Video not found");
     }
 
-    const input = {
-      image: args.baseImageUrl,
-      prompt: args.prompt,
-      resolution: "720p",
-    };
+    try {
+      // update scene videoInProcess
+      const updatedScenesWithInProcess = video.scenes.map((scene, index) =>
+        index === args.sceneIndex
+          ? { ...scene, videoInProcess: true }
+          : scene
+      );
 
-    const output = await replicate.run("wan-video/wan-2.2-i2v-fast", { input });
+      // Update video
+      await ctx.runMutation(internal.video.video.updateInternalVideo, {
+        id: args.videoId,
+        userId: user._id,
+        update: {
+          scenes: updatedScenesWithInProcess,
+        },
+      });
 
-    // @ts-expect-error replicate.run() has the url() method
-    const resp = await fetch(output.url());
+      const input = {
+        image: args.baseImageUrl,
+        prompt: args.prompt,
+        resolution: "720p",
+      };
 
-    const videoBlob = await resp.blob();
+      const output = await replicate.run("wan-video/wan-2.2-i2v-fast", { input });
 
-    // Store video in storage
-    const videoStorageId = await ctx.storage.store(videoBlob);
+      // @ts-expect-error replicate.run() has the url() method
+      const resp = await fetch(output.url());
 
-    // Get video url
-    const videoUrl = await ctx.storage.getUrl(videoStorageId);
+      const videoBlob = await resp.blob();
 
-    if (!videoUrl) {
-      throw new Error("Failed to generate URL for stored file");
+      // Store video in storage
+      const videoStorageId = await ctx.storage.store(videoBlob);
+
+      // Get video url
+      const videoUrl = await ctx.storage.getUrl(videoStorageId);
+
+      if (!videoUrl) {
+        throw new Error("Failed to generate URL for stored file");
+      }
+
+      // Update only the scenes array
+      const updatedScenes = video.scenes.map((scene, index) =>
+        index === args.sceneIndex
+          ? { ...scene, videoId: videoStorageId, videoUrl: videoUrl }
+          : scene
+      );
+
+      // Update video
+      await ctx.runMutation(internal.video.video.updateInternalVideo, {
+        id: args.videoId,
+        userId: user._id,
+        update: {
+          scenes: updatedScenes,
+        },
+      });
+
+      // update credits
+      await ctx.runMutation(internal.user.decreaseInternalCredits, {
+        subject: identity.subject,
+        amount: 5,
+      });
+      return { videoStorageId, videoUrl }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      // update scene videoInProcess
+      const updatedScenesWithInProcess = video.scenes.map((scene, index) =>
+        index === args.sceneIndex
+          ? { ...scene, videoInProcess: false }
+          : scene
+      );
+
+      // Update video
+      await ctx.runMutation(internal.video.video.updateInternalVideo, {
+        id: args.videoId,
+        userId: user._id,
+        update: {
+          scenes: updatedScenesWithInProcess,
+        },
+      });
     }
-
-    // Update only the scenes array
-    const updatedScenes = video.scenes.map((scene, index) =>
-      index === args.sceneIndex
-        ? { ...scene, videoId: videoStorageId, videoUrl: videoUrl }
-        : scene
-    );
-
-    // Update video
-    await ctx.runMutation(internal.video.video.updateInternalVideo, {
-      id: args.videoId,
-      userId: user._id,
-      update: {
-        scenes: updatedScenes,
-      },
-    });
-
-    // update credits
-    await ctx.runMutation(internal.user.decreaseInternalCredits, {
-      subject: identity.subject,
-      amount: 5,
-    });
-    return { videoStorageId, videoUrl }
 
   }
 })

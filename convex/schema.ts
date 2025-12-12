@@ -71,6 +71,7 @@ export const characterSchema = v.object({
   imagePrompt: v.string(),
   imageStorageId: v.optional(v.id('_storage')),
   imageUrl: v.optional(v.string()),
+  inProcess: v.optional(v.boolean()),
 })
 
 export const wordSchema = v.object({
@@ -92,9 +93,11 @@ export const sceneSchema = v.object({
   charactersInTheScene: v.optional(v.array(v.string())),
   imageId: v.optional(v.id('_storage')),
   imageUrl: v.optional(v.string()),
+  imageInProcess: v.optional(v.boolean()),
   videoId: v.optional(v.id('_storage')),
   videoUrl: v.optional(v.string()),
   videoDurationInSeconds: v.optional(v.number()),
+  videoInProcess: v.optional(v.boolean()),
 
   angles: v.optional(v.array(angleSchema)),
 
@@ -104,6 +107,7 @@ export const sceneSchema = v.object({
 
   audioId: v.optional(v.id('_storage')),
   audioUrl: v.optional(v.string()),
+  audioInProcess: v.optional(v.boolean()),
 })
 
 export const captionStyleSchema = v.object({
@@ -174,6 +178,7 @@ export default defineSchema({
   videos: defineTable({
     userId: v.id('users'),
 
+    autoGenerate: v.optional(v.boolean()),
     prompt: v.string(),
     title: v.optional(v.string()),
     style: styleValidator,
