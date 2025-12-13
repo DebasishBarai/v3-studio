@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     type: 'article',
     images: [
       {
-        url: 'https://ik.imagekit.io/vchtech/v3-blogs/blog-2.png',
+        url: 'https://ik.imagekit.io/vchtech/v3-blogs/blog-1.png',
         width: 1200,
         height: 630,
         alt: 'Users don’t want more AI',
@@ -82,7 +82,7 @@ export default function BlogPost() {
             </div>
           </div>
 
-          <FeaturedHeroImage imageUrl="https://ik.imagekit.io/vchtech/v3-blogs/blog-2.png" />
+          <FeaturedHeroImage imageUrl="https://ik.imagekit.io/vchtech/v3-blogs/blog-1.png" />
         </section>
 
         {/* Content */}
