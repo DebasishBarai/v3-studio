@@ -26,6 +26,15 @@ export const metadata: Metadata = {
 
 const BLOG_POSTS = [
   {
+    title: 'Users Don’t Want More AI — They Want Fewer Decisions',
+    description:
+      'What early users taught me while building V3 Studio, and how it reshaped the product roadmap.',
+    href: '/blogs/blog-3',
+    image: 'https://ik.imagekit.io/vchtech/v3-blogs/blog-3.png',
+    tag: 'Founder Insights',
+    readTime: '6 min read',
+  },
+  {
     title: 'How to Create Viral Faceless Videos with AI',
     description:
       'A complete 2025 guide to building viral faceless content using AI tools.',
