@@ -7,6 +7,7 @@ import {
   TrendingUp,
   Zap,
   DollarSign,
+  Lightbulb
 } from 'lucide-react';
 
 import { LogoSection } from '@/components/landing-components/logo-section';
