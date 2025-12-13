@@ -266,6 +266,47 @@ export default function BlogPost() {
             </ul>
           </section>
 
+                    {/* ================= FAQ ================= */}
+          <section className="mb-16">
+            <h2 className="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+              <Lightbulb className="w-8 h-8 text-yellow-400" />
+              Frequently Asked Questions
+            </h2>
+          
+            <div className="space-y-6">
+              {[
+                {
+                  q: 'Can I really make money with faceless videos?',
+                  a: 'Yes. Many creators earn income through ads, sponsorships, affiliate marketing, and digital products using faceless video content.',
+                },
+                {
+                  q: 'Do I need video editing experience?',
+                  a: 'No. AI-powered tools like V3 Studio automate scripting, visuals, voiceovers, captions, and editing.',
+                },
+                {
+                  q: 'Which platform is best for faceless videos?',
+                  a: 'TikTok offers fast discovery, while YouTube provides stronger long-term monetization. Many creators use both.',
+                },
+                {
+                  q: 'How long does it take to create a faceless AI video?',
+                  a: 'Using AI tools, a complete faceless video can be created in 5–15 minutes.',
+                },
+              ].map((faq, i) => (
+                <div
+                  key={i}
+                  className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/20 transition-all"
+                >
+                  <h3 className="text-lg font-semibold text-white mb-3">
+                    {faq.q}
+                  </h3>
+                  <p className="text-slate-300 leading-relaxed">
+                    {faq.a}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
           {/* CTA */}
           <section className="bg-slate-800/60 border border-slate-700 rounded-2xl p-10 text-center">
             <h2 className="text-3xl font-bold mb-4">
