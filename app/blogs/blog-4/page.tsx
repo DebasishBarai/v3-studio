@@ -128,7 +128,7 @@ export default function BlogPost() {
             <div className="flex items-center justify-center gap-6 text-sm text-slate-400">
               <span>📅 Updated 2025</span>
               <span>⏱️ 10 min read</span>
-              <span>👤 V3 Studio</span>
+              <span>👤 V3 Studio Team</span>
             </div>
           </div>
 
