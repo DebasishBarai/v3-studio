@@ -53,6 +53,15 @@ const BLOG_POSTS = [
     image: 'https://ik.imagekit.io/vchtech/v3-blogs/blog-3.png',
     tag: 'Founder Insights',
     readTime: '6 min read',
+  },
+  {
+    title: 'Best AI Faceless Video Generator (2025)',
+    description:
+      'Compare the best AI faceless video generators and learn how to create viral videos without showing your face.',
+    href: '/blogs/blog-4',
+    image: 'https://ik.imagekit.io/vchtech/v3-blogs/blog-1.png',
+    tag: 'SEO Guide',
+    readTime: '10 min read',
   }
 ];
 
