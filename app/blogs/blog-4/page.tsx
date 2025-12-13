@@ -45,9 +45,66 @@ export const metadata: Metadata = {
   },
 };
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is the best AI faceless video generator in 2025?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'The best AI faceless video generator in 2025 is one that allows fast video creation, supports Shorts and Reels, offers natural AI voiceovers, and minimizes manual editing. Tools like V3 Studio are optimized for short-form, high-volume content.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I make money with faceless AI videos?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes. Faceless AI videos can be monetized through YouTube ad revenue, TikTok creator programs, affiliate marketing, sponsorships, and digital products.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are AI-generated faceless videos allowed on YouTube and TikTok?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes. AI-generated faceless videos are allowed on YouTube and TikTok as long as they follow platform guidelines, avoid copyright violations, and provide original value.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How long does it take to create a faceless video using AI?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'With AI faceless video generators, a complete video can typically be created in 5–15 minutes, including script, visuals, voiceover, and captions.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do faceless videos work for YouTube Shorts?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text:
+          'Yes. Faceless videos perform very well on YouTube Shorts, especially when optimized for strong hooks, fast pacing, and consistent posting.',
+      },
+    },
+  ],
+};
+
 export default function BlogPost() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+
       <div className="bg-black text-white min-h-screen min-w-full flex flex-col items-center">
         <LogoSection />
 
