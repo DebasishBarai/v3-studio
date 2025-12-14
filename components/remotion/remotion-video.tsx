@@ -7,7 +7,7 @@ import { CachedOffthreadVideo } from "../../components/video-editor/cached-off-t
 import { loadFont } from '@remotion/fonts';
 import { captionStyleSchema } from "@/convex/schema";
 import { Infer } from "convex/values";
-import { Audio } from "@remotion/media"
+// import { Audio } from "@remotion/media"
 // import { OffthreadVideo } from "remotion";
 
 export type Props = {
