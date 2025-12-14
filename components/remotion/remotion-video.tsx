@@ -7,7 +7,7 @@ import { CachedOffthreadVideo } from "../../components/video-editor/cached-off-t
 import { loadFont } from '@remotion/fonts';
 import { captionStyleSchema } from "@/convex/schema";
 import { Infer } from "convex/values";
-// import { Audio } from "@remotion/media"
+import { Audio } from "@remotion/media"
 // import { OffthreadVideo } from "remotion";
 
 export type Props = {
@@ -48,10 +48,10 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
                       objectFit: "cover",
                       borderRadius: "0.5rem",
                     }}
-                    muted={false}
+                    muted={true}
                   />
                 ) : (
-                  <AbsoluteFill className="flex items-center justify-center text-white">
+                  <AbsoluteFill className="flex items-center justify-center text-white text-2xl">
                     No video URL for scene {i + 1}
                   </AbsoluteFill>
                 )}

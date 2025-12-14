@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Audio } from "@remotion/media";
+import { Audio } from "remotion";
 import { getCachedVideoUrl } from "../../lib/video-cache";
 
 type Props = {

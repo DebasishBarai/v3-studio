@@ -52,6 +52,7 @@ export const autoGenerateVideo = action({
 
     if (totalRequiredCredits === 0) {
       console.log('No credits required, All good!')
+      return
     }
 
     try {

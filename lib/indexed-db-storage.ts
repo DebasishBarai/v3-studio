@@ -218,6 +218,7 @@ class VideoStorage {
       const cached = await this.getVideoUrl(videoUrl);
       if (cached) {
         console.log('Returning cached video for:', videoUrl);
+        console.log("Cached video URL:", cached);
         return cached;
       }
 

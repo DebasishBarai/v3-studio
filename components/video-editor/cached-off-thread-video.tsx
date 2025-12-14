@@ -17,7 +17,10 @@ export const CachedOffthreadVideo: React.FC<Props> = ({ src, muted = true, style
     let mounted = true;
 
     getCachedVideoUrl(src).then((cachedUrl) => {
-      if (mounted) setLocalUrl(cachedUrl);
+      if (mounted) {
+        setLocalUrl(cachedUrl);
+        console.log("Cached video URL:", cachedUrl);
+      }
     });
 
     return () => {
