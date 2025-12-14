@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Audio } from "remotion";
+import { Html5Audio } from "remotion";
 import { getCachedVideoUrl } from "../../lib/video-cache";
 
 type Props = {
@@ -29,5 +29,5 @@ export const CachedAudio: React.FC<Props> = ({ src, volume = 1, loop = false }) 
     return <div>Loading audio...</div>;
   }
 
-  return <Audio src={localUrl} volume={volume} loop={loop} />;
+  return <Html5Audio src={localUrl} volume={volume} loop={loop} />;
 };
