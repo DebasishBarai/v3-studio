@@ -2,7 +2,7 @@
 
 import { v } from "convex/values";
 import { internal } from "../_generated/api";
-import { action } from "../_generated/server";
+import { action, internalAction } from "../_generated/server";
 import Replicate from "replicate";
 import { Id } from "../_generated/dataModel";
 
@@ -18,18 +18,40 @@ export const generateSceneVideo = action({
     sceneIndex: v.number(),
   },
   handler: async (ctx, args): Promise<{ videoStorageId: Id<'_storage'>, videoUrl: string }> => {
+    return await ctx.runAction(internal.video.generateVideo.internalGenerateSceneVideo, args)
+  }
+})
+
+export const internalGenerateSceneVideo = internalAction({
+  args: {
+    prompt: v.string(),
+    baseImageUrl: v.string(),
+    videoId: v.id('videos'),
+    sceneIndex: v.number(),
+    userId: v.optional(v.id('users'))
+  },
+  handler: async (ctx, args): Promise<{ videoStorageId: Id<'_storage'>, videoUrl: string }> => {
 
     console.log('generate scene video');
 
-    const identity = await ctx.auth.getUserIdentity();
+    let user = null
 
-    if (identity === null) {
-      throw new Error("Not authenticated");
+    if (!args.userId) {
+      const identity = await ctx.auth.getUserIdentity();
+
+      if (identity === null) {
+        throw new Error("Not authenticated");
+      }
+
+      user = await ctx.runQuery(internal.user.getInternalUser, {
+        subject: identity.subject,
+      });
+    } else {
+      user = await ctx.runQuery(internal.user.getInternalUserByUserId, {
+        userId: args.userId,
+      });
+
     }
-
-    const user = await ctx.runQuery(internal.user.getInternalUser, {
-      subject: identity.subject,
-    });
 
     if (!user) {
       throw new Error("User not found");
@@ -40,7 +62,7 @@ export const generateSceneVideo = action({
     }
 
     // Get video
-    const video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+    let video = await ctx.runQuery(internal.video.video.getInternalVideo, {
       id: args.videoId,
       userId: user._id,
     });
@@ -89,6 +111,12 @@ export const generateSceneVideo = action({
         throw new Error("Failed to generate URL for stored file");
       }
 
+      // Get video
+      video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+        id: args.videoId,
+        userId: user._id,
+      });
+
       // Update only the scenes array
       const updatedScenes = video.scenes.map((scene, index) =>
         index === args.sceneIndex
@@ -107,7 +135,7 @@ export const generateSceneVideo = action({
 
       // update credits
       await ctx.runMutation(internal.user.decreaseInternalCredits, {
-        subject: identity.subject,
+        subject: user.subject,
         amount: 5,
       });
       return { videoStorageId, videoUrl }
@@ -115,6 +143,12 @@ export const generateSceneVideo = action({
       console.error(error);
       throw error;
     } finally {
+      // Get video
+      video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+        id: args.videoId,
+        userId: user._id,
+      });
+
       // update scene videoInProcess
       const updatedScenesWithInProcess = video.scenes.map((scene, index) =>
         index === args.sceneIndex

@@ -1,7 +1,7 @@
 'use node'
 
 import { GoogleGenAI, Modality } from "@google/genai"
-import { action } from '../_generated/server'
+import { action, internalAction } from '../_generated/server'
 import { internal } from '../_generated/api'
 import { v } from "convex/values";
 import { aspectRatioValidator } from "../schema";
@@ -20,18 +20,41 @@ export const generateCharacterImage = action({
     characterIndex: v.number(),
   },
   handler: async (ctx, args): Promise<{ imageStorageId: Id<'_storage'>, imageUrl: string }> => {
+    return await ctx.runAction(internal.video.generateVideoImage.internalGenerateCharacterImage, args)
+  }
+})
+
+
+export const internalGenerateCharacterImage = internalAction({
+  args: {
+    prompt: v.string(),
+    aspectRatio: v.optional(aspectRatioValidator),
+    baseImageId: v.optional(v.id('_storage')),
+    videoId: v.id('videos'),
+    characterIndex: v.number(),
+    userId: v.optional(v.id('users')),
+  },
+  handler: async (ctx, args): Promise<{ imageStorageId: Id<'_storage'>, imageUrl: string }> => {
 
     console.log('generate character image');
 
-    const identity = await ctx.auth.getUserIdentity();
+    let user = null
 
-    if (identity === null) {
-      throw new Error("Not authenticated");
+    if (!args.userId) {
+      const identity = await ctx.auth.getUserIdentity();
+
+      if (identity === null) {
+        throw new Error("Not authenticated");
+      }
+
+      user = await ctx.runQuery(internal.user.getInternalUser, {
+        subject: identity.subject,
+      });
+    } else {
+      user = await ctx.runQuery(internal.user.getInternalUserByUserId, {
+        userId: args.userId,
+      });
     }
-
-    const user = await ctx.runQuery(internal.user.getInternalUser, {
-      subject: identity.subject,
-    });
 
     if (!user) {
       throw new Error("User not found");
@@ -42,7 +65,7 @@ export const generateCharacterImage = action({
     }
 
     // Get video
-    const video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+    let video = await ctx.runQuery(internal.video.video.getInternalVideo, {
       id: args.videoId,
       userId: user._id,
     });
@@ -141,6 +164,12 @@ export const generateCharacterImage = action({
               throw new Error("Failed to generate URL for stored file");
             }
 
+            // Get video
+            video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+              id: args.videoId,
+              userId: user._id,
+            });
+
             // Update only the characters array
             const updatedCharacters = video.characters.map((character, index) =>
               index === args.characterIndex
@@ -159,7 +188,7 @@ export const generateCharacterImage = action({
 
             // update credits
             await ctx.runMutation(internal.user.decreaseInternalCredits, {
-              subject: identity.subject,
+              subject: user.subject,
               amount: 5,
             });
 
@@ -178,6 +207,11 @@ export const generateCharacterImage = action({
       console.error(error);
       throw error;
     } finally {
+      // Get video
+      video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+        id: args.videoId,
+        userId: user._id,
+      });
       // update character InProcess
       const updatedCharacters = video.characters.map((character, index) =>
         index === args.characterIndex
@@ -207,19 +241,44 @@ export const generateSceneImage = action({
     sceneIndex: v.number(),
 
   },
+  handler: async (ctx, args): Promise<any> => {
+    return await ctx.runAction(internal.video.generateVideoImage.internalGenerateSceneImage, args)
+  }
+})
+
+
+export const internalGenerateSceneImage = internalAction({
+  args: {
+    prompt: v.string(),
+    aspectRatio: v.optional(aspectRatioValidator),
+    baseImageId: v.optional(v.id('_storage')),
+    characterImageIds: v.optional(v.array(v.id('_storage'))),
+    videoId: v.id('videos'),
+    sceneIndex: v.number(),
+    userId: v.optional(v.id('users')),
+
+  },
   handler: async (ctx, args) => {
 
     console.log('generate scene image');
 
-    const identity = await ctx.auth.getUserIdentity();
+    let user = null
 
-    if (identity === null) {
-      throw new Error("Not authenticated");
+    if (!args.userId) {
+      const identity = await ctx.auth.getUserIdentity();
+
+      if (identity === null) {
+        throw new Error("Not authenticated");
+      }
+
+      user = await ctx.runQuery(internal.user.getInternalUser, {
+        subject: identity.subject,
+      });
+    } else {
+      user = await ctx.runQuery(internal.user.getInternalUserByUserId, {
+        userId: args.userId,
+      });
     }
-
-    const user = await ctx.runQuery(internal.user.getInternalUser, {
-      subject: identity.subject,
-    });
 
     if (!user) {
       throw new Error("User not found");
@@ -230,7 +289,7 @@ export const generateSceneImage = action({
     }
 
     // Get video
-    const video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+    let video = await ctx.runQuery(internal.video.video.getInternalVideo, {
       id: args.videoId,
       userId: user._id,
     });
@@ -348,6 +407,12 @@ export const generateSceneImage = action({
               throw new Error("Failed to generate URL for stored file");
             }
 
+            // Get video
+            video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+              id: args.videoId,
+              userId: user._id,
+            });
+
             // Update only the scenes array
             const updatedScenes = video.scenes.map((scene, index) =>
               index === args.sceneIndex
@@ -366,7 +431,7 @@ export const generateSceneImage = action({
 
             // update credits
             await ctx.runMutation(internal.user.decreaseInternalCredits, {
-              subject: identity.subject,
+              subject: user.subject,
               amount: 5,
             });
 
@@ -384,6 +449,12 @@ export const generateSceneImage = action({
       console.error(error);
       throw error;
     } finally {
+      // Get video
+      video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+        id: args.videoId,
+        userId: user._id,
+      });
+
       // update scene videoInProcess
       const updatedScenesWithInProcess = video.scenes.map((scene, index) =>
         index === args.sceneIndex

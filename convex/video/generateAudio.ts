@@ -2,7 +2,7 @@
 
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js'
 import { v } from "convex/values";
-import { action } from "../_generated/server";
+import { action, internalAction } from "../_generated/server";
 import { internal } from "../_generated/api";
 import { Id } from "../_generated/dataModel";
 
@@ -24,17 +24,39 @@ export const generateAudio = action({
     sceneIndex: v.number(),
   },
   handler: async (ctx, args): Promise<{ audioStorageId: Id<'_storage'>, audioUrl: string }> => {
+    return await ctx.runAction(internal.video.generateAudio.internalGenerateAudio, args)
+  }
+})
+
+export const internalGenerateAudio = internalAction({
+  args: {
+    text: v.string(),
+    voiceId: v.string(),
+    videoId: v.id('videos'),
+    sceneIndex: v.number(),
+    userId: v.optional(v.id('users'))
+  },
+  handler: async (ctx, args): Promise<{ audioStorageId: Id<'_storage'>, audioUrl: string }> => {
     console.log('generate audio');
 
-    const identity = await ctx.auth.getUserIdentity();
+    let user = null
 
-    if (identity === null) {
-      throw new Error("Not authenticated");
+    if (!args.userId) {
+      const identity = await ctx.auth.getUserIdentity();
+
+      if (identity === null) {
+        throw new Error("Not authenticated");
+      }
+
+      user = await ctx.runQuery(internal.user.getInternalUser, {
+        subject: identity.subject,
+      });
+    } else {
+      user = await ctx.runQuery(internal.user.getInternalUserByUserId, {
+        userId: args.userId,
+      });
+
     }
-
-    const user = await ctx.runQuery(internal.user.getInternalUser, {
-      subject: identity.subject,
-    });
 
     if (!user) {
       throw new Error("User not found");
@@ -45,7 +67,7 @@ export const generateAudio = action({
     }
 
     // Get video
-    const video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+    let video = await ctx.runQuery(internal.video.video.getInternalVideo, {
       id: args.videoId,
       userId: user._id,
     });
@@ -128,6 +150,12 @@ export const generateAudio = action({
         endMs: word.end,
       }));
 
+      // Get video
+      video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+        id: args.videoId,
+        userId: user._id,
+      });
+
       // Update only the scenes array
       const updatedScenes = video.scenes.map((scene, index) =>
         index === args.sceneIndex
@@ -146,7 +174,7 @@ export const generateAudio = action({
 
       // update credits
       await ctx.runMutation(internal.user.decreaseInternalCredits, {
-        subject: identity.subject,
+        subject: user.subject,
         amount: 5,
       });
 
@@ -155,6 +183,11 @@ export const generateAudio = action({
       console.error(error);
       throw error;
     } finally {
+      // Get video
+      video = await ctx.runQuery(internal.video.video.getInternalVideo, {
+        id: args.videoId,
+        userId: user._id,
+      });
       // update scene audioInProcess
       const updatedScenesWithInProcess = video.scenes.map((scene, index) =>
         index === args.sceneIndex

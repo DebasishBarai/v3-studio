@@ -142,6 +142,16 @@ export const getInternalUser = internalQuery({
   }
 })
 
+// this is required for the workflow queries
+export const getInternalUserByUserId = internalQuery({
+  args: { userId: v.id('users') },
+  handler: async (ctx, args): Promise<Doc<'users'> | null> => {
+    const user = await ctx.db.get(args.userId);
+
+    return user;
+  }
+})
+
 export const createInternalUser = internalMutation({
   args: {
     subject: v.string(),

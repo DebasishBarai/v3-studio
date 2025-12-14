@@ -3,7 +3,7 @@
 import { api } from "@/convex/_generated/api"
 import { Doc, Id } from '@/convex/_generated/dataModel'
 import { useAction, useMutation, useQuery } from "convex/react"
-import { ChevronDown, ChevronUp, Download, ImagePlay, Play, Plus, Save, Settings, User, Video } from 'lucide-react'
+import { ChevronDown, ChevronUp, Cog, Download, ImagePlay, Play, Plus, Save, Settings, User, Video } from 'lucide-react'
 import { useEffect, useState, useRef } from 'react'
 import { toast } from "sonner"
 import { CharacterCard } from "@/components/ui/custom/character-card"
@@ -18,8 +18,9 @@ import { cn } from "@/lib/utils"
 import { musicValidator, voiceValidator } from "@/convex/schema"
 import { Infer } from "convex/values"
 import { CaptionStyleControls } from "./caption-style-control"
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider, useDrag, useDrop } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { AutoGenerateProgressDialog } from "@/components/video-editor/auto-generate-dialog"
 
 
 const ItemType = 'SCENE';
@@ -98,6 +99,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const generateSceneImageAction = useAction(api.video.generateVideoImage.generateSceneImage);
   const generateSceneVideoAction = useAction(api.video.generateVideo.generateSceneVideo)
   const generateSceneAudioAction = useAction(api.video.generateAudio.generateAudio);
+  const autoGenerateVideoAction = useAction(api.video.autoGenerateVideo.autoGenerateVideo);
   const [generatingCharacter, setGeneratingCharacter] = useState<number | null>(null);
   const [generatingScene, setGeneratingScene] = useState<number | null>(null);
   const [modifyPrompts, setModifyPrompts] = useState<Record<number, string>>({});
@@ -246,6 +248,10 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
         <div className="text-foreground text-xl">Loading video...</div>
       </div>
     );
+  }
+
+  if (video.autoGenerate === true) {
+    return <AutoGenerateProgressDialog video={video} />
   }
 
   const toggleSection = (section: keyof typeof expandedSections) => {
@@ -656,6 +662,35 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
     });
   };
 
+  const autoGenerate = async () => {
+    try {
+      if (video.autoGenerate) {
+        toast.info('Auto Generate is already in progress')
+        return
+      }
+
+      if (video.videoUrl) {
+        toast.error('Video is already rendered!');
+        return;
+      }
+
+      if (video.renderId) {
+        toast.error('Video is already rendering!');
+        return;
+      }
+
+      toast.info('Auto Generating video...')
+
+      await autoGenerateVideoAction({
+        videoId: id,
+      });
+      toast.success('Auto Generate started successfully!')
+    } catch (error) {
+      console.error('Error auto generating video:', error);
+      toast.error('An error occurred while auto generating video');
+    }
+  }
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="w-full min-h-screen bg-background text-foreground pt-0 md:px-4 lg:px-8">
@@ -692,6 +727,18 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                 >
                   <Download className="w-5 h-5" />
                   Download Video
+                </button>
+              )}
+              {!videoData.videoUrl && (
+                <button
+                  onClick={autoGenerate}
+                  disabled={isSaving}
+                  className={cn("mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md")}
+                >
+                  <Cog className="w-5 h-5" />
+                  <span className='hidden md:inline'>
+                    Auto Generate
+                  </span>
                 </button>
               )}
               {/* Render button */}
