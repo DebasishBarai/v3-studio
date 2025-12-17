@@ -249,6 +249,8 @@ export const CaptionStyleControls = ({
 
             {/* Mobile: Vertical Stack */}
             <div className="lg:hidden space-y-4">
+
+              {/* Text Color */}
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-white/90">Text Color</label>
                 <input
@@ -259,6 +261,7 @@ export const CaptionStyleControls = ({
                 />
               </div>
 
+              {/* Background Color */}
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-white/90">Background Color</label>
                 <input
@@ -269,6 +272,7 @@ export const CaptionStyleControls = ({
                 />
               </div>
 
+              {/* Background Opacity */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-white/90 block">
                   Background Opacity: {value.backgroundOpacity.toFixed(2)}
@@ -284,6 +288,7 @@ export const CaptionStyleControls = ({
                 />
               </div>
 
+              {/* Text Size */}
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-white/90">Text Size</label>
                 <select
@@ -302,7 +307,21 @@ export const CaptionStyleControls = ({
                 </select>
               </div>
 
+              {/* Position */}
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-white/90">Position</label>
+                <select
+                  value={value.position}
+                  onChange={(e) => update("position", e.target.value)}
+                  className="border border-white/20 rounded-md px-3 py-2 text-sm bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer [&>option]:bg-gray-800 [&>option]:text-white"
+                >
+                  <option value="top">Top</option>
+                  <option value="middle">Middle</option>
+                  <option value="bottom">Bottom</option>
+                </select>
+              </div>
 
+              {/* Font Family */}
               <div className="flex flex-col items-center gap-2">
                 <label className="text-sm font-medium text-white/90">
                   Font Family
@@ -330,19 +349,23 @@ export const CaptionStyleControls = ({
                 </select>
               </div>
 
+              {/* Words per batch */}
               <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-white/90">Position</label>
+                <label className="text-sm font-medium text-white/90">Words</label>
                 <select
-                  value={value.position}
-                  onChange={(e) => update("position", e.target.value)}
+                  value={value.wordsPerBatch}
+                  onChange={(e) => update("wordsPerBatch", Number(e.target.value))}
                   className="border border-white/20 rounded-md px-3 py-2 text-sm bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer [&>option]:bg-gray-800 [&>option]:text-white"
                 >
-                  <option value="top">Top</option>
-                  <option value="middle">Middle</option>
-                  <option value="bottom">Bottom</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
                 </select>
               </div>
 
+              {/* Text Transform */}
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-white/90">
                   Text Transform
@@ -363,6 +386,7 @@ export const CaptionStyleControls = ({
                 </select>
               </div>
 
+              {/* Show Background */}
               <div className="flex items-center justify-between pt-1">
                 <label className="text-sm font-medium text-white/90">Show Background</label>
                 <input
@@ -373,6 +397,7 @@ export const CaptionStyleControls = ({
                 />
               </div>
 
+              {/* Show Caption */}
               <div className="flex items-center justify-between pt-1">
                 <label className="text-sm font-medium text-white/90">Show Caption</label>
                 <input
@@ -387,6 +412,7 @@ export const CaptionStyleControls = ({
 
             {/* Desktop: Horizontal Grid */}
             <div className="hidden lg:grid lg:grid-cols-6 lg:gap-4 lg:items-center">
+
               {/* Text Color */}
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-medium text-white/90">Text Color</label>
@@ -458,6 +484,7 @@ export const CaptionStyleControls = ({
                 </select>
               </div>
 
+              {/* Font Family */}
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-medium text-white/90">
                   Font
@@ -485,6 +512,23 @@ export const CaptionStyleControls = ({
                 </select>
               </div>
 
+              {/* Words per batch */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-white/90">Words</label>
+                <select
+                  value={value.wordsPerBatch}
+                  onChange={(e) => update("wordsPerBatch", Number(e.target.value))}
+                  className="border border-white/20 rounded-md px-2 py-1.5 text-xs bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer [&>option]:bg-gray-800 [&>option]:text-white"
+                >
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+
+              {/* Text Transform */}
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-medium text-white/90">
                   Transform

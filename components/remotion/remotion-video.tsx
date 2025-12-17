@@ -1,14 +1,14 @@
 "use client";
 
 import { AbsoluteFill, Img, Series, spring, staticFile, useCurrentFrame } from "remotion";
-// import { CachedAudio } from "../../components/video-editor/cached-audio";
+import { CachedAudio } from "../../components/video-editor/cached-audio";
 import { Doc } from "../../convex/_generated/dataModel";
-// import { CachedOffthreadVideo } from "../../components/video-editor/cached-off-thread-video";
+import { CachedOffthreadVideo } from "../../components/video-editor/cached-off-thread-video";
 import { loadFont } from '@remotion/fonts';
 import { captionStyleSchema } from "@/convex/schema";
 import { Infer } from "convex/values";
-import { Html5Audio } from "remotion"
-import { OffthreadVideo } from "remotion";
+// import { Html5Audio } from "remotion"
+// import { OffthreadVideo } from "remotion";
 
 export type Props = {
   video: Doc<"videos"> | null;
@@ -58,11 +58,11 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
 
                 {/* Add Audio for each scene */}
                 {scene.audioUrl && (
-                  <Html5Audio src={scene.audioUrl} volume={1} /> // change to Audio for lambda
+                  <CachedAudio src={scene.audioUrl} volume={1} /> // change to Audio for lambda
                 )}
 
                 {scene.videoUrl ? (
-                  <OffthreadVideo // change to OffthreadVideo for lambda
+                  <CachedOffthreadVideo // change to OffthreadVideo for lambda
                     src={scene.videoUrl}
                     style={{
                       width: "100%",
@@ -110,7 +110,7 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
         </AbsoluteFill>
       )}
       {video && video.music && (
-        <Html5Audio src={video.music.previewUrl} loop={true} volume={0.1} /> // change to Audio for lambda
+        <CachedAudio src={video.music.previewUrl} loop={true} volume={0.1} /> // change to Audio for lambda
       )}
     </AbsoluteFill>
   );
@@ -124,13 +124,30 @@ const Caption: React.FC<{
 
   if (!words) return null;
 
-  const currentWord = words.find(word => {
-    const wordStartFrame = (word.startMs / 1000) * 30;
-    const wordEndFrame = (word.endMs / 1000) * 30;
-    return frame >= wordStartFrame && frame <= wordEndFrame;
+  // Get words per batch setting, default to 1
+  const wordsPerBatch = captionStyle?.wordsPerBatch ?? 1;
+
+  // Find active word index
+  const activeWordIndex = words.findIndex(word => {
+    const start = (word.startMs / 1000) * 30;
+    const end = (word.endMs / 1000) * 30;
+    return frame >= start && frame <= end;
   });
 
-  if (!currentWord) return null;
+  if (activeWordIndex === -1) return null;
+
+  // Calculate batch start index
+  const batchStartIndex =
+    Math.floor(activeWordIndex / wordsPerBatch) * wordsPerBatch;
+
+  // Get batched words
+  const currentBatch = words.slice(
+    batchStartIndex,
+    batchStartIndex + wordsPerBatch
+  );
+
+  // This is the animated word
+  const currentWord = words[activeWordIndex];
 
   // Default values
   const textColor = captionStyle?.textColor ?? "#FFFC00";
@@ -188,7 +205,6 @@ const Caption: React.FC<{
     const b = parseInt(hex.slice(5, 7), 16);
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
   };
-  if (!currentWord) return null;
 
   return (
     <AbsoluteFill
@@ -211,11 +227,30 @@ const Caption: React.FC<{
           lineHeight: 1.3,
           fontFamily: fontFamily,
           textTransform: textTransform,
-          transform: `scale(${scale}) translateY(${translateY}px) rotate(${rotate}deg)`,
+          // transform: `scale(${scale}) translateY(${translateY}px) rotate(${rotate}deg)`,
           ...advancedStyles
         }}
       >
-        {currentWord.text}
+        {/* Display words with space between them */}
+        {currentBatch.map((word, index) => {
+          const isActive = word === currentWord;
+
+          return (
+            <span
+              key={index}
+              style={{
+                display: "inline-block",
+                marginRight: "0.35rem",
+                color: isActive ? textColor : "#ffffff",
+                transform: isActive
+                  ? `scale(${scale}) translateY(${translateY}px) rotate(${rotate}deg)`
+                  : "none",
+              }}
+            >
+              {word.text}
+            </span>
+          );
+        })}
       </div>
     </AbsoluteFill>
   );
