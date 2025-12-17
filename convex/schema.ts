@@ -1,5 +1,5 @@
 import { defineSchema, defineTable } from "convex/server";
-import { v } from "convex/values";
+import { Infer, v } from "convex/values";
 
 export const voiceValidator = v.union(
   // extra voices
@@ -119,7 +119,10 @@ export const captionStyleSchema = v.object({
     v.literal('2rem'),
     v.literal('2.5rem'),
     v.literal('3rem'),
-    v.literal('3.5rem')
+    v.literal('3.5rem'),
+    v.literal('4rem'),
+    v.literal('4.5rem'),
+    v.literal('5rem')
   ),
   position: v.union(
     v.literal('top'),
@@ -132,6 +135,44 @@ export const captionStyleSchema = v.object({
     v.literal('center'),
     v.literal('right')
   )),
+  fontWeight: v.optional(v.union(
+    v.literal('400'),
+    v.literal('500'),
+    v.literal('600'),
+    v.literal('700'),
+    v.literal('800'),
+    v.literal('900')
+  )),
+  wordsPerBatch: v.optional(v.union(
+    v.literal(1),   // Single word
+    v.literal(2),   // Two words
+    v.literal(3),   // Three words
+    v.literal(4),   // Four words
+    v.literal(5)    // Five words
+  )),
+  textTransform: v.optional(v.union(
+    v.literal('none'),
+    v.literal('uppercase'),
+    v.literal('lowercase'),
+    v.literal('capitalize')
+  )),
+  transitionStyle: v.optional(v.union(
+    v.literal('none'),
+    v.literal('fade'),
+    v.literal('scale'),
+    v.literal('slide-up'),
+    v.literal('slide-down')
+  )),
+  fontFamily: v.optional(v.union(
+    v.literal('Komika'),
+    v.literal('Pacifico'),
+    v.literal('Bangers'),
+    v.literal('Coiny'),
+    v.literal('Komika'),
+  )),
+  showCaption: v.optional(v.boolean()),
+  // Advanced styling - stores additional CSS properties as JSON string
+  advancedStyle: v.optional(v.string())
 });
 
 export default defineSchema({
@@ -217,3 +258,97 @@ export default defineSchema({
   })
     .index('by_userId', ['userId'])
 })
+
+
+// Create a TypeScript type from your validator
+export type CaptionStyleType = Infer<typeof captionStyleSchema>;
+
+// Preset configurations
+export const CAPTION_PRESETS: Record<string, CaptionStyleType> = {
+  tiktok: {
+    textColor: '#FFFFFF',
+    backgroundColor: '#000000',
+    backgroundOpacity: 0,
+    showBackground: false,
+    textSize: '4rem' as const,
+    fontWeight: '900' as const,
+    textTransform: 'uppercase' as const,
+    position: 'middle' as const,
+    textAlign: 'center' as const,
+    wordsPerBatch: 2,
+    transitionStyle: 'scale' as const,
+    fontFamily: 'Coiny',
+    showCaption: true,
+  },
+
+  youtubeShorts: {
+    textColor: '#FFCD00',
+    backgroundColor: 'transparent',
+    backgroundOpacity: 0,
+    showBackground: false,
+    textSize: '3.5rem' as const,  // 13px in the original, but keeping your rem size
+    fontWeight: '900' as const,
+    textTransform: 'capitalize' as const,
+    position: 'bottom' as const,
+    textAlign: 'center' as const,
+    wordsPerBatch: 3,
+    transitionStyle: 'scale' as const,
+    fontFamily: 'Komika',  // Added Komika font family
+    showCaption: true,
+    advancedStyle: JSON.stringify({
+      textShadow: '0.1em 0.1em 0.1em #000, 0.1em -0.1em 0.1em #000, -0.1em 0.1em 0.1em #000, -0.1em -0.1em 0.1em #000, 0.1em 0.1em 0.2em #000, 0.1em -0.1em 0.2em #000, -0.1em 0.1em 0.2em #000, -0.1em -0.1em 0.2em #000, 0px 0px 0.1em #000, 0px 0px 0.2em #000, 0px 0px 0.3em #000, 0px 0px 0.4em #000, 0px 0px 0.5em #000, 0px 0px 0.6em #000',
+      padding: '5px 10px',
+      borderRadius: '10px',
+      letterSpacing: 'normal',  // Explicitly set to match original
+      lineHeight: 'normal'  // Explicitly set to match original
+    })
+  },
+
+  instagramReels: {
+    textColor: '#FFCD00',
+    backgroundColor: '#000000',
+    backgroundOpacity: 0.7,
+    showBackground: true,
+    textSize: '3rem' as const,
+    fontWeight: '700' as const,
+    textTransform: 'none' as const,
+    position: 'bottom' as const,
+    textAlign: 'center' as const,
+    wordsPerBatch: 3,
+    transitionStyle: 'fade' as const,
+    fontFamily: 'Coiny' as const,
+    showCaption: true,
+  },
+
+  classic: {
+    textColor: '#FFFFFF',
+    backgroundColor: '#000000',
+    backgroundOpacity: 0.8,
+    showBackground: true,
+    textSize: '2rem' as const,
+    fontWeight: '600' as const,
+    textTransform: 'none' as const,
+    position: 'bottom' as const,
+    textAlign: 'center' as const,
+    wordsPerBatch: 5,
+    transitionStyle: 'none' as const,
+    fontFamily: 'Pacifico',
+    showCaption: true,
+  },
+
+  minimal: {
+    textColor: '#FFFFFF',
+    backgroundColor: '#000000',
+    backgroundOpacity: 0,
+    showBackground: false,
+    textSize: '3rem' as const,
+    fontWeight: '500' as const,
+    textTransform: 'none' as const,
+    position: 'middle' as const,
+    textAlign: 'center' as const,
+    wordsPerBatch: 1,
+    transitionStyle: 'fade' as const,
+    fontFamily: 'Bangers',
+    showCaption: true,
+  }
+} as const;

@@ -18,24 +18,22 @@ export const RemotionRoot: React.FC = () => {
           video: null,
           isSubscribed: false,
         }}
-      // required only for rendering in lambda
-      /*
-      calculateMetadata={async ({ props }) => {
-        if (!props.video) {
-          return {
-            durationInFrames: 30,
-            width: 1080,
-            height: 1920,
+        // required only for rendering in lambda
+        calculateMetadata={async ({ props }) => {
+          if (!props.video) {
+            return {
+              durationInFrames: 30,
+              width: 1080,
+              height: 1920,
+            }
           }
-        }
-        const totalDuration = await calculateTotalDurationInSecs(props.video);
-        return {
-          durationInFrames: totalDuration * 30,
-          width: props.video.aspectRatio === '16:9' ? 1920 : 1080,
-          height: props.video.aspectRatio === '16:9' ? 1080 : 1920,
-        };
-      }}
-      */
+          const totalDuration = await calculateTotalDurationInSecs(props.video);
+          return {
+            durationInFrames: totalDuration * 30,
+            width: props.video.aspectRatio === '16:9' ? 1920 : 1080,
+            height: props.video.aspectRatio === '16:9' ? 1080 : 1920,
+          };
+        }}
       // required only for rendering in lambda
       />
     </>

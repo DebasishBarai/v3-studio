@@ -1,28 +1,50 @@
 "use client";
 
-import { AbsoluteFill, Img, Series, staticFile, useCurrentFrame } from "remotion";
-import { CachedAudio } from "../../components/video-editor/cached-audio";
+import { AbsoluteFill, Img, Series, spring, staticFile, useCurrentFrame } from "remotion";
+// import { CachedAudio } from "../../components/video-editor/cached-audio";
 import { Doc } from "../../convex/_generated/dataModel";
-import { CachedOffthreadVideo } from "../../components/video-editor/cached-off-thread-video";
+// import { CachedOffthreadVideo } from "../../components/video-editor/cached-off-thread-video";
 import { loadFont } from '@remotion/fonts';
 import { captionStyleSchema } from "@/convex/schema";
 import { Infer } from "convex/values";
-// import { Audio } from "@remotion/media"
-// import { OffthreadVideo } from "remotion";
+import { Html5Audio } from "remotion"
+import { OffthreadVideo } from "remotion";
 
 export type Props = {
   video: Doc<"videos"> | null;
   isSubscribed?: boolean;
 };
 
-const fontFamily = "Pacifico"
-
 loadFont({
-  family: fontFamily,
-  url: staticFile("/font/Pacifico-Regular.ttf"),
+  family: 'Pacifico',
+  url: staticFile("/font/Pacifico.ttf"),
   weight: "400",
 }).then(() => {
-  console.log("Font loaded successfully");
+  console.log("Font Komika loaded successfully");
+})
+
+loadFont({
+  family: 'Bangers',
+  url: staticFile("/font/Bangers.ttf"),
+  weight: "400",
+}).then(() => {
+  console.log("Font Komika loaded successfully");
+})
+
+loadFont({
+  family: 'Komika',
+  url: staticFile("/font/Komika.ttf"),
+  weight: "400",
+}).then(() => {
+  console.log("Font Komika loaded successfully");
+})
+
+loadFont({
+  family: 'Coiny',
+  url: staticFile("/font/Coiny.ttf"),
+  weight: "400",
+}).then(() => {
+  console.log("Font Komika loaded successfully");
 })
 
 export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
@@ -36,11 +58,11 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
 
                 {/* Add Audio for each scene */}
                 {scene.audioUrl && (
-                  <CachedAudio src={scene.audioUrl} volume={1} /> // change to Audio for lambda
+                  <Html5Audio src={scene.audioUrl} volume={1} /> // change to Audio for lambda
                 )}
 
                 {scene.videoUrl ? (
-                  <CachedOffthreadVideo // change to OffthreadVideo for lambda
+                  <OffthreadVideo // change to OffthreadVideo for lambda
                     src={scene.videoUrl}
                     style={{
                       width: "100%",
@@ -56,7 +78,7 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
                   </AbsoluteFill>
                 )}
                 {/* Add Caption */}
-                {scene.words && scene.words.length > 0 && (
+                {scene.words && scene.words.length > 0 && video?.captionStyle?.showCaption && (
                   <Caption
                     captionStyle={video?.captionStyle}
                     words={scene.words}
@@ -81,14 +103,14 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
               fontSize: '1.5rem',      // text-2xl
               fontWeight: 'bold',      // font-bold
               color: '#eab308',        // text-yellow-500
-              fontFamily: fontFamily,
+              fontFamily: 'Pacifico',
               marginLeft: '10px'
             }}>V3 Studio</h1>
           </div>
         </AbsoluteFill>
       )}
       {video && video.music && (
-        <CachedAudio src={video.music.previewUrl} loop={true} volume={0.1} /> // change to Audio for lambda
+        <Html5Audio src={video.music.previewUrl} loop={true} volume={0.1} /> // change to Audio for lambda
       )}
     </AbsoluteFill>
   );
@@ -108,14 +130,49 @@ const Caption: React.FC<{
     return frame >= wordStartFrame && frame <= wordEndFrame;
   });
 
+  if (!currentWord) return null;
+
   // Default values
-  const textColor = captionStyle?.textColor ?? "#ffffff";
+  const textColor = captionStyle?.textColor ?? "#FFFC00";
   const backgroundColor = captionStyle?.backgroundColor ?? "#000000";
-  const backgroundOpacity = captionStyle?.backgroundOpacity ?? 0.35;
-  const textSize = captionStyle?.textSize ?? "2.5rem";
+  const backgroundOpacity = captionStyle?.backgroundOpacity ?? 0.9;
+  const fontSize = captionStyle?.textSize ?? "3.5rem";
   const position = captionStyle?.position ?? "bottom";
   const showBackground = captionStyle?.showBackground ?? true;
   const textAlign = captionStyle?.textAlign ?? "center";
+  const fontFamily = captionStyle?.fontFamily ?? "Pacifico"
+  const textTransform = captionStyle?.textTransform ?? "none"
+
+  const wordStartFrame = (currentWord.startMs / 1000) * 30;
+  const localFrame = Math.max(0, frame - wordStartFrame);
+  // Bounce animation
+  const bounce = spring({
+    fps: 30,
+    frame: localFrame,
+    from: 0,
+    to: 1,
+    config: {
+      damping: 8,
+      stiffness: 300,
+    },
+  });
+
+  // Scale animation
+  const scale = 0.9 + bounce * 0.3;
+
+  // Vertical movement
+  const translateY = (1 - bounce) * 15;
+
+  // Glow effect
+  const glowIntensity = Math.sin(frame / 8) * 0.3 + 0.7;
+
+  // Rotate slightly for dynamic feel
+  const rotate = Math.sin(frame / 15) * 2;
+
+  // Parse the advanced styles
+  const advancedStyles = captionStyle?.advancedStyle
+    ? JSON.parse(captionStyle.advancedStyle)
+    : {};
 
   // Position mapping
   const positionStyles = {
@@ -144,7 +201,7 @@ const Caption: React.FC<{
     >
       <div
         style={{
-          fontSize: textSize,
+          fontSize: fontSize,
           color: textColor,
           textAlign: textAlign as "left" | "center" | "right",
           background: showBackground ? hexToRgba(backgroundColor, backgroundOpacity) : "transparent",
@@ -152,6 +209,10 @@ const Caption: React.FC<{
           borderRadius: showBackground ? "0.5rem" : "0",
           maxWidth: "90%",
           lineHeight: 1.3,
+          fontFamily: fontFamily,
+          textTransform: textTransform,
+          transform: `scale(${scale}) translateY(${translateY}px) rotate(${rotate}deg)`,
+          ...advancedStyles
         }}
       >
         {currentWord.text}
