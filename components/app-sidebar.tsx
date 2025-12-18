@@ -101,6 +101,8 @@ export function AppSidebar() {
 
   const addUser = useAction(api.user.addUser)
 
+  const trackSignin = useAction(api.affiliates.firstpromoter.trackSignin)
+
   useEffect(() => {
     // firstpromoter affiliate code
     // Get FirstPromoter tracking cookie
@@ -108,7 +110,11 @@ export function AppSidebar() {
       .split('; ')
       .find(row => row.startsWith('_fprom_tid='))
       ?.split('=')[1];
+    console.log(fpromTid)
     // firstpromoter affiliate code
+    if (fpromTid) {
+      trackSignin({ fpromTid })
+    }
 
     if (!user) {
 
@@ -119,7 +125,7 @@ export function AppSidebar() {
         // firstpromoter affiliate code
       )
     }
-  }, [user, addUser])
+  }, [user, addUser, trackSignin])
 
   const credits = user?.credits ?? 0;
 

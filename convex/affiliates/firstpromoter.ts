@@ -1,9 +1,31 @@
 import { v } from "convex/values";
-import { internalAction } from "../_generated/server";
+import { action, internalAction } from "../_generated/server";
+import { internal } from "../_generated/api";
 
 /**
  * Track signup/referral when user registers
  */
+
+export const trackSignin = action({
+  args: {
+    fpromTid: v.string(),
+  },
+  handler: async (ctx, args) => {
+    console.log('inside track sign in')
+    console.log(args.fpromTid)
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (identity === null) {
+      throw new Error("Not authenticated");
+    }
+
+    await ctx.runAction(internal.affiliates.firstpromoter.trackSignup, {
+      uid: identity.subject, // Use Clerk subject as UID
+      tid: args.fpromTid,
+    })
+  },
+})
+
 export const trackSignup = internalAction({
   args: {
     email: v.optional(v.string()),
