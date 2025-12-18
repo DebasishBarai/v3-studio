@@ -1,7 +1,7 @@
 'use node'
 
 import { GoogleGenAI } from "@google/genai";
-import { videoGenerationPrompt } from "../helper";
+import { videoGenerationPrompt, videoGenerationPromptDramatic } from "../helper";
 import { v } from "convex/values";
 import { action } from "../_generated/server";
 import { styleValidator, musicValidator, aspectRatioValidator, voiceValidator } from "../schema";
@@ -22,6 +22,7 @@ export const createVideoBlueprint = action({
     aspectRatio: aspectRatioValidator,
     numberOfImagesPerPrompt: v.number(),
     generateMultipleAngles: v.boolean(),
+    storyTellingStyle: v.optional(v.union(v.literal('default'), v.literal('dramatic'))),
   },
   handler: async (ctx, args): Promise<Id<'videos'>> => {
     const identity = await ctx.auth.getUserIdentity();
@@ -43,7 +44,9 @@ export const createVideoBlueprint = action({
     }
 
     console.log('create video');
-    const prompt = videoGenerationPrompt(args.prompt, args.style, args.durationInSecs, args.aspectRatio);
+
+    const prompt = (args.storyTellingStyle === 'dramatic') ? videoGenerationPromptDramatic(args.prompt, args.style, args.durationInSecs, args.aspectRatio) :
+      videoGenerationPrompt(args.prompt, args.style, args.durationInSecs, args.aspectRatio);
 
     const response = await genai.models.generateContent({
       model: "gemini-2.5-flash",
@@ -80,6 +83,7 @@ export const createVideoBlueprint = action({
       title: blueprint.title,
       characters: blueprint.characters,
       scenes: blueprint.scenes,
+      storyTellingStyle: args.storyTellingStyle,
     })
 
     // update credits

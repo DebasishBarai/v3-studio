@@ -116,6 +116,7 @@ export const createInternalVideo = internalMutation({
     title: v.optional(v.string()),
     characters: v.array(characterSchema),
     scenes: v.array(sceneSchema),
+    storyTellingStyle: v.optional(v.union(v.literal('default'), v.literal('dramatic'))),
   },
   handler: async (ctx, args): Promise<Id<'videos'>> => {
     const video = await ctx.db
@@ -132,6 +133,7 @@ export const createInternalVideo = internalMutation({
         title: args.title,
         characters: args.characters,
         scenes: args.scenes,
+        storyTellingStyle: args.storyTellingStyle,
       })
 
     return video

@@ -37,6 +37,7 @@ export default function VideoCreatorPage() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [selectedAspectRatio, setSelectedAspectRatio] = useState<string | null>(null);
   const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
+  const [storyTellingStyle, setStoryTellingStyle] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter()
@@ -159,10 +160,11 @@ export default function VideoCreatorPage() {
   };
 
   const generateVideo = async () => {
-    if (!prompt || !selectedStyle || !selectedMusic || !selectedVoice || !selectedAspectRatio || !selectedDuration) {
+    if (!prompt || !selectedStyle || !selectedMusic || !selectedVoice || !selectedAspectRatio || !selectedDuration || !storyTellingStyle) {
       toast.error('Please fill in all the required fields');
       return;
     }
+
     try {
       setIsLoading(true);
       const videoId = await createVideoBlueprint({
@@ -172,6 +174,7 @@ export default function VideoCreatorPage() {
         voice: voices.find(s => s.id === selectedVoice)!.voice as Infer<typeof voiceValidator>,
         aspectRatio: aspectRatios.find(s => s.id === selectedAspectRatio)!.label as Infer<typeof aspectRatioValidator>,
         durationInSecs: selectedDuration,
+        storyTellingStyle: storyTellingStyle === 'dramatic' ? 'dramatic' : 'default',
         numberOfImagesPerPrompt: 1,
         generateMultipleAngles: false,
       });
@@ -187,6 +190,7 @@ export default function VideoCreatorPage() {
       setSelectedVoice(null);
       setSelectedAspectRatio(null);
       setSelectedDuration(null);
+      setStoryTellingStyle(null);
     }
   }
 
@@ -313,6 +317,37 @@ export default function VideoCreatorPage() {
             </div>
           </div>
 
+          {/* Storytelling Style Section */}
+          <div className="p-6 border border-zinc-800 rounded-xl bg-zinc-900/50">
+            <div className="flex items-center gap-2 mb-2">
+              <Film className="w-5 h-5 text-orange-500" />
+              <h2 className="font-bold text-xl">Story telling style</h2>
+            </div>
+            <p className="text-gray-400 mb-4">Set the style of your video.</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <button
+                onClick={() => setStoryTellingStyle('default')}
+                className={`bg-zinc-900 rounded-lg border cursor-pointer p-4 text-center transition ${storyTellingStyle === 'default'
+                  ? 'border-orange-500 bg-orange-500/10'
+                  : 'border-zinc-800 hover:border-orange-400'
+                  }`}
+              >
+                <p className="font-semibold text-lg">{'Default'}</p>
+                <p className="text-xs text-gray-400 mt-1">{'Default style'}</p>
+              </button>
+
+              <button
+                onClick={() => setStoryTellingStyle('dramatic')}
+                className={`bg-zinc-900 rounded-lg border cursor-pointer p-4 text-center transition ${storyTellingStyle === 'dramatic'
+                  ? 'border-orange-500 bg-orange-500/10'
+                  : 'border-zinc-800 hover:border-orange-400'
+                  }`}
+              >
+                <p className="font-semibold text-lg">{'Dramatic'}</p>
+                <p className="text-xs text-gray-400 mt-1">{'Dramatic style'}</p>
+              </button>
+            </div>
+          </div>
           {/* Background Music Section */}
           <div className="p-6 border border-zinc-800 rounded-xl bg-zinc-900/50">
             <div className="flex items-center gap-2 mb-2">
@@ -409,19 +444,25 @@ export default function VideoCreatorPage() {
               <div className="flex justify-between">
                 <span className="text-gray-400">Style:</span>
                 <span className={selectedStyle ? 'text-green-400' : 'text-gray-500'}>
-                  {selectedStyle ? styles.find(s => s.id === selectedStyle)?.name : 'Not set'}
+                  {selectedStyle ? `✓ ${styles.find(s => s.id === selectedStyle)?.name}` : 'Not set'}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Aspect Ratio:</span>
                 <span className={selectedAspectRatio ? 'text-green-400' : 'text-gray-500'}>
-                  {selectedAspectRatio || 'Not set'}
+                  {selectedAspectRatio ? `✓ ${selectedAspectRatio}` : 'Not set'}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Duration:</span>
                 <span className={selectedDuration ? 'text-green-400' : 'text-gray-500'}>
-                  {selectedDuration ? `${selectedDuration}s` : 'Not set'}
+                  {selectedDuration ? `✓ ${selectedDuration}s` : 'Not set'}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Story telling style:</span>
+                <span className={storyTellingStyle ? 'text-green-400' : 'text-gray-500'}>
+                  {storyTellingStyle ? `✓ ${storyTellingStyle}` : 'Not set'}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -433,7 +474,7 @@ export default function VideoCreatorPage() {
               <div className="flex justify-between">
                 <span className="text-gray-400">Voice:</span>
                 <span className={selectedVoice ? 'text-green-400' : 'text-gray-500'}>
-                  {selectedVoice ? voices.find(v => v.id === selectedVoice)?.voice.name : 'Not set'}
+                  {selectedVoice ? `✓ ${voices.find(v => v.id === selectedVoice)?.voice.name}` : 'Not set'}
                 </span>
               </div>
             </div>

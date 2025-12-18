@@ -10,8 +10,8 @@ export const voiceValidator = v.union(
   v.object({ name: v.literal('Cindy'), gender: v.literal('Female'), voiceId: v.literal('iCrDUkL56s3C8sCRl7wb'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/database/user/sD92HnMHS9WZLXKNTKxmnC8XmJ32/voices/iCrDUkL56s3C8sCRl7wb/CYu7JBN3ynOLysW29clt.mp3'), }),
   v.object({ name: v.literal('Amelia'), gender: v.literal('Female'), voiceId: v.literal('ZF6FPAbjXT4488VcRRnw'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/custom/voices/ZF6FPAbjXT4488VcRRnw/PXswrdJcgsGr8VdoVA43.mp3'), }),
   v.object({ name: v.literal('Caroline'), gender: v.literal('Female'), voiceId: v.literal('tnSpp4vdxKPjI9w0GnoV'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/custom/voices/tnSpp4vdxKPjI9w0GnoV/LiIyxRT1qFJ1QJPr8sWl.mp3'), }),
-  v.object({ name: v.literal('Lucy'), gender: v.literal('Female'), voiceId: v.literal('lcMyyd2HUfFzxdCaC4Ta'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/database/user/On0pjHuDnweq0BS7b0qVjhIq37i1/voices/lcMyyd2HUfFzxdCaC4Ta/iutd7IQOhAGGiTAJT0X8.mp3'), }),
-  v.object({ name: v.literal('Tom'), gender: v.literal('Male'), voiceId: v.literal('DYkrAHD8iwork3YSUBbs'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/database/user/noVlXbj17nbMQVNRkHqTIt4DD4y2/voices/DYkrAHD8iwork3YSUBbs/RNF2lthsoCmS2gIzKrsn.mp3'), }),
+  v.object({ name: v.literal('Professor Bill'), gender: v.literal('Male'), voiceId: v.literal('lnieQLGTodpbhjpZtg1k'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/database/user/D24IGF9ntveLHjWUaVzVpcPora82/voices/lnieQLGTodpbhjpZtg1k/c7c51a49-a9d8-4594-ab34-d7051b826a9a.mp3'), }),
+  v.object({ name: v.literal('Drew'), gender: v.literal('Male'), voiceId: v.literal('Qdoacjdd3OKJ1mMc318A'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/database/user/ORe3NGzEcpVLmf1lPgP435AC7Px2/voices/Qdoacjdd3OKJ1mMc318A/dPmXOB8hf460JbO9Jaek.mp3'), }),
   v.object({ name: v.literal('Mark'), gender: v.literal('Male'), voiceId: v.literal('UgBBYS2sOqTuMpoF3BR0'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/database/workspace/f94e260200764678babc807b935bfb0b/voices/UgBBYS2sOqTuMpoF3BR0/0Oc7jiXwWN9kRTXfQsmw.mp3'), }),
   v.object({ name: v.literal('Jonathan'), gender: v.literal('Male'), voiceId: v.literal('PIGsltMj3gFMR34aFDI3'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/database/workspace/ae5cf0d6fb064897b39505ab5988252a/voices/PIGsltMj3gFMR34aFDI3/YwBlqdNO99mqRJj1CJ5b.mp3'), }),
   v.object({ name: v.literal('Christine'), gender: v.literal('Female'), voiceId: v.literal('uYXf8XasLslADfZ2MB4u'), previewUrl: v.literal('https://storage.googleapis.com/eleven-public-prod/database/user/sD92HnMHS9WZLXKNTKxmnC8XmJ32/voices/uYXf8XasLslADfZ2MB4u/M0UTfNFigInhz8LMb4DA.mp3'), }),
@@ -46,6 +46,11 @@ export const styleValidator = v.union(
 )
 
 export const musicValidator = v.union(
+  v.object({ title: v.literal('Dark Tranquility'), previewUrl: v.literal('https://happysoulmusic.com/wp-content/grand-media/audio/Dark_Tranquility_-_Anno_Domini_Beats.mp3'), }),
+  v.object({ title: v.literal('Intentions'), previewUrl: v.literal('https://debb-bucket.s3.ap-south-1.amazonaws.com/background_music/Intentions+-+Anno+Domini+Beats.mp3'), }),
+  v.object({ title: v.literal('Blade Runner'), previewUrl: v.literal('https://debb-bucket.s3.ap-south-1.amazonaws.com/background_music/blade_runner_2049.mp3'), }),
+  v.object({ title: v.literal('Matrix'), previewUrl: v.literal('https://debb-bucket.s3.ap-south-1.amazonaws.com/background_music/memories.mp3'), }),
+  v.object({ title: v.literal('Welcome Beats'), previewUrl: v.literal('https://debb-bucket.s3.ap-south-1.amazonaws.com/background_music/Welcome+-+Anno+Domini+Beats.mp3'), }),
   v.object({ title: v.literal('Beats'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2025/11/11/audio_f2cf114879.mp3'), }),
   v.object({ title: v.literal('Future Bass'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2024/11/08/audio_05b10daae7.mp3'), }),
   v.object({ title: v.literal('Upbeat'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2025/11/07/audio_a9bc5df6b9.mp3'), }),
@@ -236,6 +241,8 @@ export default defineSchema({
 
     captionStyle: v.optional(captionStyleSchema),
 
+    storyTellingStyle: v.optional(v.union(v.literal('default'), v.literal('dramatic'))),
+
     // Error handling
     error: v.optional(v.object({
       message: v.string(),
@@ -289,9 +296,9 @@ export const CAPTION_PRESETS: Record<string, CaptionStyleType> = {
     textSize: '3.5rem' as const,  // 13px in the original, but keeping your rem size
     fontWeight: '900' as const,
     textTransform: 'capitalize' as const,
-    position: 'bottom' as const,
+    position: 'middle' as const,
     textAlign: 'center' as const,
-    wordsPerBatch: 3,
+    wordsPerBatch: 1,
     transitionStyle: 'scale' as const,
     fontFamily: 'Komika',  // Added Komika font family
     showCaption: true,

@@ -710,3 +710,12 @@ export const promptVariations = {
 // 2. Create options for the captions and the user should be able to tweak it on the go - done
 // 3. components/billing page to be used uniformly
 // 4. Write blogs for improving SEO - started
+// background music
+// feeling blue
+// timeless
+// anthwave goose
+// anno domini dark tranquility
+// audio hetz mission to mars
+// eveningland nimbus
+// clang
+// anno domini schizo

@@ -1,6 +1,6 @@
 "use client";
 
-import { AbsoluteFill, Img, Series, spring, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Img, interpolate, Series, spring, staticFile, useCurrentFrame } from "remotion";
 import { CachedAudio } from "../../components/video-editor/cached-audio";
 import { Doc } from "../../convex/_generated/dataModel";
 import { CachedOffthreadVideo } from "../../components/video-editor/cached-off-thread-video";
@@ -55,35 +55,7 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
           {video?.scenes.map((scene, i) => {
             return (
               <Series.Sequence key={i} durationInFrames={(scene.videoDurationInSeconds ?? 5) * 30}>
-
-                {/* Add Audio for each scene */}
-                {scene.audioUrl && (
-                  <CachedAudio src={scene.audioUrl} volume={1} /> // change to Audio for lambda
-                )}
-
-                {scene.videoUrl ? (
-                  <CachedOffthreadVideo // change to OffthreadVideo for lambda
-                    src={scene.videoUrl}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      borderRadius: "0.5rem",
-                    }}
-                    muted={true}
-                  />
-                ) : (
-                  <AbsoluteFill className="flex items-center justify-center text-white text-2xl">
-                    No video URL for scene {i + 1}
-                  </AbsoluteFill>
-                )}
-                {/* Add Caption */}
-                {scene.words && scene.words.length > 0 && video?.captionStyle?.showCaption && (
-                  <Caption
-                    captionStyle={video?.captionStyle}
-                    words={scene.words}
-                  />
-                )}
+                <SceneContent scene={scene} sceneIndex={i} captionStyle={video?.captionStyle} />
               </Series.Sequence>
             );
           })}
@@ -113,6 +85,90 @@ export const RemotionVideo: React.FC<Props> = ({ video, isSubscribed }) => {
         <CachedAudio src={video.music.previewUrl} loop={true} volume={0.1} /> // change to Audio for lambda
       )}
     </AbsoluteFill>
+  );
+};
+
+// New component to handle individual scene rendering
+const SceneContent: React.FC<{
+  scene: Doc<"videos">["scenes"][0];
+  sceneIndex: number;
+  captionStyle?: Infer<typeof captionStyleSchema>;
+}> = ({ scene, sceneIndex, captionStyle }) => {
+  const frame = useCurrentFrame(); // This now gets the LOCAL frame within this sequence
+
+  // Calculate animations based on LOCAL frame
+  const scale = spring({
+    frame,
+    fps: 30,
+    from: 2, // Start zoomed in
+    to: 1, // Zoom out to normal
+    config: {
+      damping: 25,
+      stiffness: 30,
+      mass: 2,
+    },
+  });
+
+  const opacity = interpolate(frame, [0, 15], [0, 1], {
+    extrapolateRight: 'clamp',
+  });
+  // Shake rotation effect - only at the start of each scene
+  const shakeRotation = spring({
+    frame,
+    fps: 30,
+    from: 5,
+    to: 0,
+    config: {
+      damping: 8,
+      stiffness: 200,
+    },
+  });
+
+  // Alternating shake direction for more dynamic effect
+  const rotation = Math.sin(frame * 2) * shakeRotation;
+  return (
+    <>
+      {/* Add Audio for each scene */}
+      {scene.audioUrl && (
+        <CachedAudio src={scene.audioUrl} volume={1} /> // change to Audio for lambda
+      )}
+
+      {scene.videoUrl ? (
+        <CachedOffthreadVideo // change to OffthreadVideo for lambda
+          src={scene.videoUrl}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            borderRadius: "0.5rem",
+          }}
+          muted={true}
+        />
+      ) : scene.imageUrl ? (
+        <Img
+          src={scene.imageUrl}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            borderRadius: "0.5rem",
+            transform: `scale(${scale})`,
+            opacity: opacity,
+          }}
+        />
+      ) : (
+        <AbsoluteFill className="flex items-center justify-center text-white text-2xl">
+          No video URL for scene {sceneIndex + 1}
+        </AbsoluteFill>
+      )}
+      {/* Add Caption */}
+      {scene.words && scene.words.length > 0 && captionStyle?.showCaption && (
+        <Caption
+          captionStyle={captionStyle}
+          words={scene.words}
+        />
+      )}
+    </>
   );
 };
 
@@ -255,4 +311,3 @@ const Caption: React.FC<{
     </AbsoluteFill>
   );
 };
-

@@ -236,7 +236,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
 
     const allScenesHaveUrl =
       videoData?.scenes?.length > 0 &&
-      videoData.scenes.every((scene) => scene.videoUrl && scene.videoUrl !== "");
+      videoData.scenes.every((scene) => ((scene.videoUrl && scene.videoUrl !== "") || (scene.imageUrl && scene.imageUrl !== "")));
 
     setIsRenderEligible(allScenesHaveUrl);
   }, [videoData]);
