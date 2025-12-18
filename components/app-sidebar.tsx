@@ -102,8 +102,22 @@ export function AppSidebar() {
   const addUser = useAction(api.user.addUser)
 
   useEffect(() => {
+    // firstpromoter affiliate code
+    // Get FirstPromoter tracking cookie
+    const fpromTid = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('_fprom_tid='))
+      ?.split('=')[1];
+    // firstpromoter affiliate code
+
     if (!user) {
-      addUser()
+
+      // firstpromoter affiliate code
+      addUser(
+        // firstpromoter affiliate code
+        { fpromTid }
+        // firstpromoter affiliate code
+      )
     }
   }, [user, addUser])
 
