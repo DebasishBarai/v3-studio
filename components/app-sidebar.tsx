@@ -101,31 +101,11 @@ export function AppSidebar() {
 
   const addUser = useAction(api.user.addUser)
 
-  const trackSignin = useAction(api.affiliates.firstpromoter.trackSignin)
-
   useEffect(() => {
-    // firstpromoter affiliate code
-    // Get FirstPromoter tracking cookie
-    const fpromTid = document.cookie
-      .split('; ')
-      .find(row => row.startsWith('_fprom_tid='))
-      ?.split('=')[1];
-    console.log(fpromTid)
-    // firstpromoter affiliate code
-    if (fpromTid) {
-      trackSignin({ fpromTid })
-    }
-
     if (!user) {
-
-      // firstpromoter affiliate code
-      addUser(
-        // firstpromoter affiliate code
-        { fpromTid }
-        // firstpromoter affiliate code
-      )
+      addUser()
     }
-  }, [user, addUser, trackSignin])
+  }, [user, addUser])
 
   const credits = user?.credits ?? 0;
 

@@ -22,12 +22,8 @@ export const getUser = query({
 });
 
 export const addUser = action({
-  args: {
-    // firstpromoter affiliate code
-    fpromTid: v.optional(v.string()),
-    // firstpromoter affiliate code
-  },
-  handler: async (ctx, args): Promise<Doc<'users'> | null | undefined> => {
+  args: {},
+  handler: async (ctx): Promise<Doc<'users'> | null | undefined> => {
     const identity = await ctx.auth.getUserIdentity();
 
     if (identity === null) {
@@ -67,19 +63,6 @@ export const addUser = action({
       name: identity.name,
       polarCustomerId: polarCustomer.id,
     })
-
-    // firstpromoter affiliate code
-    // Track signup with FirstPromoter (fire-and-forget)
-    // Only runs AFTER user is successfully created
-    try {
-      ctx.scheduler.runAfter(0, internal.affiliates.firstpromoter.trackSignup, {
-        uid: identity.subject, // Use Clerk subject as UID
-        tid: args.fpromTid,
-      });
-    } catch (err) {
-      console.error("Failed to schedule FirstPromoter tracking:", err);
-    }
-    // firstpromoter affiliate code
 
     return newUser
   }

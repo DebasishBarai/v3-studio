@@ -78,21 +78,6 @@ http.route({
               orderId: id,
             })
 
-            // firstpromoter affiliate code
-            try {
-              ctx.runAction(internal.affiliates.firstpromoter.trackSale, {
-                email: customer.email,
-                amountCents: data.amount,
-                eventId: id,
-                plan: product.id,
-              }).catch(err => {
-                console.error("FirstPromoter action failed:", err);
-              });
-            } catch (err) {
-              console.error("Failed to schedule FirstPromoter tracking:", err);
-            }
-            // firstpromoter affiliate code
-
             return new Response("Webhook processed", { status: 200 });
           }
         }
@@ -124,21 +109,6 @@ http.route({
               orderId: id,
             })
           }
-
-          // firstpromoter affiliate code
-          try {
-            ctx.runAction(internal.affiliates.firstpromoter.trackSale, {
-              email: customer.email,
-              amountCents: data.amount,
-              eventId: id,
-              plan: product.id,
-            }).catch(err => {
-              console.error("FirstPromoter action failed:", err);
-            });
-          } catch (err) {
-            console.error("Failed to schedule FirstPromoter tracking:", err);
-          }
-          // firstpromoter affiliate code
 
           return new Response("Webhook processed", { status: 200 });
 

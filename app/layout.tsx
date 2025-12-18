@@ -5,7 +5,6 @@ import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
 import ConvexClientProvider from '@/app/providers'
 import { Toaster } from '@/components/ui/sonner'
-import Script from 'next/script'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -32,12 +31,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* firstpromoter affiliate code */}
-      <head>
-        <Script src="/fprmain.js" strategy="beforeInteractive" />
-        <Script src="https://cdn.firstpromoter.com/fpr.js" strategy="beforeInteractive" />
-      </head>
-      {/* firstpromoter affiliate code */}
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ClerkProvider appearance={{ theme: dark }}>
           <ConvexClientProvider>{children}</ConvexClientProvider>
