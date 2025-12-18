@@ -78,6 +78,19 @@ http.route({
               orderId: id,
             })
 
+            try {
+              ctx.runAction(internal.affiliates.firstpromoter.trackSale, {
+                email: customer.email,
+                amountCents: data.amount,
+                eventId: id,
+                plan: product.id,
+              }).catch(err => {
+                console.error("FirstPromoter action failed:", err);
+              });
+            } catch (err) {
+              console.error("Failed to schedule FirstPromoter tracking:", err);
+            }
+
             return new Response("Webhook processed", { status: 200 });
           }
         }
@@ -108,6 +121,19 @@ http.route({
               userId: user._id,
               orderId: id,
             })
+          }
+
+          try {
+            ctx.runAction(internal.affiliates.firstpromoter.trackSale, {
+              email: customer.email,
+              amountCents: data.amount,
+              eventId: id,
+              plan: product.id,
+            }).catch(err => {
+              console.error("FirstPromoter action failed:", err);
+            });
+          } catch (err) {
+            console.error("Failed to schedule FirstPromoter tracking:", err);
           }
 
           return new Response("Webhook processed", { status: 200 });
