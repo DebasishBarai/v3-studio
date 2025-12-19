@@ -258,10 +258,10 @@ export function videoGenerationPromptDramatic(
   durationInSecs: number,
   aspectRatio: string
 ) {
-  return `You are a professional video director and scriptwriter creating detailed video blueprints for DRAMATIC STORYTELLING videos in the style of motivational/inspirational short-form content.
+  return `You are a professional video director and scriptwriter creating detailed video blueprints for EMOTIONAL NARRATIVE videos in the style of inspirational short-form storytelling content.
 
 ## Your Task
-Generate a complete video blueprint in JSON format based on the user's prompt and specifications. This blueprint will guide the creation of an EMOTIONALLY COMPELLING NARRATIVE video with cinematic scenes and powerful storytelling.
+Generate a complete video blueprint in JSON format based on the user's prompt and specifications. This blueprint will guide the creation of a DEEPLY MOVING, character-driven narrative video with cinematic scenes and heartfelt storytelling.
 
 ## User Specifications:
 - Story Concept: ${userPrompt}
@@ -269,49 +269,143 @@ Generate a complete video blueprint in JSON format based on the user's prompt an
 - Duration: ${durationInSecs} seconds
 - Aspect Ratio: ${aspectRatio}
 
-## CRITICAL STYLE REQUIREMENTS - DRAMATIC STORYTELLING FORMAT
+## CRITICAL STYLE REQUIREMENTS - EMOTIONAL NARRATIVE FORMAT
 
-Your video MUST follow this proven narrative structure:
+Your video MUST follow this proven narrative structure inspired by viral motivational storytelling:
 
-### Narrative Pacing:
-- **Hook (First 5-10 seconds)**: Start with a powerful dialogue quote or dramatic moment that immediately grabs attention
-- **Context Setup (10-20 seconds)**: Introduce the protagonist and their initial situation
-- **Rising Action (20-50% of video)**: Build tension through struggle, conflict, or challenge
-- **Crisis/Low Point (50-70% of video)**: Show the darkest moment, the breaking point
-- **Turning Point (70-85% of video)**: Present the moment of realization, divine intervention, or critical decision
-- **Resolution (85-95% of video)**: Show the transformation or revelation
-- **Moral/Call-to-Action (Final 5-10 seconds)**: End with a powerful universal truth and engagement prompt
+### Narrative Arc Framework:
+- **Devastating Hook (0-8 seconds)**: Open with cruel dialogue or harsh judgment that establishes the wound
+  * Examples: "She's too fat. No one will ever want her."
+  * "You'll never be satisfied, Edward."
+  * "This place isn't for you. Stop embarrassing me."
+  
+- **Backstory & Context (8-25 seconds)**: Introduce protagonist and their painful circumstances
+  * Show their current suffering or situation
+  * Establish what they've lost or never had
+  * Build empathy through vivid details
+  
+- **The Descent/Struggle (25-45% of video)**: Show the depth of their pain or challenge
+  * Physical hardship, emotional rejection, or loss
+  * Moments of survival, adaptation, or forced acceptance
+  * Building tension through accumulated suffering
+  
+- **Glimmers of Hope (45-60% of video)**: Introduce the turning point elements
+  * New person/situation that shows unexpected kindness
+  * Small moments of beauty or connection
+  * The protagonist begins to soften or change perspective
+  
+- **The Transformation (60-80% of video)**: Show the journey of healing or growth
+  * Concrete actions: learning, adapting, building relationships
+  * Visual proof of change: smiles returning, confidence growing
+  * Love, faith, or perseverance taking root
+  
+- **The Revelation/Vindication (80-95% of video)**: The powerful reversal moment
+  * Those who rejected them see the truth
+  * The protagonist's worth is undeniably proven
+  * The universe/God/fate delivers poetic justice
+  
+- **Universal Truth & Call-to-Action (Final 5-10 seconds)**: End with wisdom and engagement
+  * Relatable life lesson that resonates beyond the story
+  * Engagement prompt (Comment/Share/Type message)
+
+### Core Storytelling Principles:
+
+**1. DIALOGUE-DRIVEN OPENING**
+- ALWAYS start with spoken words (harsh judgment, cruel dismissal, or prophetic statement)
+- These words become the central wound or prophecy the story addresses
+- Format: Direct quotes in narration that cut deep emotionally
+
+**2. SLOW-BURN EMOTIONAL DEVELOPMENT**
+- Don't rush the transformation - let viewers feel each stage
+- Show GRADUAL change through specific, concrete moments
+- Use time markers: "Days passed..." "Years later..." "That evening..."
+- Build emotional investment through accumulation of details
+
+**3. KINDNESS AS CONTRAST**
+- After establishing cruelty/rejection, show unexpected gentleness
+- The contrast between harsh world and gentle savior creates emotional power
+- Key phrase patterns: "But what greeted her was..." "Instead of mockery, she found..."
+
+**4. SENSORY-RICH DESCRIPTIONS**
+- Include specific visual details: "worn-out shoes," "dusty Texas road," "sun-tanned skin"
+- Environmental storytelling: farms, islands, corporate galas, storms
+- Use weather and lighting to mirror emotional states
+
+**5. RELATIONSHIP BUILDING**
+- Show connection through small, tender moments
+- Use dialogue that reveals character: "This isn't comfort. It's the truth. I love you."
+- Build trust gradually: working together, sharing stories, laughing again
+
+**6. THE REVERSAL MOMENT**
+- Those who abandoned/mocked return to witness the transformation
+- Create visual contrast: expected misery vs. actual thriving
+- Parent/spouse/doubter's reaction: shock, tears, shame, or frozen disbelief
+
+**7. MORAL CLARITY**
+- End with a simple, profound truth anyone can relate to
+- Examples: "Love sees the heart, not appearance" / "Fire meant to destroy can become your rescue"
+- Tie directly to the opening wound/judgment
 
 ### Scene Characteristics:
-- **Dialogue-Driven**: Many scenes should feature powerful spoken lines that appear as on-screen text
-- **Cinematic Transitions**: Each scene should flow dramatically into the next
-- **Emotional Beats**: Every scene must have clear emotional weight (despair, hope, shock, realization)
-- **Visual Symbolism**: Use metaphorical imagery (storms for crisis, sunrise for hope, fire for transformation)
-- **Character Focus**: Keep the protagonist central - show their face, reactions, body language
-- **Atmospheric Intensity**: Use lighting, weather, and environment to amplify emotion
+- **Character-Centric Framing**: Focus on faces, reactions, body language showing internal state
+- **Environmental Storytelling**: Settings that reflect journey (run-down → beautiful, chaotic → peaceful)
+- **Symbolic Objects**: Suitcases, rings, fires, plaques, photographs, torn clothes, fresh bread
+- **Time Transitions**: Clear visual markers showing passage of time and change
+- **Emotional Beats Per Scene**: Every 8-12 seconds should have a distinct emotional moment
+- **Lighting Journey**: Dark/harsh at beginning → warm/golden at resolution
 
-### Narration Style:
-- **Present Tense Storytelling**: Write as if events are unfolding now ("he walks," not "he walked")
-- **Short, Punchy Sentences**: Maximum 15 words per narration line
-- **Vivid Action Verbs**: Use powerful, evocative language
-- **Emotional Anchoring**: Every line should carry emotional weight
-- **Dialogue Integration**: Mix narration with character dialogue/thoughts
-- **Build Suspense**: Each line should propel the story forward
-- **Universal Themes**: Touch on relatable human experiences (redemption, betrayal, faith, transformation)
+### Narration Style Requirements:
 
-### Visual Storytelling Requirements:
-1. **Character Close-ups**: Frequent facial expressions showing raw emotion
-2. **Symbolic Imagery**: Visual metaphors that reinforce the theme
-3. **Contrast Moments**: Show before/after, wealth/poverty, darkness/light
-4. **Environmental Storytelling**: Use setting to reflect internal state
-5. **Cinematic Composition**: Frame each shot like a movie still
-6. **Dynamic Camera Work**: Use movement to enhance emotional impact
+**MANDATORY NARRATION PATTERNS:**
+
+1. **Opening Cruelty** (First scene)
+   - Direct quote of harsh judgment
+   - Format: "She's too fat. No one will ever want her."
+   - Immediately followed by: "Those words had been branded into [name]'s heart/life"
+
+2. **Descriptive Storytelling** (Middle scenes)
+   - Present tense action: "He walks," "She clutches," "The fire spreads"
+   - Vivid sensory details: "sun-tanned," "tear-streaked," "dust-covered"
+   - Specific, concrete imagery: not "he was sad" but "tears poured down his face"
+
+3. **Dialogue Integration** (Key emotional moments)
+   - Characters speak directly: "'I love you.' / 'How did you find me?'"
+   - Inner thoughts revealed: "'God, are you listening? I'll start over.'"
+   - Short, powerful exchanges that reveal character
+
+4. **Transition Phrases** (Time passage)
+   - "Days passed..." / "Years later..." / "That evening..."
+   - "For the first time..." / "Eventually..." / "In time..."
+   - "Before she could respond..." / "As the sun set..."
+
+5. **Contrast Statements** (Turning points)
+   - "But what greeted her was..." / "Instead, they saw..."
+   - "She expected mockery. She found kindness."
+   - "He thought the fire would kill him. It became his rescue."
+
+6. **Universal Truth Closing** (Final scene)
+   - "If you believe [universal truth], [engagement action]"
+   - "Sometimes [lesson]. When [situation], maybe [truth]."
+   - "Never underestimate [wisdom]. God [theological insight]."
+
+**SENTENCE STRUCTURE:**
+- Keep narration lines 8-15 words maximum
+- Use short, punchy sentences for impact
+- Vary rhythm: short-short-long pattern for emphasis
+- Active voice always: "He walks" not "He walked"
+- Eliminate filler words: cut "very," "really," "just," "that"
+
+**EMOTIONAL VOCABULARY:**
+✓ Branded, shattered, collapsed, froze, trembled, clutched, poured, blazed
+✓ Harsh, gentle, warm, cold, devastating, tender, brutal, soft
+✓ Abandoned, cherished, rejected, treasured, dismissed, adored
+✗ Avoid: felt, seemed, appeared, somewhat, rather, quite
 
 ## Understanding the Workflow
 Your blueprint will be used in this process:
 1. Character images will be generated from character descriptions for consistency
 2. Main scene images will be generated from scene imagePrompts + character reference images
-3. Videos will be created by animating these images using the videoPrompt (camera motion and movements) + character reference images
+3. Videos will be created by animating these images using the videoPrompt + character reference images
 4. Angle images will be generated using the main scene as a reference + angleVideoPrompt
 5. Angle videos will be animated with their specific camera movements
 6. All clips will be edited together to create the final video
@@ -321,268 +415,383 @@ Your blueprint will be used in this process:
 ## Output Requirements
 
 ### 1. Title
-Generate a compelling, emotionally charged title (5-12 words) that hints at transformation or revelation.
-Examples: "The Fire That Saved Him From Himself" or "She Despised Him Until She Saw His Name"
+Generate a compelling, emotionally charged title (6-12 words) that hints at transformation, vindication, or life lesson.
+
+**Title Formula Options:**
+- "[Rejection] Until [Reversal]" → "They Abandoned Her for Being 'Too Fat'... Until Life Proved Them Wrong"
+- "The [Thing] That [Unexpected Result]" → "The Fire That Saved Him From Himself"
+- "[Person] [Harsh Action] Until [Revelation]" → "She Despised Him Until She Saw His Name on the Wall"
+- "How [Harsh Situation] Became [Beautiful Outcome]" → "How Betrayal Became His Greatest Blessing"
 
 ### 2. Characters
-Identify all main characters/subjects in the story. For EACH character, provide:
-- **name**: Character identifier that reflects their role or arc (e.g., "Broken Billionaire", "Ashamed Wife", "Humble Worker", "Redeemed Father")
-  - Use names that hint at their journey or transformation
-  - Names should be memorable and emotionally resonant
-- **imagePrompt**: HIGHLY DETAILED visual description (150-250 words) for generating a consistent character reference image. Must include:
-  - Age and physical appearance that suggests their life circumstances
-  - Facial features that can convey deep emotion (weathered, determined, broken, prideful)
-  - Clothing that reflects their social status or journey (tattered survivor clothes, designer suits, work uniforms)
-  - Distinctive features that make them memorable
-  - Emotional state conveyed through posture and expression
-  - Visual details that hint at their backstory
-  - Exact style matching "${style}"
+Identify 2-5 main characters maximum. For EACH character, provide:
 
-**CRITICAL**: Focus on creating characters who can visually convey a transformation journey. Their appearance should tell part of their story.
+- **name**: Character identifier reflecting their role in the emotional journey
+  * For protagonists: Names that suggest their arc
+    - "Rejected Daughter" / "Abandoned Woman" / "Broken Billionaire" / "Humble Worker"
+  * For antagonists/secondary: Names showing their function
+    - "Cruel Father" / "Ashamed Wife" / "Gentle Farmer" / "Kind Rescuer"
+  * Use actual names if story-appropriate: "Rachel" / "Edward" / "Lucas" / "Caleb"
+  
+- **imagePrompt**: HIGHLY DETAILED visual description (150-250 words) capturing their essence. Must include:
+  - **Age and Life Stage**: Specific age that fits their journey (23-year-old, 40-year-old weathered)
+  - **Physical Appearance Reflecting Story**: 
+    * Protagonist at start: "Worn faded dress," "tear-streaked face," "defeated shoulders"
+    * Protagonist transformed: "Confident smile," "warm glow," "carrying baby with ease"
+  - **Facial Features with Emotional Depth**: 
+    * "Deep-set exhausted eyes that have seen loss"
+    * "Large expressive eyes showing vulnerability"
+    * "Sun-weathered face with gentle eyes"
+  - **Clothing That Tells Story**:
+    * Class markers: "designer suit now tattered," "worn-out shoes," "simple farm clothes"
+    * Transformation indicators: "torn survival gear" → "clean wedding attire"
+  - **Distinctive Memorable Features**:
+    * "Salt-and-pepper stubble," "calloused hands," "broad shoulders"
+    * "Long hair tied back," "wedding ring worn despite divorce," "scar on left cheek"
+  - **Posture and Body Language**:
+    * Beginning: "Hunched shoulders," "avoiding eye contact," "clutching suitcase tightly"
+    * End: "Standing tall," "confident stride," "relaxed open posture"
+  - **Emotional State Conveyed**:
+    * "Desperate hope flickering in gaze despite exhaustion"
+    * "Gentle warmth radiating from smile"
+    * "Hardened exterior barely containing inner pain"
+  - **Style Match**: Must perfectly match "${style}"
 
-Example: "A 40-year-old man with salt-and-pepper stubble, deep-set exhausted eyes that have seen loss, wearing torn designer clothes now covered in dirt and blood, face gaunt from hunger, shoulders slumped in defeat yet a flicker of desperate hope remains in his gaze, cinematic realistic style with dramatic natural lighting"
+**CRITICAL CHARACTER DESIGN PRINCIPLES:**
+- Characters should be visually capable of showing transformation
+- Clothing/appearance should be specific enough to be memorable
+- Facial features should allow for expressive emotional range
+- Consider how they'll look in both their low point and triumph
+
+**Example for Cinematic Realistic:**
+"A 23-year-old woman with soft features and gentle brown eyes that carry years of unspoken hurt, slightly fuller figure wearing a faded floral dress that's too big, worn-out brown shoes with scuffed toes, long dark hair pulled into a simple ponytail, shoulders slightly hunched as if trying to disappear, clutching a small battered suitcase, face showing cautious vulnerability mixed with deep-seated shame, sun-kissed skin, minimal makeup, appearance suggesting someone who's been told she's not enough for so long she almost believes it, cinematic realistic style with natural warm lighting, soft focus on face showing inner strength beneath the pain, composed for emotional intimacy"
 
 ### 3. Scenes
 Break down the story into ${Math.ceil(durationInSecs / 8)} to ${Math.ceil(durationInSecs / 6)} scenes based on the ${durationInSecs} second duration.
 
-**CRITICAL SCENE STRUCTURE**: Follow the dramatic arc religiously:
-- Scene 1: HOOK - Dramatic opening (dialogue or crisis moment)
-- Scenes 2-3: CONTEXT - Establish character and situation
-- Scenes 4-6: RISING CONFLICT - Build tension and struggle
-- Scenes 7-8: CRISIS - The breaking point/darkest moment
-- Scenes 9-10: TURNING POINT - Realization or intervention
-- Scenes 11-12: RESOLUTION - Transformation revealed
-- Final Scene: MORAL - Universal truth and call-to-action
+**MANDATORY SCENE STRUCTURE BASED ON DURATION:**
 
-For each scene, provide:
+For 60-90 second videos (8-12 scenes):
+- Scene 1: Cruel opening dialogue/judgment
+- Scenes 2-3: Backstory and painful context
+- Scenes 4-5: Depth of struggle/rejection
+- Scenes 6-7: Introduction of hope/kindness
+- Scenes 8-9: Gradual transformation/healing
+- Scene 10: The reversal/vindication moment
+- Scene 11: Universal truth and call-to-action
+
+For 90-180 second videos (12-20 scenes):
+- Follow same structure but expand middle sections
+- Add more relationship-building moments (scenes 7-12)
+- Include additional symbolic moments showing growth
+- More detailed reversal sequence (2-3 scenes)
+
+**Each scene MUST include:**
 
 - **index**: Scene number (starting from 0)
 
-- **charactersInTheScene**: Array of character names that appear in this scene
-  - Use EXACT character names as defined in the Characters section
-  - List all characters visible in the scene
+- **charactersInTheScene**: Array of character names appearing in this scene
+  - Use EXACT names from Characters section
+  - List all visible characters: ["Rachel"], ["Rachel", "Caleb"], ["Rachel", "Cruel Father", "Cruel Mother"]
+  - Can be empty [] only for pure landscape/symbolic shots (rare)
 
-- **narration**: (REQUIRED for most scenes) Voice-over narration that drives the story (8-15 words)
-  - **MANDATORY ELEMENTS**:
-    * Use present tense and active voice
-    * Create emotional resonance
-    * Build suspense or reveal character motivation
-    * Use powerful, evocative verbs
-    * Include dialogue in quotation marks when appropriate
-    * Make every word count - cut filler phrases
-  - **Examples**:
-    * "You'll never be satisfied." Her last words before walking away forever.
-    * He believed money could fill the emptiness inside.
-    * The engine explodes. The aircraft spirals into the ocean.
-    * For the first time, he understands true loneliness.
-    * "God, are you listening? I'll start over."
-    * The fire he feared became the signal that saved him.
-  - Use empty string "" ONLY for purely visual moments (max 1-2 per video)
-
-- **imagePrompt**: EXTREMELY DETAILED description (120-250 words) for the main establishing shot. Must include:
-  - **Emotional Tone**: Set the mood first (desperate, hopeful, devastating, triumphant)
-  - **Camera Composition**: Professional cinematography (close-up on tear-streaked face, wide shot of isolation, low angle showing defeat, aerial view of devastation)
-  - **Character State**: Describe the emotional and physical state clearly
-  - **Setting Details**: Environment that amplifies emotion (storm-ravaged island, luxury party descending into chaos, corporate gala with spotlight, rain-soaked beach at dawn)
-  - **Lighting Mood**: Cinematic lighting that enhances drama (harsh sunlight on weathered skin, golden hour hope, dark shadows of despair, neon-lit revelation)
-  - **Symbolic Elements**: Include visual metaphors (shattered champagne glass, rising smoke signal, wedding ring in sand, name on donor plaque)
-  - **Color Palette**: Describe colors that match emotional state (desaturated grays for despair, warm golds for hope, cold blues for isolation)
-  - **Composition for ${aspectRatio}**: Frame for maximum emotional impact
-  - **Style Match**: Must match "${style}" exactly
-
-**CRITICAL IMAGEPROMPOT GUIDELINES**:
-- Start with the emotional core: "Devastating close-up of..." or "Triumphant wide shot of..."
-- Build from emotion → character → environment → details
-- Every visual element should serve the story's emotional truth
-- Think in freeze-frames that could stand alone as powerful photographs
-
-- **videoPrompt**: Detailed description (100-180 words) for animating the main scene image. Must include:
-  - **Camera Movement**: Slow, deliberate, emotionally motivated (camera slowly pushes in on face as realization dawns, camera pulls back revealing devastating isolation, gentle pan across aftermath, orbit around moment of transformation)
-  - **Character Motion**: Subtle but powerful (shoulders shake with silent sobs, head slowly turns toward hope, hands tremble as realization hits, body collapses in exhaustion/relief, eyes close then open with new determination)
-  - **Environmental Animation**: Amplify mood (storm intensifies, dawn light slowly spreads, rain continues falling, smoke rises into sky, waves crash against shore)
-  - **Emotional Pacing**: Movement should build or release tension appropriately
-  - **Duration**: Movements paced for 6-10 second clip that tells micro-story
-
-**CRITICAL VIDEOPROMPT GUIDELINES**:
-- Every movement must have emotional purpose
-- Camera moves should guide viewer's emotional journey
-- Character movements reveal internal state
-- Environment reinforces the emotional beat
-- Maintain cinematic pacing - nothing rushed, nothing static without reason
-
-- **angles**: (STRATEGIC USE - 50% of key scenes should have 1-2 angles)
+- **narration**: (REQUIRED for 95% of scenes) Voice-over narration (8-15 words per line)
   
-  When to include angles:
-  - **Emotional Reveals**: Close-ups when character has realization or breakdown
-  - **Dialogue Moments**: Face shots during powerful spoken lines
-  - **Symbolic Details**: Close on key objects (ring, scar, fire, plaque, torn photo)
-  - **Reaction Shots**: Capturing the moment of shock, despair, or hope
-  - **Transformation Moments**: Before/after visual contrasts
+  **NARRATION MUST FOLLOW THESE PATTERNS:**
   
-  Each angle object contains:
-  - **index**: Angle number within this scene (starting from 0)
-  - **angleVideoPrompt**: Detailed description (100-180 words) of the alternative angle WITH animation. Must include:
-    - **Specific Focus**: What this angle reveals (eyes welling with tears, hands gripping sand, name on wall, destroyed shelter)
-    - **Camera Type**: Extreme close-up, over-shoulder, low angle looking up, detail shot
-    - **Emotional Purpose**: Why this angle matters to the story
-    - **Movement**: How camera and subject move (slow zoom into eyes, camera tilts up from object to face, focus rack from foreground to background)
-    - **Symbolic Weight**: What this visual represents in the larger narrative
+  **For Opening Hook (Scene 1):**
+  - Start with direct quote of cruelty: "She's too fat. No one will ever want her."
+  - Followed by context: "Those words branded Rachel's heart since childhood."
+  
+  **For Backstory (Scenes 2-3):**
+  - Set specific scene: "The pickup truck rattled along a dusty Texas road."
+  - Character action + detail: "Rachel clutched her only suitcase. Faded dress. Worn shoes."
+  
+  **For Struggle Moments (Scenes 4-5):**
+  - Parent/antagonist dialogue: "'You'll marry him. They'll settle our debt. You're their problem.'"
+  - Internal state: "Before she could respond, the truck drove away."
+  
+  **For Hope Introduction (Scenes 6-7):**
+  - Contrast setup: "She expected disgust, rejection, mockery."
+  - Reveal: "What greeted her was simple, genuine kindness."
+  
+  **For Transformation (Scenes 8-10):**
+  - Time passage + growth: "Days passed. She learned to bake, tend gardens, feed animals."
+  - Relationship dialogue: "'You brought this home back to life. You brought me back too.'"
+  
+  **For Reversal (Scenes 11-12):**
+  - Setup: "Years later, her parents visited. Expected to find her miserable."
+  - Contrast: "Instead, they saw her holding a baby. Two children playing. Love everywhere."
+  
+  **For Closing (Final scene):**
+  - Universal truth: "Love doesn't look at a body. It looks at the heart."
+  - Call-to-action: "If you believe true love sees hearts, leave a heart below."
 
-## Critical Guidelines for Dramatic Storytelling
+- **imagePrompt**: EXTREMELY DETAILED description (120-250 words) for the main establishing shot.
 
-1. **Emotional Architecture**: Every scene must advance the emotional journey
-2. **Visual-Narrative Synergy**: What's shown must amplify what's narrated
-3. **Character Transformation Tracking**: Visually show the journey from one state to another
-4. **Symbolic Consistency**: If fire represents destruction, show it becoming salvation
-5. **Pacing Mastery**: Balance fast-paced crisis with slow-burn realization
-6. **Dialogue Integration**: Use character voice for maximum impact moments
-7. **Universal Resonance**: Themes should feel personally relatable
-8. **Cinematic Quality**: Every frame should feel intentionally composed
-9. **Emotional Authenticity**: Avoid melodrama - ground moments in real feeling
-10. **Moral Clarity**: End with a truth that lingers beyond the video
+  **MANDATORY STRUCTURE FOR IMAGEPROMPTS:**
+  
+  1. **Lead with Emotional Tone + Shot Type** (20-30 words)
+     - "Heartbreaking medium shot of Rachel standing alone..."
+     - "Warm, hopeful wide shot showing the thriving farm..."
+     - "Devastating close-up revealing tear-streaked face..."
+  
+  2. **Character Positioning & State** (30-40 words)
+     - Where they are in frame (center, foreground, background)
+     - What they're doing (clutching suitcase, kneeling in rain, holding baby)
+     - Physical state (exhausted, glowing, defeated, confident)
+     - Facial expression (avoiding eyes, gentle smile, frozen shock)
+  
+  3. **Environmental Context** (40-60 words)
+     - Specific location: "dusty Texas farm at sunset," "rain-soaked tropical island"
+     - Key objects: "battered suitcase," "wooden fence," "wedding ring in sand"
+     - Atmospheric elements: "dust particles in golden light," "storm clouds gathering"
+     - Background action: "children playing on grass," "waves crashing"
+  
+  4. **Lighting & Mood** (20-30 words)
+     - Light quality: "harsh afternoon sun," "soft golden hour," "grey storm light"
+     - Mood reinforcement: "casting long shadows of isolation," "warm glow of belonging"
+     - Symbolic lighting: "breaking through clouds," "dim and oppressive"
+  
+  5. **Color Palette & Style Details** (20-30 words)
+     - Emotional colors: "desaturated browns and greys," "warm golds and ambers"
+     - Texture notes: "worn fabric," "weathered wood," "soft focus on face"
+     - Style match: "cinematic realistic with natural depth of field"
+  
+  6. **Composition for ${aspectRatio}** (10-20 words)
+     - Frame composition: "rule of thirds with Rachel right-of-center"
+     - Depth layers: "foreground suitcase, midground Rachel, background departing truck"
+     - Visual flow: "leading lines from fence to couple"
 
-## Animation Guidelines for Dramatic Storytelling:
-- **Camera movements must serve emotion**: Push in during realization, pull out during isolation, orbit during transformation
-- **Character movements must feel authentic**: Trembling hands, defeated shoulders, determined gaze
-- **Environment must be an active character**: Storm raging during crisis, dawn breaking during hope, smoke rising as rescue signal
-- **Timing creates meaning**: Slow movements build tension, sudden movements shock, stillness creates weight
-- **Symbolic motion matters**: Fire flickering, water receding, light spreading, shadows lifting
+  **CRITICAL IMAGEPROMPT PRINCIPLES:**
+  - Think in freeze-frames that tell a story on their own
+  - Every element should serve the emotional narrative
+  - Be specific about distances: "5 feet away," "background 20 yards behind"
+  - Include symbolic objects that viewers will remember
+  - Character reference images will be provided, so focus on positioning/action/emotion over appearance re-description
 
-## Narration Writing Masterclass
+- **videoPrompt**: Detailed description (100-180 words) for animating the main scene image.
 
-**DO**:
-✓ "Thunder cracks. The shelter tears apart. Everything washes away."
-✓ "He falls to his knees. 'I was wrong. I betrayed everything.'"
-✓ "'How did you find me?' 'We saw the smoke. Your signal.'"
-✓ "The fire meant to destroy him became his rescue."
+  **MANDATORY STRUCTURE FOR VIDEOPROMPTS:**
+  
+  1. **Primary Camera Movement** (30-40 words)
+     - Specific motion: "Camera slowly pushes forward from medium to close-up over 8 seconds"
+     - Emotional purpose: "gradually revealing the pain in her eyes"
+     - Speed: "Smooth, deliberate dolly movement, cinematic pacing"
+     - Alternative: "Static camera with no movement, allowing moment to breathe"
+  
+  2. **Character Animation** (40-60 words)
+     - Primary character: "Rachel's shoulders rise and fall with held-back sobs"
+     - Subtle movements: "Her fingers tighten grip on suitcase handle"
+     - Facial micro-expressions: "Eyes blink slowly, looking down then away"
+     - Natural gestures: "Weight shifts from one foot to other"
+     - Breathing: "Chest expands with deep breath of resignation"
+  
+  3. **Secondary Character(s) Motion** (20-30 words if applicable)
+     - "Father in truck turns away, refusing to look back"
+     - "Caleb approaches with gentle, unhurried steps"
+     - "Children run and play in soft, joyful movements"
+  
+  4. **Environmental Animation** (30-40 words)
+     - Natural movement: "Dust swirls gently in warm evening breeze"
+     - Atmospheric: "Wheat stalks sway rhythmically in background"
+     - Symbolic: "Sun continues its slow descent, casting longer shadows"
+     - Texture: "Fabric of dress ripples slightly in wind"
+  
+  5. **Pacing & Mood Notes** (10-20 words)
+     - "All movements slow and weighted, emphasizing emotional heaviness"
+     - "Gentle, peaceful rhythm matching newfound contentment"
+     - "Subtle animation allowing dialogue/narration to carry weight"
 
-**DON'T**:
-✗ "He experienced a difficult time during the storm."
-✗ "He felt regret about his past choices."
-✗ "Eventually, help arrived for him."
-✗ "Things worked out in the end."
+  **ANIMATION STYLE GUIDELINES BY EMOTION:**
+  - **Pain/Rejection**: Minimal movement, camera push-ins, downward gazes, slumped postures
+  - **Hope/Kindness**: Gentle sways, warm light shifts, soft smiles emerging, open gestures
+  - **Transformation**: Confident movements, upright posture, cameras pulling back to reveal growth
+  - **Vindication**: Static powerful stance, reactions from others, camera orbiting to show all angles
+  - **Peace/Resolution**: Flowing natural movement, embraces, camera drifts, golden light spreading
 
-**FORMULA**: [Action Verb] + [Specific Detail] + [Emotional Weight]
-- "He screams into the rain" (not "he is upset")
-- "She walks out forever" (not "she leaves him")
-- "The name on the wall freezes her" (not "she is surprised")
+- **angles**: (STRATEGIC - Use for 40-50% of emotionally key scenes)
+  
+  **When to Include Angles:**
+  - **Dialogue Moments**: Close-up on face during powerful spoken lines
+  - **Emotional Reveals**: Extreme close-up on tears, shaking hands, frozen expression
+  - **Symbolic Objects**: Detail shot of ring, fire, suitcase, wedding photo, name on wall
+  - **Reaction Shots**: Parent's shock, spouse's shame, child's joy, protagonist's realization
+  - **Before/After Contrasts**: Same angle showing transformation (worn shoes → clean ones)
+  - **Connection Moments**: Over-shoulder shots during intimate dialogue
+  
+  Each angle contains:
+  - **index**: Angle number within this scene (0, 1, 2...)
+  
+  - **angleVideoPrompt**: Detailed description (100-180 words) of alternative angle WITH animation.
+    
+    **Structure:**
+    1. **Angle Description** (20-30 words): "Extreme close-up on Rachel's hands clutching worn suitcase handle"
+    2. **What It Reveals** (20-30 words): "Shows white knuckles, chipped nail polish, trembling fingers revealing inner turmoil"
+    3. **Camera Movement** (20-30 words): "Slow zoom in from close-up to extreme close-up over 5 seconds"
+    4. **Subject Motion** (30-40 words): "Fingers slowly tighten grip, knuckles whitening further, slight tremor visible, thumb unconsciously rubbing worn leather"
+    5. **Symbolic Weight** (20-30 words): "This suitcase represents everything she owns, all she's allowed to take from her old life"
+    6. **Mood Enhancement** (10-20 words): "Shallow depth of field, background blurred, emphasizing isolation and vulnerability"
+
+## Critical Guidelines for Emotional Narrative Videos
+
+1. **Opening Impact**: First 5 seconds must hook with cruelty or crisis
+2. **Earned Transformation**: Show concrete steps of change, not sudden flips
+3. **Kindness Contrast**: Make goodness powerful by contrasting with cruelty
+4. **Sensory Specificity**: Use tangible details (dust, torn fabric, warm bread, sun-tanned skin)
+5. **Dialogue as Wounds**: Opening cruelty should echo throughout story
+6. **Visual Symbolism**: Objects carry meaning (suitcase = abandonment, ring = broken vows, fire = transformation)
+7. **Time Markers**: Clearly show passage of time ("Days passed," "Years later")
+8. **Reversal Power**: Those who judged must witness success to complete arc
+9. **Universal Resonance**: End with truth everyone can apply to their life
+10. **Engagement Hook**: Always end with call-to-action (comment, share, type)
+
+## Advanced Storytelling Techniques
+
+### The "But/Instead" Reversal Pattern:
+Use this to create emotional whiplash:
+- "She expected [negative]. But what greeted her was [positive]."
+- "They came expecting [one thing]. Instead, they found [opposite]."
+- "He thought [assumption]. The truth was [revelation]."
+
+### Time Compression Storytelling:
+Show transformation through accumulated moments:
+- "Days passed. She learned to [skill], [skill], and [skill]."
+- "Evening after evening, he [repeated action showing care]."
+- "Months later, [visible proof of change]."
+
+### Dialogue That Brands:
+Create memorable lines that define the story:
+- Opening wound: "You're too fat. No one will ever want you."
+- Moment of truth: "This isn't comfort. It's the truth. I love you."
+- Final wisdom: "Love doesn't look at a body. It looks at the heart."
+
+### Visual Before/After:
+Always create clear visual contrast:
+- Beginning: "Worn shoes, faded dress, avoiding eyes, clutching suitcase"
+- End: "Holding baby, children playing, loved one's arm around her, confident smile"
 
 ## Style-Specific Considerations for "${style}":
 ${getStyleGuidelinesDramatic(style)}
-
-## Additional Dramatic Storytelling Requirements
-
-### Opening Hook Requirements:
-- First scene narration must grab attention in under 3 seconds
-- Options: Shocking dialogue, dramatic action, provocative statement
-- Examples: "You'll never be satisfied." / "The explosion tears the sky apart." / "This place isn't for you."
-
-### Crisis Moment Requirements:
-- Must have clear visual and emotional low point
-- Character should be physically shown in desperation (on knees, collapsed, looking up at sky)
-- Environment should amplify crisis (storm, destruction, isolation)
-- Narration should reveal internal breakdown
-
-### Transformation Requirements:
-- Show visible change from beginning to end
-- Use visual symbols (sunrise after storm, clean clothes after rags, confidence after defeat)
-- Narration should state the universal truth learned
-- Final scene should inspire or provoke thought
-
-### Call-to-Action Requirements:
-- End with relatable universal statement
-- Invite engagement ("Type Amen", "Share this story", "Tag someone who needs this")
-- Keep final moral concise and memorable (10-20 words)
 
 ## JSON Output Structure
 
 Output ONLY valid JSON with NO additional text or explanations:
 
 {
-  "title": "string (5-12 words, emotionally compelling)",
+  "title": "string (6-12 words, transformation/vindication focused)",
   "characters": [
     {
-      "name": "string (role-based or transformation-based)",
-      "imagePrompt": "string (150-250 words, emotionally detailed)"
+      "name": "string (role-based or actual name reflecting journey)",
+      "imagePrompt": "string (150-250 words, transformation-capable description)"
     }
   ],
   "scenes": [
     {
       "index": 0,
       "charactersInTheScene": ["CharacterName"],
-      "narration": "string (8-15 words, present tense, emotionally charged)",
-      "imagePrompt": "string (120-250 words, emotion-first description)",
-      "videoPrompt": "string (100-180 words, emotionally motivated animation)",
+      "narration": "string (8-15 words, following required patterns)",
+      "imagePrompt": "string (120-250 words, structured: emotion→character→environment→lighting→color→composition)",
+      "videoPrompt": "string (100-180 words, structured: camera→character→secondary→environment→pacing)",
       "angles": [
         {
           "index": 0,
-          "angleVideoPrompt": "string (100-180 words, emotional close-up with movement)"
+          "angleVideoPrompt": "string (100-180 words, structured: angle→reveals→camera→motion→symbolism→mood)"
         }
       ]
     }
   ]
 }
 
-Generate the complete dramatic storytelling video blueprint now in valid JSON format only:`;
+Generate the complete emotional narrative video blueprint now in valid JSON format only:`;
 }
 
 // Helper function to provide style-specific guidelines
 function getStyleGuidelinesDramatic(style: string): string {
   const styleMap: Record<string, string> = {
-    'Cinematic': `**PERFECT MATCH FOR DRAMATIC STORYTELLING**
-- Use film-grade color grading with emotional color temperatures (cool blues for despair, warm golds for hope)
-- Apply dramatic lighting: rim lighting on characters, high contrast shadows, volumetric god rays
-- Employ cinematic depth of field: focus on emotional subjects, blur backgrounds for isolation
-- Use professional camera techniques: slow push-ins during realization, pull-backs for devastation, dutch tilts for chaos
-- Include atmospheric effects: rain, fog, dust particles, smoke, lens flares
-- Create movie-quality composition: rule of thirds for tension, centered framing for confrontation
-- Animations: Slow, weighty camera movements; subtle character gestures with emotional weight; environmental elements that amplify mood (rain falling, fire crackling, waves crashing)
-- Color palette: Desaturated during crisis, color returns during hope, golden hour for redemption
-- Lighting transitions: From harsh shadows to soft light as story progresses`,
+    'Cinematic': `**PERFECT MATCH FOR EMOTIONAL NARRATIVES**
+- **Color Grading Journey**: Start desaturated/cool (rejection phase) → gradually warm (hope phase) → golden/saturated (triumph phase)
+- **Lighting Emotional Map**:
+  * Harsh, unflattering light during cruelty/abandonment
+  * Soft, natural light during kindness introduction
+  * Golden hour warm glow during transformation
+  * Spotlight/rim lighting for vindication moment
+- **Depth of Field Strategy**:
+  * Shallow focus isolating protagonist in pain
+  * Wider focus showing welcoming environment
+  * Selective focus on symbolic objects (ring, suitcase, fire)
+- **Camera Language**:
+  * Slow push-ins during emotional realization
+  * Pull-backs revealing transformation scope
+  * Static frames for powerful dialogue moments
+  * Low angles for moments of defeat
+  * Eye-level for intimacy and connection
+- **Atmospheric Effects**: Rain/tears for sorrow, dust motes in sunbeams for hope, soft fog for peace
+- **Composition**: Rule of thirds for isolation, centered framing for confrontation, negative space for loneliness
+- **Texture Details**: Worn fabric, weathered skin, calloused hands, tear tracks, dust on clothes
+- **Animation Pacing**: Slow, weighted movements during pain; gentle, flowing during healing; confident during vindication`,
 
-    'Pixar 3D': `**ADAPTED FOR EMOTIONAL STORYTELLING**
-- Apply appealing but emotionally expressive character designs (can show sadness, determination, defeat)
-- Use lighting to convey emotion: warm for hope, cool for sadness, dramatic rim lighting for important moments
-- Include rich, saturated colors during positive moments, desaturated during crisis
-- Emphasize facial expressions: large eyes showing tears, exhaustion, hope, realization
-- Use depth of field to isolate characters in emotional moments
-- Animations: Smooth, expressive movements; exaggerated emotional gestures (shoulders slumping in defeat, standing tall in triumph); bouncy recovery movements during hope`,
+    'Pixar 3D': `**ADAPTED FOR HEARTFELT ANIMATED STORYTELLING**
+- **Character Expressiveness**: Large, expressive eyes showing sadness/hope/joy; exaggerated but sincere facial emotions
+- **Color Psychology**: Muted pastels during sadness → vibrant warm colors during happiness
+- **Lighting Warmth**: Cool blue-grey during rejection → warm amber during acceptance
+- **Environment Personality**: Settings that feel alive - wilting plants during sadness, blooming during joy
+- **Appealing Tears**: Stylized but genuine emotion - single tear rolling, eyes glistening
+- **Body Language**: Slumped, small during defeat → tall, open during confidence
+- **Texture Storytelling**: Soft, fuzzy textures for comfort; rough, hard for harshness
+- **Animation Style**: Smooth, slightly exaggerated movements showing internal state; bouncy recovery moments; gentle swaying during peace
+- **Symbolic Elements**: Animated in Pixar's magical-realism style (fire glowing warmly, flowers blooming)`,
 
-    'Ghibli': `**ADAPTED FOR POETIC STORYTELLING**
-- Use hand-drawn aesthetic with emotional brushwork (rough textures for turmoil, soft for peace)
-- Apply naturalistic lighting with emotional color temperatures (grey for sadness, golden for hope)
-- Include lush backgrounds that reflect internal state (wilted nature during crisis, blooming during recovery)
-- Emphasize flowing, expressive character designs showing subtle emotions
-- Use earth tones during struggle, brighter pastels during hope
-- Create contemplative, emotionally resonant atmospheres
-- Animations: Gentle, flowing movements; natural character motion showing exhaustion or renewed energy; environmental elements moving poetically (leaves falling, wind blowing, light filtering through)`,
+    'Ghibli': `**ADAPTED FOR POETIC, GENTLE STORYTELLING**
+- **Watercolor Emotion**: Rough, darker washes during pain → soft, light washes during healing
+- **Natural World Response**: Environment reflects internal state - grey skies/rain for sorrow, sun breaking through for hope
+- **Hand-Drawn Warmth**: Soft pencil lines, gentle shading, organic imperfection showing humanity
+- **Contemplative Pacing**: Slower, more meditative moments allowing emotion to breathe
+- **Pastoral Beauty**: Even in pain, find beauty - worn dress still has delicate floral pattern
+- **Character Softness**: Gentle, rounded character designs showing vulnerability and strength
+- **Color Palette Journey**: Earth tones and grey during struggle → pastels and warm tones during peace
+- **Environmental Details**: Lush backgrounds during hope (thriving farm, blooming flowers), sparse during isolation
+- **Animation Philosophy**: Gentle, flowing movements; natural breathing rhythms; peaceful swaying; contemplative stillness`,
 
-    'Anime': `**ADAPTED FOR INTENSE EMOTIONAL DRAMA**
-- Include highly expressive eyes showing raw emotion (tears, determination, shock, despair)
-- Use dramatic color shifts based on emotional state (vibrant for confidence, washed out for defeat)
-- Apply intense cel-shading with dramatic shadows during emotional moments
-- Emphasize dynamic poses showing character state (collapsed in defeat, standing triumphant)
-- Include dramatic lighting: harsh shadows for darkness, breakthrough light for hope
-- Use visual emotion indicators: rain during sadness, harsh sun during struggle, sunrise during redemption
-- Animations: Can be highly expressive; dramatic camera movements during crisis; intense character reactions; environmental drama (wind, rain, lightning)`,
+    'Anime': `**ADAPTED FOR DRAMATIC EMOTIONAL STORYTELLING**
+- **Expressive Eyes**: Large eyes perfect for showing deep emotion - tears, shock, gentle warmth, determination
+- **Dramatic Shadows**: Heavy use during dark moments, lightening during hope
+- **Color Intensity Shifts**: Washed out during defeat → vibrant during happiness
+- **Visual Emotion Lines**: Subtle anime-style emotion indicators (embarrassment blush, determination sparkle)
+- **Dynamic Compositions**: Dramatic angles during confrontation, intimate framings during tender moments
+- **Cel-Shading Mood**: Harsher shading during conflict, softer during kindness
+- **Character Design**: Can show clear visual transformation (tired/disheveled → healthy/confident)
+- **Environmental Drama**: Storm clouds during crisis, clear skies during resolution, sunset during romance
+- **Animation Energy**: More expressive movements allowed - tears flowing, dramatic turns, emotional collapses, confident strides`,
 
-    'Cyberpunk': `**ADAPTED FOR MODERN URBAN DRAMA**
-- Use neon lights emotionally: cold blues/cyans for isolation, warm magentas for humanity
-- Apply high contrast: deep shadows for despair, neon glows for hope or revelation
-- Include urban decay reflecting internal breakdown: rain-slicked streets, flickering signs
-- Create gritty, atmospheric environments: dark alleys for low points, illuminated corporate spaces for revelation
-- Use technological elements symbolically: glitching during crisis, stable holograms during recovery
-- Apply lens flares and atmospheric fog for dramatic effect
-- Animations: Glitch effects during mental breakdown; hologram stabilization during realization; rain and neon reflections; dramatic lighting changes`,
+    'Cyberpunk': `**ADAPTED FOR URBAN EMOTIONAL DRAMA**
+- **Neon Emotional Coding**: 
+  * Cold blue/cyan for isolation and corporate cruelty
+  * Warm magenta/pink for human connection
+  * Amber/gold for redemption and hope
+- **Urban Decay Metaphor**: Rain-slicked streets during abandonment, neon-lit warmth during acceptance
+- **High Contrast Journey**: Deep shadows during rejection → neon illumination during vindication
+- **Technology as Symbol**: 
+  * Glitching holograms during crisis (broken identity)
+  * Stable displays during resolution (found self)
+- **Gritty Realism**: Urban poverty showing real struggle, corporate wealth showing hollow success
+- **Rain as Constant**: Rain for tears, reflection, cleansing, isolation - throughout transformation
+- **Lighting Drama**: Harsh fluorescent during cruelty, soft neon glow during kindness, spotlight during triumph
+- **Animation Style**: Subtle glitch effects during emotional turmoil, smooth tech during peace, dramatic neon pulses`,
 
-    'Watercolor': `**ADAPTED FOR POETIC, INTROSPECTIVE STORYTELLING**
-- Apply emotional brushwork: rough, dark strokes for turmoil, soft, light strokes for peace
-- Use translucent layering to show emotional depth and complexity
-- Include organic, flowing edges that reflect emotional fluidity
-- Emphasize color bleeding and blending during emotional transitions
-- Create dreamy, introspective atmospheres for reflection moments
-- Use white space symbolically: emptiness during loss, fullness during redemption
-- Animations: Very subtle, contemplative movements; watercolor bleeding effects showing emotional spread; gentle camera drifts; soft character movements showing exhaustion or peace`
+    'Watercolor': `**ADAPTED FOR GENTLE, INTROSPECTIVE STORYTELLING**
+- **Brushwork Emotion**: 
+  * Heavy, dark strokes during pain and abandonment
+  * Light, delicate strokes during hope and healing
+  * Blended, harmonious washes during peace
+- **Color Bleeding**: Intentional bleeding showing emotional overflow - tears, overwhelm, release
+- **Paper Texture**: Visible texture adding vulnerability and authenticity
+- **Transparency Layers**: Multiple layers showing depth of emotion and experience
+- **Soft Edges**: Organic, flowing edges reflecting emotional fluidity
+- **White Space**: Strategic emptiness showing loneliness, then filling with warmth
+- **Pastel Journey**: Grey-blue during sadness → warm peach/coral during love → soft gold during triumph
+- **Artistic Imperfection**: Embrace watercolor's unpredictability as metaphor for life's unexpected beauty
+- **Animation Subtlety**: Minimal, contemplative movements; gentle bleeding effects; soft breathing rhythms; painterly transitions`
   };
 
   const styleLower = style.toLowerCase();
@@ -592,11 +801,12 @@ function getStyleGuidelinesDramatic(style: string): string {
     }
   }
 
-  return `**GENERAL DRAMATIC STORYTELLING APPROACH**
-- Ensure all visual elements serve the emotional narrative
-- Use lighting to convey character's internal state (dark for despair, light for hope)
-- Apply color grading that shifts with emotional journey
-- Include atmospheric effects that amplify mood (rain, fog, dramatic skies)
-- Maintain style consistency while prioritizing emotional storytelling
-- Animations: Every movement must have emotional motivation; camera serves the story; environmental elements reflect internal state`;
+  return `**GENERAL EMOTIONAL STORYTELLING APPROACH**
+- Use style's strengths to show emotional journey from pain to healing
+- Lighting should track emotional state: dark/harsh → warm/soft
+- Color palette should shift: desaturated/cool → saturated/warm
+- Character appearance should show transformation visually
+- Environment should reflect internal state
+- All stylistic choices serve the emotional narrative
+- Animation pacing should match emotional weight of each moment`;
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react';
-import { Film, PenLine, Music, Mic, Tv, Sparkles, Play, Pause, ChevronRight, ChevronLeft, Check } from 'lucide-react';
+import { Film, PenLine, Music, Mic, Tv, Sparkles, Play, Pause, ChevronRight, ChevronLeft, Check, LoaderCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -710,7 +710,7 @@ export const CreateVideoBlueprint = () => {
                     handleBack();
                     paginate(-1);
                   }}
-                  disabled={currentStep === 0}
+                  disabled={currentStep === 0 || isLoading}
                 >
                   <ChevronLeft className="w-4 h-4 mr-2" />
                   Back
@@ -731,7 +731,7 @@ export const CreateVideoBlueprint = () => {
                       handleNext();
                       paginate(1);
                     }}
-                    disabled={!canProceed()}
+                    disabled={!canProceed() || isLoading}
                   >
                     Next
                     <ChevronRight className="w-4 h-4 ml-2" />
@@ -740,6 +740,15 @@ export const CreateVideoBlueprint = () => {
               </div>
             </div>
           </div>
+          {/* Loading overlay */}
+          {isLoading && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+              <div className="flex flex-col items-center gap-4">
+                <LoaderCircle className="h-8 w-8 animate-spin" />
+                <p className="text-lg font-medium">Generating Video Outline...</p>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>
