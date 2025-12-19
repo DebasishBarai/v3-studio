@@ -348,6 +348,7 @@ export default function VideoCreatorPage() {
               </button>
             </div>
           </div>
+
           {/* Background Music Section */}
           <div className="p-6 border border-zinc-800 rounded-xl bg-zinc-900/50">
             <div className="flex items-center gap-2 mb-2">
