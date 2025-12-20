@@ -225,6 +225,7 @@ export default defineSchema({
     userId: v.id('users'),
 
     autoGenerate: v.optional(v.boolean()),
+    autoGenerateError: v.optional(v.string()),
     prompt: v.string(),
     title: v.optional(v.string()),
     style: styleValidator,

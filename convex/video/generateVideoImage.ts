@@ -74,6 +74,11 @@ export const internalGenerateCharacterImage = internalAction({
       throw new Error("Video not found");
     }
 
+    // check whether the character is already generated
+    if (video.characters[args.characterIndex].imageUrl) {
+      throw new Error("Character image already generated");
+    }
+
     try {
       // update character InProcess
       const updatedCharacters = video.characters.map((character, index) =>
