@@ -16,7 +16,7 @@ export const createVideoBlueprint = action({
   args: {
     prompt: v.string(),
     style: styleValidator,
-    music: musicValidator,
+    music: v.optional(musicValidator),
     voice: voiceValidator,
     durationInSecs: v.number(),
     aspectRatio: aspectRatioValidator,

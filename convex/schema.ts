@@ -229,7 +229,7 @@ export default defineSchema({
     prompt: v.string(),
     title: v.optional(v.string()),
     style: styleValidator,
-    music: musicValidator,
+    music: v.optional(musicValidator),
     voice: voiceValidator,
     durationInSecs: v.number(), // Total video length in seconds
     aspectRatio: aspectRatioValidator,

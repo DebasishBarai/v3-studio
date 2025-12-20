@@ -183,17 +183,32 @@ export const CreateVideoBlueprint = () => {
 
     try {
       setIsLoading(true);
-      const videoId = await createVideoBlueprint({
-        prompt,
-        style: styles.find(s => s.id === selectedStyle)!.name as Infer<typeof styleValidator>,
-        music: musics.find(s => s.id === selectedMusic)!.music as Infer<typeof musicValidator>,
-        voice: voices.find(s => s.id === selectedVoice)!.voice as Infer<typeof voiceValidator>,
-        aspectRatio: aspectRatios.find(s => s.id === selectedAspectRatio)!.label as Infer<typeof aspectRatioValidator>,
-        durationInSecs: selectedDuration,
-        storyTellingStyle: storyTellingStyle === 'dramatic' ? 'dramatic' : 'default',
-        numberOfImagesPerPrompt: 1,
-        generateMultipleAngles: false,
-      });
+
+      let videoId;
+      if (selectedMusic === 0) {
+        videoId = await createVideoBlueprint({
+          prompt,
+          style: styles.find(s => s.id === selectedStyle)!.name as Infer<typeof styleValidator>,
+          voice: voices.find(s => s.id === selectedVoice)!.voice as Infer<typeof voiceValidator>,
+          aspectRatio: aspectRatios.find(s => s.id === selectedAspectRatio)!.label as Infer<typeof aspectRatioValidator>,
+          durationInSecs: selectedDuration,
+          storyTellingStyle: storyTellingStyle === 'dramatic' ? 'dramatic' : 'default',
+          numberOfImagesPerPrompt: 1,
+          generateMultipleAngles: false,
+        });
+      } else {
+        videoId = await createVideoBlueprint({
+          prompt,
+          style: styles.find(s => s.id === selectedStyle)!.name as Infer<typeof styleValidator>,
+          music: musics.find(s => s.id === selectedMusic)!.music as Infer<typeof musicValidator>,
+          voice: voices.find(s => s.id === selectedVoice)!.voice as Infer<typeof voiceValidator>,
+          aspectRatio: aspectRatios.find(s => s.id === selectedAspectRatio)!.label as Infer<typeof aspectRatioValidator>,
+          durationInSecs: selectedDuration,
+          storyTellingStyle: storyTellingStyle === 'dramatic' ? 'dramatic' : 'default',
+          numberOfImagesPerPrompt: 1,
+          generateMultipleAngles: false,
+        });
+      }
 
       router.push(`/ai-tools/ai-video/editor/${videoId}`);
     } catch (error) {
@@ -538,12 +553,37 @@ export const CreateVideoBlueprint = () => {
                   Select background music to set the mood.
                 </p>
                 <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[350px] overflow-auto">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.05 }}
+                    onClick={() => setSelectedMusic(0)}
+                    className={cn(
+                      "relative flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all hover:scale-105",
+                      selectedMusic === 0
+                        ? 'border-green-500 bg-green-500/10 ring-2 ring-green-500/50'
+                        : 'border-border bg-secondary/50'
+                    )}
+                  >
+                    <div className="flex-1">
+                      <p className="font-semibold">None</p>
+                    </div>
+                    {selectedMusic === 0 && (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="absolute top-2 right-2 bg-green-500 rounded-full p-1"
+                      >
+                        <Check className="w-4 h-4 text-white" />
+                      </motion.div>
+                    )}
+                  </ motion.div>
                   {musics.map((track, index) => (
                     <motion.div
                       key={track.id}
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.05 }}
+                      transition={{ delay: (index + 1) * 0.05 }}
                       onClick={() => setSelectedMusic(track.id)}
                       className={cn(
                         "relative flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all hover:scale-105",

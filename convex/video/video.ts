@@ -71,6 +71,7 @@ export const updateVideo = mutation({
   args: {
     id: v.id("videos"),
     update: partial(videoFields),
+    clearMusic: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -98,7 +99,26 @@ export const updateVideo = mutation({
       throw new Error("Not authenticated for this video");
     }
 
-    await ctx.db.patch(args.id, args.update)
+    console.log('update video');
+    console.log({ args })
+
+    const patch: any = {};
+
+    // Only set music: undefined if the client explicitly asked to clear it.
+    if (args.clearMusic) {
+      patch.music = undefined; // this will remove the field
+    } else if ("music" in args.update) {
+      patch.music = args.update.music; // normal update
+    }
+
+    // Copy over other fields that are present in args.update
+    // (skipping undefined ones, since they were stripped already)
+    for (const [key, value] of Object.entries(args.update)) {
+      if (key === "music") continue;
+      patch[key] = value;
+    }
+
+    await ctx.db.patch(args.id, patch)
   }
 })
 
@@ -107,7 +127,7 @@ export const createInternalVideo = internalMutation({
     userId: v.id('users'),
     prompt: v.string(),
     style: styleValidator,
-    music: musicValidator,
+    music: v.optional(musicValidator),
     voice: voiceValidator,
     aspectRatio: aspectRatioValidator,
     durationInSecs: v.number(),

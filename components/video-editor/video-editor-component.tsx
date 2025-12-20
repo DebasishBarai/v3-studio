@@ -594,10 +594,18 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
       // Remove Convex system fields before saving
       const { _id, _creationTime, userId, ...updateData } = videoData;
 
-      await updateVideo({
-        id: id,
-        update: updateData
-      });
+      if (updateData.music === undefined) {
+        await updateVideo({
+          id: id,
+          update: updateData,
+          clearMusic: true
+        });
+      } else {
+        await updateVideo({
+          id: id,
+          update: updateData
+        });
+      }
       toast.success('Video saved successfully!');
     } catch (error) {
       console.error('Error saving video:', error);
@@ -862,9 +870,16 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                       <div>
                         <label className="block text-sm font-medium text-gray-300 mb-2">Music</label>
                         <select
-                          value={videoData.music.title}
+                          value={videoData.music?.title ?? 'none'}
                           onChange={(e) => {
-                            const selected = musics.find(m => `${m.music.title}` === e.target.value);
+                            const value = e.target.value;
+
+                            if (value === "none") {
+                              updateField("music", undefined);
+                              return;
+                            }
+
+                            const selected = musics.find(m => `${m.music.title}` === value);
                             if (selected) {
                               updateNestedField('music.title', selected.music.title);
                               updateNestedField('music.previewUrl', selected.music.previewUrl);
@@ -872,7 +887,10 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                           }}
                           className="w-full px-4 py-2 bg-white/5 cursor-pointer border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                         >
-                          <option value="" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>Select Music</option>
+                          <option value="none" style={{ backgroundColor: "#1E1E2D", color: "white" }}>
+                            None
+                          </option>
+                          <option value="" disabled style={{ backgroundColor: '#1E1E2D', color: 'white' }}>Select Music</option>
                           {musics.map((music) => (
                             <option key={music.id} value={music.music.title} style={{ backgroundColor: '#1E1E2D', color: 'white' }}>
                               {music.music.title}
