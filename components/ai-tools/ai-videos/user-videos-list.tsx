@@ -37,14 +37,7 @@ export const UsersVideosList = () => {
             <p className="max-w-sm">
               Start creating your first AI Powered Video to bring your ideas to life!
             </p>
-            <Link href="/ai-tools/ai-video/create">
-              <Button
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow hover:bg-primary/90 h-9 mt-6 px-5 py-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md"
-                type="button"
-              >
-                Create New Video
-              </Button>
-            </Link>
+            <CreateVideoBlueprint />
           </div>
         )}
 
