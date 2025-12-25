@@ -317,7 +317,7 @@ export const CreateVideoBlueprint = () => {
                 <CurrentIcon className={cn("w-6 h-6", steps[currentStep].color)} />
               </div>
               <div>
-                <h2 className="text-2xl font-bold">{steps[currentStep].title}</h2>
+                <h2 className={cn("text-2xl font-bold", steps[currentStep].color)}>{steps[currentStep].title}</h2>
                 <p className="text-sm text-muted-foreground">
                   Step {currentStep + 1} of {steps.length}
                 </p>
@@ -561,7 +561,7 @@ export const CreateVideoBlueprint = () => {
                     className={cn(
                       "relative flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all hover:scale-105",
                       selectedMusic === 0
-                        ? 'border-green-500 bg-green-500/10 ring-2 ring-green-500/50'
+                        ? 'border-cyan-500 bg-cyan-500/10 ring-2 ring-cyan-500/50'
                         : 'border-border bg-secondary/50'
                     )}
                   >
@@ -572,7 +572,7 @@ export const CreateVideoBlueprint = () => {
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="absolute top-2 right-2 bg-green-500 rounded-full p-1"
+                        className="absolute top-2 right-2 bg-cyan-500 rounded-full p-1"
                       >
                         <Check className="w-4 h-4 text-white" />
                       </motion.div>
@@ -588,7 +588,7 @@ export const CreateVideoBlueprint = () => {
                       className={cn(
                         "relative flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all hover:scale-105",
                         selectedMusic === track.id
-                          ? 'border-green-500 bg-green-500/10 ring-2 ring-green-500/50'
+                          ? 'border-cyan-500 bg-cyan-500/10 ring-2 ring-cyan-500/50'
                           : 'border-border bg-secondary/50'
                       )}
                     >
@@ -612,7 +612,7 @@ export const CreateVideoBlueprint = () => {
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
-                          className="absolute top-2 right-2 bg-green-500 rounded-full p-1"
+                          className="absolute top-2 right-2 bg-cyan-500 rounded-full p-1"
                         >
                           <Check className="w-4 h-4 text-white" />
                         </motion.div>
@@ -700,8 +700,8 @@ export const CreateVideoBlueprint = () => {
       </Button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className={cn("max-w-[95svw] max-h-[90svh] overflow-auto p-0 bg-zinc-950/90 backdrop-blur-xl border-zinc-800")}>
-          <DialogHeader className="px-6 pt-6 pb-4 border-b">
+        <DialogContent className={cn("max-w-[95svw] max-h-[90svh] overflow-auto p-0 bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] backdrop-blur-xl border-zinc-800")}>
+          <DialogHeader className="px-6 pt-6 pb-4 border-b bg-red-500">
             <DialogTitle className="text-2xl font-bold flex items-center gap-2">
               <Film className="w-6 h-6" />
               Create Your AI Video
@@ -742,7 +742,7 @@ export const CreateVideoBlueprint = () => {
             </div>
 
             {/* Footer */}
-            <div className="border-t px-6 py-4 bg-muted/30">
+            <div className="border-t px-6 py-4 bg-slate-600/30">
               <div className="flex justify-between items-center">
                 <Button
                   variant="ghost"
@@ -760,7 +760,7 @@ export const CreateVideoBlueprint = () => {
                   <Button
                     onClick={generateVideo}
                     disabled={!canProceed()}
-                    className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white"
+                    className="bg-red-500 hover:to-purple-700 text-white"
                   >
                     {isLoading ? <Spinner /> : <Sparkles className="w-6 h-6" />}
                     {isLoading ? 'Generating...' : 'Generate Outline'}
