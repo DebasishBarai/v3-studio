@@ -37,9 +37,16 @@ export const ProductPreviewSection = () => {
             opacity,
             transformPerspective: 1400,
           }}
-          className="w-[92%] max-w-6xl"
+          className="relative w-[92%] max-w-6xl"
         >
+          {/* White glow layers */}
+          <div className="pointer-events-none absolute inset-0 -z-10">
+            {/* Core soft glow */}
+            <div className="absolute inset-0 rounded-3xl blur-xl bg-white/20" />
 
+            {/* Larger diffused halo */}
+            <div className="absolute -inset-16 rounded-[40px] blur-[120px] bg-white/10" />
+          </div>
           <Image
             src="/dashboardpage.png" // <-- your screenshot
             alt="V3 Studio Dashboard"
