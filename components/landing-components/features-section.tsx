@@ -42,7 +42,10 @@ export const Features = () => {
   ];
 
   return (
-    <div className="z-20 py-20 text-white text-center px-6">
+    <div
+      id="features"
+      className="z-20 py-20 text-white text-center px-6"
+    >
       <h2 className="text-3xl md:text-5xl font-bold mb-10">
         Everything You Need to{" "}
         <span className="text-pink-400">Create AI Movies</span>

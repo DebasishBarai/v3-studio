@@ -217,9 +217,9 @@ export function PlaceholdersAndVanishInput({
         <Button
           variant='default'
           size="sm"
-          className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 px-3 text-xs rounded-full cursor-pointer bg-gradient-to-r from-[#BE575F] via-[#A338E3] to-[#AC76D6] text-white shadow hover:opacity-90 transition-opacity"
+          className="absolute right-2 top-1/2 z-30 -translate-y-1/2 h-8 px-3 text-xs rounded-full cursor-pointer bg-gradient-to-r from-[#BE575F] via-[#A338E3] to-[#AC76D6] text-white shadow hover:opacity-90 transition-opacity"
         >
-          Try Now
+          Try it Free
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </Link>

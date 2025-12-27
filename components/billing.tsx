@@ -139,7 +139,10 @@ export const PricingPage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
+    <div
+      id="pricing"
+      className="w-full min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8"
+    >
       <div className="max-w-7xl mx-auto">
         {/* Tabs */}
         <div className="flex items-center justify-center mb-12">

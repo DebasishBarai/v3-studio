@@ -18,7 +18,10 @@ export const HeroSection = () => {
   ];
 
   return (
-    <div className="h-[80vh] w-full flex flex-col justify-center items-center text-center px-4">
+    <div
+      id="hero"
+      className="h-[80vh] w-full flex flex-col justify-center items-center text-center px-4"
+    >
 
       {/* Marquee with images */}
       <div className="absolute top-[15%] inset-0 z-0">
