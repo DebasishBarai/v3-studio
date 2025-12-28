@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react';
-import { Film, PenLine, Music, Mic, Tv, Sparkles, Play, Pause, ChevronRight, ChevronLeft, Check, LoaderCircle } from 'lucide-react';
+import { Film, PenLine, Music, Mic, Tv, Bot, Gauge, Sparkles, Play, Pause, ChevronRight, ChevronLeft, Check, LoaderCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -44,6 +44,8 @@ export const CreateVideoBlueprint = () => {
   const [selectedAspectRatio, setSelectedAspectRatio] = useState<string | null>(null);
   const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
   const [storyTellingStyle, setStoryTellingStyle] = useState<string | null>(null);
+  const [selectedModel, setSelectedModel] = useState<string | null>(null);
+  const [selectedResolution, setSelectedResolution] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter()
@@ -65,6 +67,16 @@ export const CreateVideoBlueprint = () => {
     { id: '16:9', label: '16:9', description: 'Landscape' },
     { id: '9:16', label: '9:16', description: 'Portrait' },
   ];
+
+  const models = [
+    { id: 'standard', label: 'Standard', description: 'The standard model generates videos without audio and requires narration. Cheaper' },
+    { id: 'premium', label: 'Premium', description: 'The premium model provides videos with audio. Uses best in industry video generation models' },
+  ]
+
+  const resolutions = [
+    { id: '480p', label: '480p', description: 'Low quality. Only available in standard model' },
+    { id: '720p', label: '720p', description: 'High quality' },
+  ]
 
   const durations = [
     { id: 15, label: '15s', description: 'Quick' },
@@ -100,9 +112,11 @@ export const CreateVideoBlueprint = () => {
     { id: 1, title: 'Style', icon: Film, color: 'text-purple-500' },
     { id: 2, title: 'Aspect Ratio', icon: Tv, color: 'text-yellow-500' },
     { id: 3, title: 'Duration', icon: Film, color: 'text-orange-500' },
-    { id: 4, title: 'Story Style', icon: Sparkles, color: 'text-blue-500' },
-    { id: 5, title: 'Music', icon: Music, color: 'text-cyan-500' },
-    { id: 6, title: 'Voice', icon: Mic, color: 'text-green-500' },
+    { id: 4, title: 'AI Model', icon: Bot, color: 'text-indigo-500' },
+    { id: 5, title: 'Video Quality', icon: Gauge, color: 'text-emerald-500' },
+    { id: 6, title: 'Story Style', icon: Sparkles, color: 'text-blue-500' },
+    { id: 7, title: 'Music', icon: Music, color: 'text-cyan-500' },
+    { id: 8, title: 'Voice', icon: Mic, color: 'text-green-500' },
   ];
 
   useEffect(() => {
@@ -232,9 +246,11 @@ export const CreateVideoBlueprint = () => {
       case 1: return selectedStyle !== null;
       case 2: return selectedAspectRatio !== null;
       case 3: return selectedDuration !== null;
-      case 4: return storyTellingStyle !== null;
-      case 5: return selectedMusic !== null;
-      case 6: return selectedVoice !== null;
+      case 4: return selectedModel !== null;
+      case 5: return selectedResolution !== null;
+      case 6: return storyTellingStyle !== null;
+      case 7: return selectedMusic !== null;
+      case 8: return selectedVoice !== null;
       default: return false;
     }
   };
@@ -260,6 +276,8 @@ export const CreateVideoBlueprint = () => {
     setSelectedAspectRatio(null);
     setSelectedDuration(null);
     setStoryTellingStyle(null);
+    setSelectedModel(null);
+    setSelectedResolution(null);
   };
 
   const slideVariants = {
@@ -310,9 +328,11 @@ export const CreateVideoBlueprint = () => {
                 currentStep === 1 && "from-purple-500/20 to-purple-600/20",
                 currentStep === 2 && "from-yellow-500/20 to-yellow-600/20",
                 currentStep === 3 && "from-orange-500/20 to-orange-600/20",
-                currentStep === 4 && "from-blue-500/20 to-blue-600/20",
-                currentStep === 5 && "from-cyan-500/20 to-cyan-600/20",
-                currentStep === 6 && "from-green-500/20 to-green-600/20"
+                currentStep === 4 && "from-indigo-500/20 to-indigo-600/20",
+                currentStep === 5 && "from-emerald-500/20 to-emerald-600/20",
+                currentStep === 6 && "from-blue-500/20 to-blue-600/20",
+                currentStep === 7 && "from-cyan-500/20 to-cyan-600/20",
+                currentStep === 8 && "from-green-500/20 to-green-600/20"
               )}>
                 <CurrentIcon className={cn("w-6 h-6", steps[currentStep].color)} />
               </div>
@@ -502,6 +522,100 @@ export const CreateVideoBlueprint = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
+                {/* AI Model Section */}
+                <p className="text-muted-foreground mb-4">
+                  Select the AI model to use for generating the video.
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {models.map((model, index) => (
+                    <motion.button
+                      key={model.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      onClick={() => {
+                        if (model.id === 'premium' && selectedResolution === '480p') {
+                          setSelectedResolution('720p')
+                        }
+                        setSelectedModel(model.id)
+                      }}
+                      className={cn(
+                        "relative p-8 rounded-lg border-2 transition-all hover:scale-105",
+                        selectedModel === model.id
+                          ? 'border-indigo-500 bg-indigo-500/10 ring-2 ring-indigo-500/50'
+                          : 'border-border bg-secondary/50'
+                      )}
+                    >
+                      <div className="text-center">
+                        <p className="text-3xl font-bold mb-2">{model.label}</p>
+                        <p className="text-sm text-muted-foreground">{model.description}</p>
+                      </div>
+                      {selectedModel === model.id && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute top-2 right-2 bg-indigo-500 rounded-full p-1"
+                        >
+                          <Check className="w-4 h-4 text-white" />
+                        </motion.div>
+                      )}
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {currentStep === 5 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                {/* Aspect Ratio Section */}
+                <p className="text-muted-foreground mb-4">
+                  Select the resolution for your video output.
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {resolutions.map((resolution, index) => (
+                    <motion.button
+                      key={resolution.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      disabled={selectedModel === 'premium' && resolution.id === '480p'}
+                      onClick={() => setSelectedResolution(resolution.id)}
+                      className={cn(
+                        "relative p-8 rounded-lg border-2 transition-all hover:scale-105",
+                        selectedResolution === resolution.id
+                          ? 'border-emerald-500 bg-emerald-500/10 ring-2 ring-emerald-500/50'
+                          : 'border-border bg-secondary/50'
+                      )}
+                    >
+                      <div className="text-center">
+                        <p className="text-3xl font-bold mb-2">{resolution.label}</p>
+                        <p className="text-sm text-muted-foreground">{resolution.description}</p>
+                      </div>
+                      {selectedResolution === resolution.id && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute top-2 right-2 bg-emerald-500 rounded-full p-1"
+                        >
+                          <Check className="w-4 h-4 text-white" />
+                        </motion.div>
+                      )}
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {currentStep === 6 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
                 {/* Storytelling Style Section */}
                 <p className="text-muted-foreground mb-4">
                   Choose the storytelling approach for your video.
@@ -542,7 +656,7 @@ export const CreateVideoBlueprint = () => {
               </motion.div>
             )}
 
-            {currentStep === 5 && (
+            {currentStep === 7 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -623,7 +737,7 @@ export const CreateVideoBlueprint = () => {
               </motion.div>
             )}
 
-            {currentStep === 6 && (
+            {currentStep === 8 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

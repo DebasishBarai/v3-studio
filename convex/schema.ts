@@ -45,6 +45,11 @@ export const styleValidator = v.union(
   v.literal('Watercolor'),
 )
 
+export const videoResolutionValidator = v.union(
+  v.literal('480p'),
+  v.literal('720p'),
+)
+
 export const musicValidator = v.union(
   v.object({ title: v.literal('Dark Tranquility'), previewUrl: v.literal('https://happysoulmusic.com/wp-content/grand-media/audio/Dark_Tranquility_-_Anno_Domini_Beats.mp3'), }),
   v.object({ title: v.literal('Intentions'), previewUrl: v.literal('https://debb-bucket.s3.ap-south-1.amazonaws.com/background_music/Intentions+-+Anno+Domini+Beats.mp3'), }),
@@ -62,6 +67,19 @@ export const musicValidator = v.union(
   v.object({ title: v.literal('Chill Pop'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2024/02/02/audio_9c1cf8951d.mp3'), }),
   v.object({ title: v.literal('Future Beats'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2024/01/25/audio_8698bda9da.mp3'), }),
   v.object({ title: v.literal('Chill Beats'), previewUrl: v.literal('https://cdn.pixabay.com/audio/2024/01/02/audio_c88a26ff39.mp3'), }),
+)
+
+export const videoGenerationModelSchema = v.union(
+  v.object({ model: v.literal('wan-video/wan-2.2-i2v-fast'), audio: v.literal('none'), category: v.literal('standard'), }),
+  v.object({ model: v.literal('openai/sora-2'), audio: v.literal('lipsync'), category: v.literal('premium'), }),
+  v.object({ model: v.literal('wan-video/wan-2.5-i2v'), audio: v.literal('background'), category: v.literal('premium'), }),
+  v.object({ model: v.literal('google/veo-3.1-fast'), audio: v.literal('lipsync'), category: v.literal('premium'), }),
+  v.object({ model: v.literal('google/veo-3.1'), audio: v.literal('lipsync'), category: v.literal('premium'), }),
+  v.object({ model: v.literal('google/veo-3'), audio: v.literal('lipsync'), category: v.literal('premium'), }),
+  v.object({ model: v.literal('google/veo-3-fast'), audio: v.literal('lipsync'), category: v.literal('premium'), }),
+  v.object({ model: v.literal('openai/sora-2-pro'), audio: v.literal('lipsync'), category: v.literal('premium'), }),
+  v.object({ model: v.literal('bytedance/seedance-1-pro'), audio: v.literal('none'), category: v.literal('standard'), }),
+  v.object({ model: v.literal('bytedance/seedance-1-lite'), audio: v.literal('none'), category: v.literal('standard'), }),
 )
 
 // Video aspect ratios
@@ -233,6 +251,7 @@ export default defineSchema({
     voice: voiceValidator,
     durationInSecs: v.number(), // Total video length in seconds
     aspectRatio: aspectRatioValidator,
+    resolution: v.optional(videoResolutionValidator),
 
     videoUrl: v.optional(v.string()),
     thumbnailUrl: v.optional(v.string()),
@@ -243,6 +262,8 @@ export default defineSchema({
     captionStyle: v.optional(captionStyleSchema),
 
     storyTellingStyle: v.optional(v.union(v.literal('default'), v.literal('dramatic'))),
+
+    videoGenerationModel: v.optional(videoGenerationModelSchema),
 
     // Error handling
     error: v.optional(v.object({
