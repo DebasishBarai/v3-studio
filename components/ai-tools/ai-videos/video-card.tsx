@@ -18,7 +18,7 @@ export default function VideoCard({ video, index }: { video: any; index: number 
     if (!sceneImages?.length) return
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % sceneImages.length)
-    }, 2000)
+    }, (Math.floor(Math.random() * 4000) + 2000))
     return () => clearInterval(interval)
   }, [sceneImages])
 
