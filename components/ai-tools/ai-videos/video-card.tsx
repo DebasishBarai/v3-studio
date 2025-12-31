@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Play, ImageOff } from "lucide-react"
+import { Play, ImageOff, SquarePen } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { motion } from "framer-motion"
 
 export default function VideoCard({ video, index }: { video: any; index: number }) {
   const sceneImages = video?.scenes
@@ -23,8 +24,14 @@ export default function VideoCard({ video, index }: { video: any; index: number 
   }, [sceneImages])
 
   return (
-    <div
+    <motion.div
       key={index}
+      whileHover={{ scale: 1.03 }}
+      transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+      }}
       className="relative rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm bg-slate-100 dark:bg-slate-800/10"
     >
       {/* Scene Image */}
@@ -56,7 +63,7 @@ export default function VideoCard({ video, index }: { video: any; index: number 
         <div className="flex gap-2">
           <Link href={`/ai-tools/ai-video/editor/${video._id}`}>
             <Button size="sm" variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-none">
-              Edit
+              <SquarePen className="w-4 h-4" />
             </Button>
           </Link>
 
@@ -69,7 +76,7 @@ export default function VideoCard({ video, index }: { video: any; index: number 
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 

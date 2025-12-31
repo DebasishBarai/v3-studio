@@ -381,3 +381,11 @@ export const CAPTION_PRESETS: Record<string, CaptionStyleType> = {
     showCaption: true,
   }
 } as const;
+
+// arrays generated from schema
+export const videoGenerationModelArray = v.array(videoGenerationModelSchema);
+export const aspectRatioArray = v.array(aspectRatioValidator);
+export const styleArray = v.array(styleValidator);
+export const voiceArray = v.array(voiceValidator);
+export const musicArray = v.array(musicValidator);
+export const videoResolutionArray = v.array(videoResolutionValidator);

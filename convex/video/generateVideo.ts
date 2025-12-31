@@ -91,10 +91,12 @@ export const internalGenerateSceneVideo = internalAction({
       const input = {
         image: args.baseImageUrl,
         prompt: args.prompt,
-        resolution: "720p",
+        resolution: video?.resolution || "720p",
       };
 
-      const output = await replicate.run("wan-video/wan-2.2-i2v-fast", { input });
+      const model = video?.videoGenerationModel?.model || "wan-video/wan-2.2-i2v-fast";
+
+      const output = await replicate.run(model, { input });
 
       // @ts-expect-error replicate.run() has the url() method
       const resp = await fetch(output.url());
@@ -136,7 +138,7 @@ export const internalGenerateSceneVideo = internalAction({
       // update credits
       await ctx.runMutation(internal.user.decreaseInternalCredits, {
         subject: user.subject,
-        amount: 5,
+        amount: video?.videoGenerationModel?.category === 'premium' ? 10 : 5,
       });
       return { videoStorageId, videoUrl }
     } catch (error) {

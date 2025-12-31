@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import schema, { styleValidator, musicValidator, aspectRatioValidator, voiceValidator, sceneSchema, characterSchema } from "../schema";
+import schema, { styleValidator, musicValidator, aspectRatioValidator, voiceValidator, sceneSchema, characterSchema, videoGenerationModelSchema, videoResolutionValidator } from "../schema";
 import { Id } from "../_generated/dataModel";
 import { internalMutation, internalQuery, mutation, query } from "../_generated/server";
 import { partial } from "convex-helpers/validators";
@@ -137,6 +137,8 @@ export const createInternalVideo = internalMutation({
     characters: v.array(characterSchema),
     scenes: v.array(sceneSchema),
     storyTellingStyle: v.optional(v.union(v.literal('default'), v.literal('dramatic'))),
+    videoGenerationModel: v.optional(videoGenerationModelSchema),
+    resolution: v.optional(videoResolutionValidator),
   },
   handler: async (ctx, args): Promise<Id<'videos'>> => {
     const video = await ctx.db
@@ -154,6 +156,8 @@ export const createInternalVideo = internalMutation({
         characters: args.characters,
         scenes: args.scenes,
         storyTellingStyle: args.storyTellingStyle,
+        videoGenerationModel: args?.videoGenerationModel,
+        resolution: args?.resolution,
       })
 
     return video

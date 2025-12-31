@@ -3,7 +3,7 @@
 import { api } from "@/convex/_generated/api"
 import { Doc, Id } from '@/convex/_generated/dataModel'
 import { useAction, useMutation, useQuery } from "convex/react"
-import { ChevronDown, ChevronUp, Cog, Download, ImagePlay, Play, Plus, Save, Settings, User, Video } from 'lucide-react'
+import { ChevronDown, ChevronUp, Rocket, Download, ImagePlay, Play, Plus, Save, Settings, User, Video } from 'lucide-react'
 import { useEffect, useState, useRef } from 'react'
 import { toast } from "sonner"
 import { CharacterCard } from "@/components/ui/custom/character-card"
@@ -22,6 +22,9 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { AutoGenerateProgressDialog } from "@/components/video-editor/auto-generate-dialog"
 
+import { ConfirmDialog } from '@/components/confirm-dialog';
+import { useConfirmDialogHook } from '@/hooks/use-confirm-dialog-hook';
+import { calculateTotalCreditsRequired } from "@/lib/functions"
 
 const ItemType = 'SCENE';
 
@@ -82,6 +85,8 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
   const updateVideo = useMutation(api.video.video.updateVideo);
 
   const user = useQuery(api.user.getUser)
+
+  const { open, config, confirm, handleConfirm } = useConfirmDialogHook()
 
   const [durationInSeconds, setDurationInSeconds] = useState(0)
   const [localUrl, setLocalUrl] = useState<string | null>(null)
@@ -324,6 +329,20 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
       return;
     }
 
+    const confirmConfig = {
+      action: 'Generating Character Image',
+      requiredCredits: 5,
+      balanceCredits: user?.credits ? user.credits - 5 : 0
+    }
+
+    const confirmed = await confirm(confirmConfig)
+
+    if (!confirmed) {
+      setGeneratingCharacter(null);
+      setModifyingCharacter(null);
+      return
+    }
+
     try {
       let result
       if (!baseImageId) {
@@ -443,6 +462,19 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
       return;
     }
 
+    const confirmConfig = {
+      action: 'Generating Scene Image',
+      requiredCredits: 5,
+      balanceCredits: user?.credits ? user.credits - 5 : 0
+    }
+
+    const confirmed = await confirm(confirmConfig)
+
+    if (!confirmed) {
+      setGeneratingScene(null);
+      return
+    }
+
     try {
       let result
       if (baseImageId) {
@@ -538,6 +570,23 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
       return;
     }
 
+    const confirmConfig = videoData.videoGenerationModel?.category === 'premium' ? {
+      action: 'Generating Scene Video',
+      requiredCredits: 10,
+      balanceCredits: user?.credits ? user.credits - 10 : 0
+    } : {
+      action: 'Generating Scene Video',
+      requiredCredits: 5,
+      balanceCredits: user?.credits ? user.credits - 5 : 0
+    }
+
+    const confirmed = await confirm(confirmConfig)
+
+    if (!confirmed) {
+      setGeneratingScene(null);
+      return
+    }
+
     try {
       const result = await generateSceneVideoAction({
         prompt,
@@ -566,6 +615,19 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
       toast.error('Please enter a prompt for the scene audio');
       setGeneratingScene(null);
       return;
+    }
+
+    const confirmConfig = {
+      action: 'Generating Scene Audio',
+      requiredCredits: 5,
+      balanceCredits: user?.credits ? user.credits - 5 : 0
+    }
+
+    const confirmed = await confirm(confirmConfig)
+
+    if (!confirmed) {
+      setGeneratingScene(null);
+      return
     }
 
     try {
@@ -687,6 +749,26 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
         return;
       }
 
+      const totalRequiredCredits = calculateTotalCreditsRequired(video)
+
+      if (totalRequiredCredits === 0) {
+        toast.info('The video is fully generated')
+        return
+      }
+
+      const confirmConfig = {
+        action: 'Auto Generating Video',
+        requiredCredits: totalRequiredCredits,
+        balanceCredits: user?.credits ? user.credits - totalRequiredCredits : 0
+      }
+
+      const confirmed = await confirm(confirmConfig)
+
+      if (!confirmed) {
+        setGeneratingScene(null);
+        return
+      }
+
       toast.info('Auto Generating video...')
 
       await autoGenerateVideoAction({
@@ -734,7 +816,9 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                   className={cn("mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md")}
                 >
                   <Download className="w-5 h-5" />
-                  Download Video
+                  <span className='hidden md:inline'>
+                    Download Video
+                  </span>
                 </button>
               )}
               {!videoData.videoUrl && (
@@ -743,7 +827,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                   disabled={isSaving}
                   className={cn("mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md")}
                 >
-                  <Cog className="w-5 h-5" />
+                  <Rocket className="w-5 h-5" />
                   <span className='hidden md:inline'>
                     Auto Generate
                   </span>
@@ -911,11 +995,34 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                           <option value="1:1" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>1:1 (Square)</option>
                         </select>
                       </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Video Quality</label>
+                        <select
+                          value={videoData.resolution || '720p'}
+                          disabled
+                          onChange={(e) => updateField('resolution', e.target.value)}
+                          className="w-full px-4 py-2 bg-white/5 cursor-not-allowed border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        >
+                          <option value="480p" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>480p</option>
+                          <option value="720p" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>720p</option>
+                        </select>
+                      </div>
                     </div>
 
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="col-span-1 md:col-span-2">
+                      <div className="col-span-1">
+                        <label className="block text-sm font-medium text-gray-300 mb-2">AI Video Model</label>
+                        <select
+                          value={videoData.videoGenerationModel?.category || 'standard'}
+                          disabled
+                          className="w-full px-4 py-2 bg-white/5 cursor-not-allowed border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        >
+                          <option value="standard" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>Standard Model</option>
+                          <option value="premium" style={{ backgroundColor: '#1E1E2D', color: 'white' }}>Premium Model</option>
+                        </select>
+                      </div>
+                      <div className="col-span-1">
                         <label className="block text-sm font-medium text-gray-300 mb-2">Voiceover</label>
                         <select
                           value={`${videoData.voice.name} (${videoData.voice.gender})`}
@@ -1066,6 +1173,13 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
           )}
         </div>
       </div>
+      <ConfirmDialog
+        open={open}
+        action={config?.action ?? ""}
+        requiredCredits={config?.requiredCredits ?? 0}
+        balanceCredits={config?.balanceCredits ?? 0}
+        onConfirm={handleConfirm}
+      />
     </DndProvider>
   );
 };

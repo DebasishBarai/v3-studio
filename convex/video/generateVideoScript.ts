@@ -4,7 +4,7 @@ import { GoogleGenAI } from "@google/genai";
 import { videoGenerationPrompt, videoGenerationPromptDramatic } from "../helper";
 import { v } from "convex/values";
 import { action } from "../_generated/server";
-import { styleValidator, musicValidator, aspectRatioValidator, voiceValidator } from "../schema";
+import { styleValidator, musicValidator, aspectRatioValidator, voiceValidator, videoResolutionValidator, videoGenerationModelSchema } from "../schema";
 import { internal } from "../_generated/api";
 import { Id } from "../_generated/dataModel";
 
@@ -23,6 +23,9 @@ export const createVideoBlueprint = action({
     numberOfImagesPerPrompt: v.number(),
     generateMultipleAngles: v.boolean(),
     storyTellingStyle: v.optional(v.union(v.literal('default'), v.literal('dramatic'))),
+    videoGenerationModel: v.optional(videoGenerationModelSchema),
+    resolution: v.optional(videoResolutionValidator),
+
   },
   handler: async (ctx, args): Promise<Id<'videos'>> => {
     const identity = await ctx.auth.getUserIdentity();
@@ -84,6 +87,8 @@ export const createVideoBlueprint = action({
       characters: blueprint.characters,
       scenes: blueprint.scenes,
       storyTellingStyle: args.storyTellingStyle,
+      videoGenerationModel: args?.videoGenerationModel,
+      resolution: args?.resolution,
     })
 
     // update credits

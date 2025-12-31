@@ -8,13 +8,15 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
-import { useAction, useConvex } from 'convex/react';
+import { useAction, useConvex, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { toast } from 'sonner';
-import { aspectRatioValidator, musicValidator, styleValidator, voiceValidator } from '@/convex/schema';
+import { aspectRatioValidator, musicValidator, styleValidator, videoResolutionValidator, voiceValidator } from '@/convex/schema';
 import { Infer } from 'convex/values';
 import { useRouter } from 'next/navigation';
 import { Spinner } from '@/components/ui/spinner';
+import { ConfirmDialog } from '@/components/confirm-dialog';
+import { useConfirmDialogHook } from '@/hooks/use-confirm-dialog-hook';
 
 interface VoiceType {
   id: number;
@@ -52,6 +54,10 @@ export const CreateVideoBlueprint = () => {
   const convex = useConvex()
   const createVideoBlueprint = useAction(api.video.generateVideoScript.createVideoBlueprint)
 
+  const { open, config, confirm, handleConfirm } = useConfirmDialogHook()
+
+  const user = useQuery(api.user.getUser)
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const styles = [
@@ -70,7 +76,7 @@ export const CreateVideoBlueprint = () => {
 
   const models = [
     { id: 'standard', label: 'Standard', description: 'The standard model generates videos without audio and requires narration. Cheaper' },
-    { id: 'premium', label: 'Premium', description: 'The premium model provides videos with audio. Uses best in industry video generation models' },
+    { id: 'premium', label: 'Premium', description: 'The premium model provides videos with audio. Uses best in industry video generation models. For subscribed users only' },
   ]
 
   const resolutions = [
@@ -199,6 +205,26 @@ export const CreateVideoBlueprint = () => {
       setIsLoading(true);
 
       let videoId;
+
+      if (selectedModel === null) {
+        toast.error('Please select a model');
+        return;
+      }
+
+      const confirmConfig = {
+        action: 'Generating Video Outline',
+        requiredCredits: 5,
+        balanceCredits: user?.credits ? user.credits - 5 : 0
+      }
+
+      const confirmed = await confirm(confirmConfig)
+
+      console.log('confirmed:', confirmed)
+
+      if (!confirmed) {
+        return
+      }
+
       if (selectedMusic === 0) {
         videoId = await createVideoBlueprint({
           prompt,
@@ -209,6 +235,10 @@ export const CreateVideoBlueprint = () => {
           storyTellingStyle: storyTellingStyle === 'dramatic' ? 'dramatic' : 'default',
           numberOfImagesPerPrompt: 1,
           generateMultipleAngles: false,
+          videoGenerationModel: selectedModel === 'premium' ?
+            { model: 'google/veo-3.1-fast', audio: 'lipsync', category: 'premium', } :
+            { model: 'wan-video/wan-2.2-i2v-fast', audio: 'none', category: 'standard', },
+          resolution: resolutions.find(s => s.id === selectedResolution)!.label as Infer<typeof videoResolutionValidator>,
         });
       } else {
         videoId = await createVideoBlueprint({
@@ -221,6 +251,10 @@ export const CreateVideoBlueprint = () => {
           storyTellingStyle: storyTellingStyle === 'dramatic' ? 'dramatic' : 'default',
           numberOfImagesPerPrompt: 1,
           generateMultipleAngles: false,
+          videoGenerationModel: selectedModel === 'premium' ?
+            { model: 'google/veo-3.1-fast', audio: 'lipsync', category: 'premium', } :
+            { model: 'wan-video/wan-2.2-i2v-fast', audio: 'none', category: 'standard', },
+          resolution: resolutions.find(s => s.id === selectedResolution)!.label as Infer<typeof videoResolutionValidator>,
         });
       }
 
@@ -447,7 +481,7 @@ export const CreateVideoBlueprint = () => {
                       transition={{ delay: index * 0.1 }}
                       onClick={() => setSelectedAspectRatio(ratio.id)}
                       className={cn(
-                        "relative p-8 rounded-lg border-2 transition-all hover:scale-105",
+                        "relative p-8 rounded-lg border-2 transition-all hover:scale-105 cursor-pointer",
                         selectedAspectRatio === ratio.id
                           ? 'border-yellow-500 bg-yellow-500/10 ring-2 ring-yellow-500/50'
                           : 'border-border bg-secondary/50'
@@ -491,7 +525,7 @@ export const CreateVideoBlueprint = () => {
                       transition={{ delay: index * 0.05 }}
                       onClick={() => setSelectedDuration(duration.id)}
                       className={cn(
-                        "relative p-6 rounded-lg border-2 transition-all hover:scale-105",
+                        "relative p-6 rounded-lg border-2 transition-all hover:scale-105 cursor-pointer",
                         selectedDuration === duration.id
                           ? 'border-orange-500 bg-orange-500/10 ring-2 ring-orange-500/50'
                           : 'border-border bg-secondary/50'
@@ -533,6 +567,7 @@ export const CreateVideoBlueprint = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
+                      disabled={model.id === 'premium' && !user?.subscriptionProductId}
                       onClick={() => {
                         if (model.id === 'premium' && selectedResolution === '480p') {
                           setSelectedResolution('720p')
@@ -540,10 +575,11 @@ export const CreateVideoBlueprint = () => {
                         setSelectedModel(model.id)
                       }}
                       className={cn(
-                        "relative p-8 rounded-lg border-2 transition-all hover:scale-105",
+                        "relative p-8 rounded-lg border-2 transition-all hover:scale-105 cursor-pointer",
                         selectedModel === model.id
                           ? 'border-indigo-500 bg-indigo-500/10 ring-2 ring-indigo-500/50'
-                          : 'border-border bg-secondary/50'
+                          : 'border-border bg-secondary/50',
+                        model.id === 'premium' && !user?.subscriptionProductId && "opacity-50 cursor-not-allowed pointer-events-none grayscale"
                       )}
                     >
                       <div className="text-center">
@@ -571,7 +607,7 @@ export const CreateVideoBlueprint = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                {/* Aspect Ratio Section */}
+                {/* Video Quality Section */}
                 <p className="text-muted-foreground mb-4">
                   Select the resolution for your video output.
                 </p>
@@ -585,10 +621,11 @@ export const CreateVideoBlueprint = () => {
                       disabled={selectedModel === 'premium' && resolution.id === '480p'}
                       onClick={() => setSelectedResolution(resolution.id)}
                       className={cn(
-                        "relative p-8 rounded-lg border-2 transition-all hover:scale-105",
+                        "relative p-8 rounded-lg border-2 transition-all hover:scale-105 cursor-pointer",
                         selectedResolution === resolution.id
                           ? 'border-emerald-500 bg-emerald-500/10 ring-2 ring-emerald-500/50'
-                          : 'border-border bg-secondary/50'
+                          : 'border-border bg-secondary/50',
+                        selectedModel === 'premium' && resolution.id === '480p' && "opacity-50 cursor-not-allowed pointer-events-none grayscale"
                       )}
                     >
                       <div className="text-center">
@@ -629,7 +666,7 @@ export const CreateVideoBlueprint = () => {
                       transition={{ delay: index * 0.1 }}
                       onClick={() => setStoryTellingStyle(style)}
                       className={cn(
-                        "relative p-8 rounded-lg border-2 transition-all hover:scale-105",
+                        "relative p-8 rounded-lg border-2 transition-all hover:scale-105 cursor-pointer",
                         storyTellingStyle === style
                           ? 'border-blue-500 bg-blue-500/10 ring-2 ring-blue-500/50'
                           : 'border-border bg-secondary/50'
@@ -905,6 +942,14 @@ export const CreateVideoBlueprint = () => {
           )}
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={open}
+        action={config?.action ?? ""}
+        requiredCredits={config?.requiredCredits ?? 0}
+        balanceCredits={config?.balanceCredits ?? 0}
+        onConfirm={handleConfirm}
+      />
     </div>
   );
 }

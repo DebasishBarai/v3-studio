@@ -1,10 +1,8 @@
 'use client'
 
-import { Button } from '@/components/ui/button';
 import { api } from '@/convex/_generated/api';
 import { useQuery } from 'convex/react';
 import Image from 'next/image';
-import Link from 'next/link';
 import VideoCard from './video-card';
 import { CreateVideoBlueprint } from '@/components/create-video-blueprint';
 
@@ -37,7 +35,6 @@ export const UsersVideosList = () => {
             <p className="max-w-sm">
               Start creating your first AI Powered Video to bring your ideas to life!
             </p>
-            <CreateVideoBlueprint />
           </div>
         )}
 

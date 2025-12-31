@@ -191,7 +191,7 @@ export const SceneCard = ({
           <div className="flex justify-start gap-2">
             {/* Re-generate Image */}
             <CustomButton
-              disabled={generatingScene === index}
+              disabled={generatingScene === index || scene.imageInProcess}
               onClick={() =>
                 generateSceneImage({
                   index,
@@ -201,8 +201,8 @@ export const SceneCard = ({
               className={cn(
                 'flex items-center gap-2 py-2 rounded-lg text-white transition-all',
                 {
-                  'bg-blue-600 hover:bg-blue-700 cursor-pointer': generatingScene !== index,
-                  'bg-blue-600/60 opacity-60 cursor-not-allowed': generatingScene === index,
+                  'bg-blue-600 hover:bg-blue-700 cursor-pointer': !(generatingScene === index || scene.imageInProcess),
+                  'bg-blue-600/60 opacity-60 cursor-not-allowed': generatingScene === index || scene.imageInProcess,
                 }
               )}
               icon={RotateCcw}
@@ -214,16 +214,17 @@ export const SceneCard = ({
               disabled={
                 generatingScene === index ||
                 modifyingScene === index ||
-                !scene.imageUrl
+                !scene.imageUrl ||
+                scene.imageInProcess
               }
               onClick={() => setModifyOpen(true)}
               className={cn(
                 'flex items-center gap-2 py-2 rounded-lg text-white transition-all',
                 {
                   'bg-purple-600 hover:bg-purple-700 cursor-pointer':
-                    !(generatingScene === index || modifyingScene === index || !scene.imageUrl),
+                    !(generatingScene === index || modifyingScene === index || !scene.imageUrl || scene.imageInProcess),
                   'bg-purple-600/60 opacity-60 cursor-not-allowed':
-                    generatingScene === index || modifyingScene === index || !scene.imageUrl,
+                    generatingScene === index || modifyingScene === index || !scene.imageUrl || scene.imageInProcess,
                 }
               )}
               icon={WandSparkles}
@@ -232,7 +233,7 @@ export const SceneCard = ({
 
             {/* Generate Video */}
             <CustomButton
-              disabled={!scene.imageUrl || generatingScene === index}
+              disabled={!scene.imageUrl || generatingScene === index || scene.videoInProcess}
               onClick={() =>
                 generateSceneVideo({
                   index,
@@ -244,9 +245,9 @@ export const SceneCard = ({
                 'flex items-center gap-2 py-2 rounded-lg text-white transition-all',
                 {
                   'bg-green-600 hover:bg-green-700 cursor-pointer':
-                    !(!scene.imageUrl || generatingScene === index),
+                    !(!scene.imageUrl || generatingScene === index || scene.videoInProcess),
                   'bg-green-600/60 opacity-60 cursor-not-allowed':
-                    !scene.imageUrl || generatingScene === index,
+                    !scene.imageUrl || generatingScene === index || scene.videoInProcess,
                 }
               )}
               icon={Video}
@@ -255,7 +256,7 @@ export const SceneCard = ({
 
             {/* Generate Audio */}
             <CustomButton
-              disabled={!scene.narration.trim() || generatingScene === index}
+              disabled={!scene.narration.trim() || generatingScene === index || scene.audioInProcess}
               onClick={() =>
                 generateSceneAudio({
                   index,
@@ -266,9 +267,9 @@ export const SceneCard = ({
                 'flex items-center gap-2 py-2 rounded-lg text-white transition-all',
                 {
                   'bg-green-600 hover:bg-green-700 cursor-pointer':
-                    !(!scene.narration.trim() || generatingScene === index),
+                    !(!scene.narration.trim() || generatingScene === index || scene.audioInProcess),
                   'bg-green-600/60 opacity-60 cursor-not-allowed':
-                    !scene.narration.trim() || generatingScene === index,
+                    !scene.narration.trim() || generatingScene === index || scene.audioInProcess,
                 }
               )}
               icon={AudioLines}
