@@ -60,6 +60,7 @@ export const addUser = action({
 
     const newUser = await ctx.runMutation(internal.user.createInternalUser, {
       subject: identity.subject,
+      email: identity.email,
       name: identity.name,
       polarCustomerId: polarCustomer.id,
     })
@@ -155,6 +156,7 @@ export const getInternalUserByUserId = internalQuery({
 export const createInternalUser = internalMutation({
   args: {
     subject: v.string(),
+    email: v.optional(v.string()),
     name: v.optional(v.string()),
     polarCustomerId: v.string(),
   },
@@ -171,6 +173,7 @@ export const createInternalUser = internalMutation({
 
     await ctx.db.insert('users', {
       subject: args.subject,
+      email: args?.email,
       name: args.name ?? 'Anonymous',
       credits: 400,
       polarCustomerId: args.polarCustomerId,

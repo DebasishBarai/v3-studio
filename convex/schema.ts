@@ -203,6 +203,7 @@ export default defineSchema({
     name: v.string(),
     credits: v.number(),
     subject: v.string(),
+    email: v.optional(v.string()),
     polarCustomerId: v.string(),
     subscriptionProductId: v.optional(v.string()),
   }).index('by_subject', ['subject']),
