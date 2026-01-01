@@ -825,12 +825,30 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                 <button
                   onClick={autoGenerate}
                   disabled={isSaving}
-                  className={cn("mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md")}
+                  className={cn(
+                    "relative mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium",
+                    "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500",
+                    "disabled:pointer-events-none disabled:opacity-50",
+                    "h-9 py-2 px-5 rounded-md text-white overflow-hidden",
+                    "bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-[length:200%_100%]",
+                    "hover:scale-105 active:scale-95 transition-all duration-300",
+                    "shadow-lg shadow-purple-500/50 hover:shadow-xl hover:shadow-purple-500/70",
+                    "animate-shimmer"
+                  )}
+                  style={{
+                    animation: "shimmer 3s linear infinite"
+                  }}
                 >
                   <Rocket className="w-5 h-5" />
                   <span className='hidden md:inline'>
                     Auto Generate
                   </span>
+                  <style jsx>{`
+              @keyframes shimmer {
+                0% { background-position: 200% center; }
+                100% { background-position: -200% center; }
+              }
+            `}</style>
                 </button>
               )}
               {/* Render button */}
@@ -838,12 +856,29 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                 <button
                   onClick={renderVideo}
                   disabled={isSaving}
-                  className={cn("mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-yellow-600 to-yellow-600 hover:scale-105 transition-all text-white rounded-md")}
+                  className={cn(
+                    "relative mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium",
+                    "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500",
+                    "disabled:pointer-events-none disabled:opacity-50",
+                    "h-9 py-2 px-5 rounded-md text-white overflow-hidden",
+                    "bg-gradient-to-r from-yellow-600 via-amber-600 to-yellow-600 bg-[length:200%_100%]",
+                    "hover:scale-105 active:scale-95 transition-all duration-300",
+                    "shadow-lg shadow-yellow-500/50 hover:shadow-xl hover:shadow-yellow-500/70"
+                  )}
+                  style={{
+                    animation: "shimmer 3s linear infinite"
+                  }}
                 >
                   <Video className="w-5 h-5" />
                   <span className='hidden md:inline'>
                     {(!video.videoUrl && video.renderId) ? 'Rendering...' : 'Render Video'}
                   </span>
+                  <style jsx>{`
+              @keyframes shimmer {
+                0% { background-position: 200% center; }
+                100% { background-position: -200% center; }
+              }
+            `}</style>
                 </button>
               )}
               {/* Preview Button with Dialog */}
@@ -851,12 +886,29 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                 <DialogTrigger asChild>
                   <Button
                     disabled={isSaving || isVideoLoading}
-                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:scale-105 transition-all text-white rounded-md"
+                    className={cn(
+                      "relative inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium",
+                      "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500",
+                      "disabled:pointer-events-none disabled:opacity-50",
+                      "h-9 py-2 px-5 rounded-md text-white overflow-hidden",
+                      "bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 bg-[length:200%_100%]",
+                      "hover:scale-105 active:scale-95 transition-all duration-300",
+                      "shadow-lg shadow-cyan-500/50 hover:shadow-xl hover:shadow-cyan-500/70"
+                    )}
+                    style={{
+                      animation: "shimmer 3s linear infinite"
+                    }}
                   >
                     <Play className="w-4 h-4" />
                     <span className='hidden md:inline'>
                       Preview Video
                     </span>
+                    <style jsx>{`
+              @keyframes shimmer {
+                0% { background-position: 200% center; }
+                100% { background-position: -200% center; }
+              }
+            `}</style>
                   </Button>
                 </DialogTrigger>
                 <DialogContent className='!max-w-[98vw] !w-[98vw] max-h-[98vh] h-[98vh] p-6 flex flex-col'>
@@ -896,12 +948,29 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
               <button
                 onClick={handleSave}
                 disabled={isSaving || !!video.renderId || !!video.videoUrl}
-                className="mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow hover:bg-primary/90 h-9 py-2 px-5 bg-gradient-to-r from-pink-600 to-purple-600 hover:scale-105 transition-all text-white rounded-md"
+                className={cn(
+                  "relative mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium",
+                  "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500",
+                  "disabled:pointer-events-none disabled:opacity-50",
+                  "h-9 py-2 px-5 rounded-md text-white overflow-hidden",
+                  "bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 bg-[length:200%_100%]",
+                  "hover:scale-105 active:scale-95 transition-all duration-300",
+                  "shadow-lg shadow-pink-500/50 hover:shadow-xl hover:shadow-pink-500/70"
+                )}
+                style={{
+                  animation: "shimmer 3s linear infinite"
+                }}
               >
                 <Save className="w-5 h-5" />
                 <span className='hidden md:inline'>
                   {isSaving ? 'Saving...' : 'Save Changes'}
                 </span>
+                <style jsx>{`
+              @keyframes shimmer {
+                0% { background-position: 200% center; }
+                100% { background-position: -200% center; }
+              }
+            `}</style>
               </button>
             </div>
           </div>
