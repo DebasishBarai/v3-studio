@@ -10,43 +10,43 @@ export const Showcase = () => {
   const videos = [
     {
       poster: "https://cdn.revid.ai/thumbnail/6zmk9uhimSM4wpQf2V4R-1747152919071.webp",
-      src: "https://cdn.revid.ai/renders/gjcIDd3JXNbmRF7DcHp7/6zmk9uhimSM4wpQf2V4R-1747152919071.mp4",
-      badge: "100% generated",
+      src: "/showcase/vid1.webm",
+      badge: "a video on a world where every person has a unique superpower",
       link: "/tools/talking-avatar",
       cols: 1
     },
     {
       poster: "https://cdn.revid.ai/thumbnail/BkFMpcz2oAQo9MW3JiRB-1744895354187.webp",
-      src: "https://cdn.revid.ai/renders/gjcIDd3JXNbmRF7DcHp7/BkFMpcz2oAQo9MW3JiRB-1744895354187.mp4",
-      badge: "100% generated",
+      src: "/showcase/vid2.webm",
+      badge: "a motivational story of a guy who is left by his wife because he is poor but later he becomes one of the welthiest in the town",
       link: "/tools/prompt-to-video",
       cols: 1
     },
     {
       poster: "https://cdn.revid.ai/static/wolf.webp",
-      src: "https://cdn.revid.ai/static/Guided%20by%20a%20Wolf_s%20Instincts.mp4",
-      badge: "100% generated",
+      src: "/showcase/vid3.webm",
+      badge: "a video on an inspiring story of someone who achieved success without formal training",
       link: "/tools/ai-cinematic-video",
       cols: 2
     },
     {
       poster: "https://cdn.revid.ai/thumbnail/santa-video-generator.webp",
-      src: "https://cdn.revid.ai/static/tools/santa-video-generator.mp4",
-      badge: "avatar + media generated",
+      src: "/showcase/vid4.webm",
+      badge: "a video on a gas giant with floating jellyfish cities",
       link: "/tools/talking-avatar",
       cols: 1
     },
     {
       poster: "https://cdn.revid.ai/static/music-to-video.webp",
-      src: "https://cdn.revid.ai/renders/gjcIDd3JXNbmRF7DcHp7/vVoXK7Q1NLHR5n3tosx3-1754920973374.mp4",
-      badge: "100% generated",
+      src: "/showcase/vid5.webm",
+      badge: "create a video of a person who is doing his 9 to 5 corporate job but bored by this monotonous job which he does not like and...",
       link: "/tools/ai-music-video-generator",
       cols: 2
     },
     {
       poster: "https://cdn.revid.ai/ai-gen/ahwPdMnLiX.jpg",
-      src: "https://cdn.revid.ai/renders/gjcIDd3JXNbmRF7DcHp7/wokP1jkEBN023669K6U3-1764757719117.mp4",
-      badge: "100% generated",
+      src: "/showcase/vid6.webm",
+      badge: "a video on a desert planet with sand-swimming nomads",
       link: "/tools/ai-music-video-generator",
       cols: 1
     }
@@ -116,19 +116,10 @@ export const Showcase = () => {
                   }`}
               >
                 {/* Badge on hover */}
-                <div className="absolute z-10 top-2 right-2 flex items-center gap-2 text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <div className="inline-flex items-center rounded-full border text-xs font-semibold bg-slate-900 text-slate-50 hover:bg-slate-900/80 px-2.5 py-0.5 border-white">
+                <div className="absolute z-10 w-full bottom-2 left-1/2 -translate-x-1/2 flex justify-center items-center gap-2 text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <div className="inline-flex items-center rounded-sm border text-xs font-semibold bg-slate-900 text-slate-50 hover:bg-slate-900/80 px-2.5 py-0.5 border-white">
                     {video.badge}
                   </div>
-                </div>
-
-                {/* Button on hover */}
-                <div className="absolute z-10 bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <a href={video.link}>
-                    <button className="inline-flex gap-1.5 items-center justify-center whitespace-nowrap font-medium bg-white hover:bg-gray-100 text-gray-900 border border-gray-200 px-3 py-1.5 text-[0.85rem] rounded-md shadow-lg">
-                      Create Similar Video
-                    </button>
-                  </a>
                 </div>
 
                 {/* Video */}
@@ -183,7 +174,7 @@ export const Showcase = () => {
                   autoPlay
                   muted
                 >
-                  <source src="https://cdn.revid.ai/static/alliance-in-the-canopy.mp4" type="video/mp4" />
+                  <source src="/showcase/vid7.webm" type="video/mp4" />
                 </video>
               </div>
 
@@ -198,7 +189,7 @@ export const Showcase = () => {
                   playsInline
                   autoPlay
                 >
-                  <source src="https://cdn.revid.ai/static/Flicker%20in%20the%20Shadows.mp4" type="video/mp4" />
+                  <source src="/showcase/vid8.webm" type="video/mp4" />
                 </video>
               </div>
 
@@ -213,7 +204,7 @@ export const Showcase = () => {
                   autoPlay
                   muted
                 >
-                  <source src="https://cdn.revid.ai/static/Rivalry%20in%20the%20City.mp4" type="video/mp4" />
+                  <source src="/showcase/vid9.webm" type="video/mp4" />
                 </video>
               </div>
 
