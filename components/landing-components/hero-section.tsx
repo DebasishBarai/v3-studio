@@ -47,7 +47,7 @@ export const HeroSection = () => {
                 playsInline
                 autoPlay
               >
-                <source src="https://cdn.revid.ai/renders/gjcIDd3JXNbmRF7DcHp7/5nD2OXg8d74hb3Avqjxq-1745743754440.mp4" type="video/mp4" />
+                <source src="/showcase/vid9.webm" type="video/mp4" />
               </video>
             </div>
           </div>
@@ -67,7 +67,7 @@ export const HeroSection = () => {
                 playsInline
                 autoPlay
               >
-                <source src="https://cdn.revid.ai/renders/gjcIDd3JXNbmRF7DcHp7/bo7ynCGPQfYZaDyQ18cu-1742641087135.mp4" type="video/mp4" />
+                <source src="/showcase/vid3.webm" type="video/mp4" />
               </video>
             </div>
           </div>
@@ -84,7 +84,7 @@ export const HeroSection = () => {
                 playsInline
                 autoPlay
               >
-                <source src="https://cdn.revid.ai/static/Lily_s%20Dutch%20Adventure.mp4" type="video/mp4" />
+                <source src="/showcase/vid5.webm" type="video/mp4" />
               </video>
             </div>
           </div>
