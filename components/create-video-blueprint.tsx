@@ -196,7 +196,8 @@ export const CreateVideoBlueprint = () => {
   };
 
   const generateVideo = async () => {
-    if (!prompt || !selectedStyle || !selectedMusic || !selectedVoice || !selectedAspectRatio || !selectedDuration || !storyTellingStyle) {
+    if (!prompt || !selectedStyle || (selectedMusic === null) || !selectedVoice || !selectedAspectRatio || !selectedDuration || !storyTellingStyle) {
+      console.log({ prompt, selectedStyle, selectedMusic, selectedVoice, selectedAspectRatio, selectedDuration, storyTellingStyle })
       toast.error('Please fill in all the required fields');
       return;
     }
@@ -844,10 +845,28 @@ export const CreateVideoBlueprint = () => {
           resetWizard();
         }}
         size="lg"
-        className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700"
+        className={cn(
+          "relative mx-4 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium",
+          "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500",
+          "disabled:pointer-events-none disabled:opacity-50",
+          "h-9 py-2 px-5 rounded-md text-white overflow-hidden",
+          "bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 bg-[length:200%_100%]",
+          "hover:scale-105 active:scale-95 transition-all duration-300",
+          "shadow-lg shadow-pink-500/50 hover:shadow-xl hover:shadow-pink-500/70",
+          "animate-shimmer"
+        )}
+        style={{
+          animation: "shimmer 3s linear infinite"
+        }}
       >
         <Film className="w-5 h-5 mr-2" />
         Create AI Video
+        <style jsx>{`
+              @keyframes shimmer {
+                0% { background-position: 200% center; }
+                100% { background-position: -200% center; }
+              }
+            `}</style>
       </Button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>

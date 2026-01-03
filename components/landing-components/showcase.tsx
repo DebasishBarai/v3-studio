@@ -1,0 +1,228 @@
+'use client';
+
+import { useScrollDownAnimationHook } from "@/hooks/use-scroll-down-animation-hook";
+import { motion } from "framer-motion";
+
+export const Showcase = () => {
+  const { ref: ref1, controls: controls1 } = useScrollDownAnimationHook()
+  const { ref: ref2, controls: controls2 } = useScrollDownAnimationHook()
+  const { ref: ref3, controls: controls3 } = useScrollDownAnimationHook()
+  const videos = [
+    {
+      poster: "https://cdn.revid.ai/thumbnail/6zmk9uhimSM4wpQf2V4R-1747152919071.webp",
+      src: "https://cdn.revid.ai/renders/gjcIDd3JXNbmRF7DcHp7/6zmk9uhimSM4wpQf2V4R-1747152919071.mp4",
+      badge: "100% generated",
+      link: "/tools/talking-avatar",
+      cols: 1
+    },
+    {
+      poster: "https://cdn.revid.ai/thumbnail/BkFMpcz2oAQo9MW3JiRB-1744895354187.webp",
+      src: "https://cdn.revid.ai/renders/gjcIDd3JXNbmRF7DcHp7/BkFMpcz2oAQo9MW3JiRB-1744895354187.mp4",
+      badge: "100% generated",
+      link: "/tools/prompt-to-video",
+      cols: 1
+    },
+    {
+      poster: "https://cdn.revid.ai/static/wolf.webp",
+      src: "https://cdn.revid.ai/static/Guided%20by%20a%20Wolf_s%20Instincts.mp4",
+      badge: "100% generated",
+      link: "/tools/ai-cinematic-video",
+      cols: 2
+    },
+    {
+      poster: "https://cdn.revid.ai/thumbnail/santa-video-generator.webp",
+      src: "https://cdn.revid.ai/static/tools/santa-video-generator.mp4",
+      badge: "avatar + media generated",
+      link: "/tools/talking-avatar",
+      cols: 1
+    },
+    {
+      poster: "https://cdn.revid.ai/static/music-to-video.webp",
+      src: "https://cdn.revid.ai/renders/gjcIDd3JXNbmRF7DcHp7/vVoXK7Q1NLHR5n3tosx3-1754920973374.mp4",
+      badge: "100% generated",
+      link: "/tools/ai-music-video-generator",
+      cols: 2
+    },
+    {
+      poster: "https://cdn.revid.ai/ai-gen/ahwPdMnLiX.jpg",
+      src: "https://cdn.revid.ai/renders/gjcIDd3JXNbmRF7DcHp7/wokP1jkEBN023669K6U3-1764757719117.mp4",
+      badge: "100% generated",
+      link: "/tools/ai-music-video-generator",
+      cols: 1
+    }
+  ];
+
+  return (
+    <article
+      id="showcase-videos"
+      className="m-4 relative text-[#BEC0C7] rounded-3xl p-4 sm:p-6 md:p-8 max-w-7xl bg-transparent"
+    >
+      <div className="w-full relative">
+        {/* Header Section */}
+        <div className="relative z-20 mx-auto m-8">
+          <motion.div
+            ref={ref1}
+            initial="hidden"
+            animate={controls1}
+            variants={{
+              hidden: {
+                opacity: 0,
+                y: 100
+              },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: {
+                  duration: 2,
+                  ease: [0.22, 1, 0.36, 1]
+                }
+              },
+            }}
+          >
+            {/* Title */}
+            <h1 className="py-6 font-bold text-white !leading-tight max-w-2xl mx-auto text-center text-3xl lg:text-4xl xl:text-5xl capitalize">
+              Explore Videos Created By<br />
+              <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Other Users
+              </span>
+            </h1>
+          </motion.div>
+
+          {/* Video Grid */}
+          <motion.div
+            ref={ref2}
+            initial="hidden"
+            animate={controls2}
+            variants={{
+              hidden: {
+                opacity: 0,
+                y: 100
+              },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: {
+                  duration: 2,
+                  delay: 0.2, // Delay the animation to avoid flickering
+                  ease: [0.22, 1, 0.36, 1]
+                }
+              },
+            }}
+            className="pt-14 grid grid-cols-2 lg:grid-cols-4 gap-5">
+            {videos.map((video, index) => (
+              <div
+                key={index}
+                className={`group items-center justify-center relative ${video.cols === 2 ? 'lg:col-span-2' : ''
+                  }`}
+              >
+                {/* Badge on hover */}
+                <div className="absolute z-10 top-2 right-2 flex items-center gap-2 text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <div className="inline-flex items-center rounded-full border text-xs font-semibold bg-slate-900 text-slate-50 hover:bg-slate-900/80 px-2.5 py-0.5 border-white">
+                    {video.badge}
+                  </div>
+                </div>
+
+                {/* Button on hover */}
+                <div className="absolute z-10 bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <a href={video.link}>
+                    <button className="inline-flex gap-1.5 items-center justify-center whitespace-nowrap font-medium bg-white hover:bg-gray-100 text-gray-900 border border-gray-200 px-3 py-1.5 text-[0.85rem] rounded-md shadow-lg">
+                      Create Similar Video
+                    </button>
+                  </a>
+                </div>
+
+                {/* Video */}
+                <div className="w-full h-72 md:h-[30rem] relative">
+                  <video
+                    className="bg-white shadow-2xl rounded-[10px] object-cover w-full h-full rounded-2xl"
+                    poster={video.poster}
+                    preload="none"
+                    muted
+                    loop
+                    playsInline
+                    autoPlay
+                  >
+                    <source src={video.src} type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+
+          {/* Video Showcase Section */}
+          <div className="space-y-12 py-12 lg:py-12">
+            <motion.div
+              ref={ref3}
+              animate={controls3}
+              initial="hidden"
+              variants={{
+                hidden: {
+                  opacity: 0,
+                  y: 100
+                },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: {
+                    duration: 2,
+                    delay: 0.2, // Delay the animation to avoid flickering
+                    ease: [0.22, 1, 0.36, 1]
+                  }
+                },
+              }}
+              className="flex justify-center items-center relative w-5/6 mx-auto">
+              {/* Left video */}
+              <div
+                className="bg-white outline w-1/2 md:max-w-[500px] absolute hidden sm:block sm:-left-1/4 md:right-1/4 mx-auto outline-[6px] outline-[#636363]/25 rounded-xl object-cover">
+                <video
+                  className="bg-white shadow-2xl rounded-[10px] object-cover w-full"
+                  poster="https://cdn.revid.ai/static/space-exploration.webp"
+                  preload="none"
+                  loop
+                  playsInline
+                  autoPlay
+                  muted
+                >
+                  <source src="https://cdn.revid.ai/static/alliance-in-the-canopy.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              {/* Center video */}
+              <div className="bg-white outline w-11/12 md:w-3/4 md:max-w-[380px] relative z-10 mx-auto outline-[6px] outline-[#636363]/25 rounded-xl object-cover">
+                <video
+                  className="bg-white shadow-2xl rounded-[10px] object-cover w-full"
+                  poster="https://cdn.revid.ai/static/boy-and-dog.webp"
+                  preload="none"
+                  muted
+                  loop
+                  playsInline
+                  autoPlay
+                >
+                  <source src="https://cdn.revid.ai/static/Flicker%20in%20the%20Shadows.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              {/* Right video */}
+              <div className="bg-white outline w-1/2 md:max-w-[500px] absolute hidden sm:block sm:-right-1/4 md:left-1/4 -z-0 mx-auto outline-[6px] outline-[#636363]/25 rounded-xl object-cover">
+                <video
+                  className="bg-white shadow-2xl rounded-[10px] object-cover w-full"
+                  poster="https://cdn.revid.ai/static/men-scuffle.webp"
+                  preload="none"
+                  loop
+                  playsInline
+                  autoPlay
+                  muted
+                >
+                  <source src="https://cdn.revid.ai/static/Rivalry%20in%20the%20City.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              {/* Glow effect */}
+              <div className="absolute bg-gradient-to-b from-[#BEFFD6] to-[#92DAFF] blur-[125px] w-[35%] h-[45%] mb-6 -z-10"></div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+};

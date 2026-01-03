@@ -121,10 +121,10 @@ export function AppSidebar() {
       {/* Header */}
       <SidebarHeader>
         <div className="flex items-center justify-start">
-          <Link href="/">
+          <Link href="/" className="flex items-center gap-3 cursor-pointer z-50">
             <Image alt="logo" src="/logo.png" width={80} height={80} />
+            <h1 className={`text-2xl font-bold text-yellow-500 ${pacifico.className}`}>V3 Studio</h1>
           </Link>
-          <h1 className={`text-2xl font-bold text-yellow-500 ${pacifico.className}`}>V3 Studio</h1>
         </div>
       </SidebarHeader>
 

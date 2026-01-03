@@ -5,11 +5,9 @@ import {
   NavBody,
   NavItems,
   MobileNav,
-  NavbarLogo,
-  NavbarButton,
-  MobileNavHeader,
+  NavbarLogo, MobileNavHeader,
   MobileNavToggle,
-  MobileNavMenu,
+  MobileNavMenu
 } from "@/components/ui/resizable-navbar";
 import Link from "next/link";
 import { useState } from "react";
@@ -19,6 +17,10 @@ export function NavbarDemo() {
     {
       name: "Features",
       link: "#features",
+    },
+    {
+      name: "Gallery",
+      link: "#showcase-videos",
     },
     {
       name: "Pricing",
@@ -41,7 +43,7 @@ export function NavbarDemo() {
         <div className="flex items-center gap-4">
           <Link
             href="/dashboard"
-            className="inline-flex items-center z-50 px-6 py-3 font-semibold bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+            className="inline-flex items-center z-50 px-6 py-3 font-semibold bg-gradient-to-r from-[#45EC82] from-[0.16%] to-indigo-500 text-black rounded-full shadow-lg transition-transform transform hover:scale-105"
           >
             Login
           </Link>

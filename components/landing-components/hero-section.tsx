@@ -1,65 +1,98 @@
 'use client';
 
-import Marquee from "react-fast-marquee";
-import Image from "next/image";
-import { PlaceholdersAndVanishInput } from "../ui/placeholders-and-vanish-input";
-
 export const HeroSection = () => {
-  const images = [1, 2, 3, 4, 5, 6, 7];
-
-  const placeholders = [
-    "Generate 3D cartoon characters",
-    "Build full web series with AI",
-    "Turn ideas into full AI-generated stories",
-    "Create engaging video content with AI",
-    "Generate unique visuals for your stories",
-    "Craft compelling narratives with AI",
-    "Create captivating video content with AI",
-  ];
-
   return (
-    <div
-      id="hero"
-      className="h-[80vh] w-full flex flex-col justify-center items-center text-center px-4"
-    >
+    <article className="rounded-3xl px-4 sm:px-6 md:px-8 w-full flex flex-col items-center justify-center">
+      <div className="w-full relative md:px-8 py-[7.5%] grid lg:grid-cols-2 gap-12 lg:gap-4 xl:gap-8 items-start md:max-w-7xl">
 
-      {/* Marquee with images */}
-      <div className="absolute top-[15%] inset-0 z-0">
-        <Marquee gradient={false} speed={50}>
-          {images.map((i) => (
-            <div key={i} className="mx-6">
-              <Image
-                src={`/marquee/slider${i}.webp`}
-                alt={`Slider ${i}`}
-                width={300}
-                height={400}
-                className="w-[300px] h-[500px] object-cover rounded-xl mx-5 opacity-50"
-              />
+        {/* Left Content Section */}
+        <section className="space-y-8 mt-12 lg:mt-0 flex-2 flex flex-col gap-0">
+          <div className="space-y-4">
+            <h1 className="text-4xl sm:text-[48px] lg:text-[42px] xl:text-5xl 2xl:text-6xl lg:text-left leading-[50px] text-center font-medium text-white text-balance">
+              Create stunning videos {" "}
+              <span className="font-medium from-[#45EC82] from-[0.16%] via-indigo-500 via-[47.81%] to-pink-500 to-100% bg-gradient-to-r bg-clip-text text-transparent">
+                with AI
+              </span>
+            </h1>
+            <p className="text-md text-neutral-400 2xl:text-base text-center lg:text-left mx-auto lg:mx-0 leading-normal">
+              Bring your stories to life with AI: craft web series, generate unique character visuals, produce short narrated videos, and access a suite of creative tools — all in one place.
+            </p>
+          </div>
+
+          <div className="flex justify-center lg:justify-start">
+            <div className="flex flex-col gap-2 items-start justify-start">
+              <div className="w-fit lg:mx-0">
+                <a
+                  className="inline-block px-6 py-3 bg-gradient-to-r from-[#45EC82] to-[#75CEFC] text-black font-semibold rounded-lg hover:opacity-90 transition-opacity"
+                  href="/dashboard"
+                >
+                  Try it Free
+                </a>
+              </div>
             </div>
-          ))}
-        </Marquee>
-        {/* Dark overlay for readability */}
-        <div className="absolute inset-0 bg-black/70" />
+          </div>
+        </section>
+
+        {/* Right Video Section */}
+        <div className="h-[440px] max-w-[280px] sm:max-w-unset mx-auto flex items-center justify-center relative">
+          {/* Left video */}
+          <div className="bg-white/10 border-white/90 hidden border w-[120px] sm:w-[240px] aspect-[9/16] sm:-rotate-12 sm:absolute z-20 sm:block sm:-left-1/4 sm:right-1/4 mx-auto rounded-xl overflow-hidden transition-all duration-300 hover:z-40 hover:scale-110 group">
+            <div className="w-full h-full">
+              <video
+                className="bg-white shadow-2xl rounded-[10px] object-cover h-full w-full"
+                poster="https://cdn.revid.ai/thumbnail/5nD2OXg8d74hb3Avqjxq-1745743754440.webp"
+                preload="none"
+                muted
+                loop
+                playsInline
+                autoPlay
+              >
+                <source src="https://cdn.revid.ai/renders/gjcIDd3JXNbmRF7DcHp7/5nD2OXg8d74hb3Avqjxq-1745743754440.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+
+          {/* Center video */}
+          <div
+            className="bg-white/10 border-white/90 border w-11/12 sm:w-[250px] aspect-[9/16] relative z-30 mx-auto rounded-xl overflow-hidden top-[-10px] transition-all duration-300 hover:z-40 hover:scale-110 group"
+            style={{ filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.65)) drop-shadow(0 8px 8px rgba(0, 0, 0, 0.10))' }}
+          >
+            <div className="w-full h-full">
+              <video
+                className="bg-white shadow-2xl rounded-[10px] object-cover h-full w-full"
+                poster="https://cdn.revid.ai/static/cinematic-music-to-video.webp"
+                preload="none"
+                muted
+                loop
+                playsInline
+                autoPlay
+              >
+                <source src="https://cdn.revid.ai/renders/gjcIDd3JXNbmRF7DcHp7/bo7ynCGPQfYZaDyQ18cu-1742641087135.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+
+          {/* Right video */}
+          <div className="bg-white/10 border-white/90 hidden border w-[120px] sm:w-[240px] aspect-[9/16] sm:rotate-12 sm:absolute sm:block sm:-right-1/4 sm:left-1/4 z-20 mx-auto rounded-xl overflow-hidden transition-all duration-300 hover:z-40 hover:scale-110 group">
+            <div className="w-full h-full">
+              <video
+                className="bg-white shadow-2xl rounded-[10px] object-cover h-full w-full"
+                poster="https://cdn.revid.ai/static/netherland-girl.webp"
+                preload="none"
+                muted
+                loop
+                playsInline
+                autoPlay
+              >
+                <source src="https://cdn.revid.ai/static/Lily_s%20Dutch%20Adventure.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+
+          {/* Glow effect */}
+          <div className="absolute bg-gradient-to-b from-[#BEFFD6] to-[#92DAFF] blur-[55px] w-[40%] h-[85%] mb-6 z-0"></div>
+        </div>
       </div>
-
-      <h1 className="z-20 text-4xl md:text-6xl font-light leading-tight mb-4">
-        Create Stunning{" "}
-        <strong className="font-bold">Viral Videos</strong> With <br />
-        <span className="text-pink-400">AI-Powered Storytelling</span>
-      </h1>
-
-      <p className="z-20 max-w-2xl text-lg md:text-xl text-gray-300 mb-6">
-        Bring your stories to life with AI: craft web series, generate unique
-        character visuals, produce short narrated videos, and access a suite of
-        creative tools — all in one place.
-      </p>
-
-      {/* Call to action */}
-      <div className="w-full">
-        <PlaceholdersAndVanishInput
-          placeholders={placeholders}
-        />
-      </div>
-    </div>
+    </article>
   );
 };

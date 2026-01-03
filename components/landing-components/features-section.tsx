@@ -1,3 +1,7 @@
+'use client';
+
+import { useScrollDownAnimationHook } from "@/hooks/use-scroll-down-animation-hook";
+import { motion } from "framer-motion";
 import {
   Film,
   Layers,
@@ -8,6 +12,8 @@ import {
 } from "lucide-react";
 
 export const Features = () => {
+  const { ref: ref1, controls: controls1 } = useScrollDownAnimationHook()
+  const { ref: ref2, controls: controls2 } = useScrollDownAnimationHook()
   const features = [
     {
       title: "Generate Short Films",
@@ -27,12 +33,12 @@ export const Features = () => {
     {
       title: "Voice Narration",
       description: "Choose from multiple voices and narrators for immersive storytelling.",
-      icon: <Mic className="w-8 h-8 text-green-400" />,
+      icon: <Mic className="w-8 h-8 text-emerald-400" />,
     },
     {
       title: "Scene-by-Scene Editing",
       description: "Fine-tune every moment of your AI-generated video effortlessly.",
-      icon: <Scissors className="w-8 h-8 text-yellow-400" />,
+      icon: <Scissors className="w-8 h-8 text-amber-400" />,
     },
     {
       title: "3-Click Movie Export",
@@ -46,23 +52,62 @@ export const Features = () => {
       id="features"
       className="z-20 py-20 text-white text-center px-6"
     >
-      <h2 className="text-3xl md:text-5xl font-bold mb-10">
+      <motion.div
+        ref={ref1}
+        initial="hidden"
+        animate={controls1}
+        variants={{
+          hidden: {
+            opacity: 0,
+            y: 100
+          },
+          visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+              duration: 2,
+              ease: [0.22, 1, 0.36, 1]
+            }
+          },
+        }}
+        className="text-3xl md:text-5xl font-bold mb-10">
         Everything You Need to{" "}
-        <span className="text-pink-400">Create AI Movies</span>
-      </h2>
+        <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          Create AI Movies
+        </span>
+      </motion.div>
 
-      <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <motion.div
+        ref={ref2}
+        initial="hidden"
+        animate={controls2}
+        variants={{
+          hidden: {
+            opacity: 0,
+            y: 100
+          },
+          visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+              duration: 2,
+              delay: 0.5, // Delay the animation to avoid flickering
+              ease: [0.22, 1, 0.36, 1]
+            }
+          },
+        }}
+        className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
         {features.map((feature, idx) => (
           <div
             key={idx}
-            className="bg-gray-800 p-6 rounded-2xl shadow hover:shadow-pink-500/20 transition"
+            className="bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-xl border border-slate-700/50 p-6 rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition-all duration-300"
           >
             <div className="flex justify-center mb-4">{feature.icon}</div>
             <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-            <p className="text-gray-400">{feature.description}</p>
+            <p className="text-slate-400">{feature.description}</p>
           </div>
         ))}
-      </div>
+      </motion.div >
     </div>
   );
 };

@@ -6,6 +6,8 @@ import { PolarEmbedCheckout } from "@polar-sh/checkout/embed";
 import { useAction, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { Button } from '@/components/ui/button';
+import { useScrollDownAnimationHook } from "@/hooks/use-scroll-down-animation-hook";
+import { motion } from "framer-motion";
 
 interface PricingTier {
   name: string;
@@ -93,6 +95,7 @@ const creditPacks: CreditPack[] = [
 ];
 
 export const PricingPage = () => {
+  const { ref, controls } = useScrollDownAnimationHook()
   const [activeTab, setActiveTab] = useState<'subscription' | 'credits'>('subscription');
   const [billedAnnually, setBilledAnnually] = useState(true);
 
@@ -139,19 +142,37 @@ export const PricingPage = () => {
   };
 
   return (
-    <div
+    <motion.div
       id="pricing"
-      className="w-full min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8"
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={{
+        hidden: {
+          opacity: 0,
+          y: 100
+        },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: {
+            duration: 2,
+            delay: 0.2, // Delay the animation to avoid flickering
+            ease: [0.22, 1, 0.36, 1]
+          }
+        },
+      }}
+      className="w-full min-h-screen bg-transparent text-foreground py-12 px-4 sm:px-6 lg:px-8"
     >
       <div className="max-w-7xl mx-auto">
         {/* Tabs */}
         <div className="flex items-center justify-center mb-12">
-          <div className="inline-flex items-center bg-muted rounded-lg p-1">
+          <div className="inline-flex items-center bg-slate-900/50 backdrop-blur-xl border border-slate-700/50 rounded-lg p-1">
             <button
               onClick={() => setActiveTab('subscription')}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${activeTab === 'subscription'
-                ? 'bg-background text-foreground shadow'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25'
+                : 'text-slate-400 hover:text-white'
                 }`}
             >
               Subscription
@@ -159,8 +180,8 @@ export const PricingPage = () => {
             <button
               onClick={() => setActiveTab('credits')}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${activeTab === 'credits'
-                ? 'bg-background text-foreground shadow'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25'
+                : 'text-slate-400 hover:text-white'
                 }`}
             >
               Credits
@@ -172,8 +193,9 @@ export const PricingPage = () => {
         {activeTab === 'subscription' && (
           <div className="space-y-8">
             <div className="text-center">
-              <h1 className="text-4xl font-bold text-white mb-4">Plans & Pricing</h1>
-              <p className="text-xl text-muted-foreground">Choose the perfect plan for your creative needs</p>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Plans &
+                <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"> Pricing</span></h1>
+              <p className="text-xl text-slate-300">Choose the perfect plan for your creative needs</p>
             </div>
 
             {/* Billing Toggle */}
@@ -205,14 +227,14 @@ export const PricingPage = () => {
               {subscriptionTiers.map((tier, idx) => (
                 <div
                   key={idx}
-                  className="relative bg-background border border-zinc-800 rounded-lg shadow hover:shadow-lg transition"
+                  className="relative bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-lg hover:shadow-2xl hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition-all duration-300"
                 >
                   {/* Header */}
                   <div className="px-6 pt-6 pb-4">
                     <div className="flex items-start justify-between mb-2">
                       <h2 className="text-2xl font-bold">{tier.name}</h2>
                       {tier.badge && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
                           {tier.badge}
                         </span>
                       )}
@@ -224,8 +246,8 @@ export const PricingPage = () => {
                     {/* Pricing */}
                     <div className="mb-4">
                       <div className="flex items-baseline gap-1">
-                        <span className="text-4xl font-bold">${tier.price}</span>
-                        <span className="text-muted-foreground text-sm">/{tier.period}</span>
+                        <span className="text-4xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">${tier.price}</span>
+                        <span className="text-slate-400 text-sm mb-4">/{tier.period}</span>
                       </div>
                     </div>
                   </div>
@@ -246,9 +268,11 @@ export const PricingPage = () => {
                   {user &&
                     <div className="px-6 py-4 border-t border-zinc-800">
                       <button
-                        className={`w-full py-2.5 px-4 rounded-md font-medium cursor-pointer transition-colors ${tier.name === 'Free'
-                          ? 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                          : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                        className={`w-full py-2.5 px-4 rounded-lg font-medium cursor-pointer transition-all duration-300 ${tier.name === 'Free'
+                          ? 'bg-slate-800/50 border border-slate-700 text-white hover:bg-slate-700/50 hover:border-slate-600'
+                          : (user?.subscriptionProductId === tier.productId)
+                            ? 'bg-gradient-to-r from-[#45EC82] to-[#75CEFC] text-black font-semibold border border-emerald-500 shadow-md shadow-emerald-500/20 hover:bg-emerald-500'
+                            : 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/25 hover:from-indigo-600 hover:to-purple-500 hover:shadow-indigo-500/40 hover:scale-105'
                           }`}
                         onClick={async () => await openCheckout({ products: [tier.productId] })}
                       >
@@ -266,7 +290,7 @@ export const PricingPage = () => {
         {activeTab === 'credits' && (
           <div className="space-y-8">
             <div className="text-center">
-              <h1 className="text-4xl font-bold text-white mb-4">Credit Packages</h1>
+              <h1 className="text-4xl font-bold text-white mb-4">Credit <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Packages</span></h1>
               <p className="text-xl text-muted-foreground">Buy credits and unlock creative potential</p>
             </div>
 
@@ -275,7 +299,7 @@ export const PricingPage = () => {
               {creditPacks.map((pack, idx) => (
                 <div
                   key={idx}
-                  className="rounded-xl border border-zinc-800 bg-zinc-900 p-4 flex flex-col justify-between shadow hover:shadow-lg transition"
+                  className="rounded-xl border border-slate-700/50 bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-xl p-6 flex flex-col justify-between shadow-lg hover:shadow-2xl hover:shadow-indigo-500/10 hover:border-indigo-500/50 transition-all duration-300"
                 >
                   {/* Credits and Badge */}
                   <div className="flex flex-col gap-3">
@@ -283,7 +307,7 @@ export const PricingPage = () => {
                       <Coins className="h-4 w-4 text-yellow-400" />
                       <span className="text-xl font-bold">{pack.credits.toLocaleString()}</span>
                       {pack.badge && (
-                        <span className="text-xs bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-md font-medium">
+                        <span className="text-xs bg-amber-500/10 text-amber-400 px-2 py-1 rounded-md font-medium border border-amber-500/20">
                           {pack.badge}
                         </span>
                       )}
@@ -300,7 +324,7 @@ export const PricingPage = () => {
 
                   {/* Price and Button */}
                   <div className="mt-6 flex items-center justify-between">
-                    <div className="text-xl font-semibold">${pack.price}</div>
+                    <div className="text-2xl font-semibold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">${pack.price}</div>
                     <button
                       className="inline-flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap rounded-md font-medium transition-colors bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 h-8 px-4 text-sm"
                       onClick={async () => await openCheckout({ products: [pack.productId] })}
@@ -315,16 +339,17 @@ export const PricingPage = () => {
         )}
       </div>
 
-      {user &&
+      {
+        user &&
         <div className="w-full flex flex-col justify-center items-center" >
           <Button variant="default"
-            className="mt-8 p-4"
+            className="mt-8 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-500 hover:to-purple-500 shadow-lg shadow-indigo-500/25 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
             onClick={async () => await openCustomerPortal()}
           >
             Manage your subscriptions
           </Button>
         </div>
       }
-    </div>
+    </motion.div >
   );
 }
