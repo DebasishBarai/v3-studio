@@ -9,42 +9,42 @@ export const Showcase = () => {
   const { ref: ref3, controls: controls3 } = useScrollDownAnimationHook()
   const videos = [
     {
-      poster: "https://cdn.revid.ai/thumbnail/6zmk9uhimSM4wpQf2V4R-1747152919071.webp",
+      poster: "/showcase/vid1.webp",
       src: "/showcase/vid1.webm",
       badge: "a video on a world where every person has a unique superpower",
       link: "/tools/talking-avatar",
       cols: 1
     },
     {
-      poster: "https://cdn.revid.ai/thumbnail/BkFMpcz2oAQo9MW3JiRB-1744895354187.webp",
+      poster: "/showcase/vid2.webp",
       src: "/showcase/vid2.webm",
       badge: "a motivational story of a guy who is left by his wife because he is poor but later he becomes one of the welthiest in the town",
       link: "/tools/prompt-to-video",
       cols: 1
     },
     {
-      poster: "https://cdn.revid.ai/static/wolf.webp",
+      poster: "/showcase/vid3.webp",
       src: "/showcase/vid3.webm",
       badge: "a video on an inspiring story of someone who achieved success without formal training",
       link: "/tools/ai-cinematic-video",
       cols: 2
     },
     {
-      poster: "https://cdn.revid.ai/thumbnail/santa-video-generator.webp",
+      poster: "/showcase/vid4.webp",
       src: "/showcase/vid4.webm",
       badge: "a video on a gas giant with floating jellyfish cities",
       link: "/tools/talking-avatar",
       cols: 1
     },
     {
-      poster: "https://cdn.revid.ai/static/music-to-video.webp",
+      poster: "/showcase/vid5.webp",
       src: "/showcase/vid5.webm",
       badge: "create a video of a person who is doing his 9 to 5 corporate job but bored by this monotonous job which he does not like and...",
       link: "/tools/ai-music-video-generator",
       cols: 2
     },
     {
-      poster: "https://cdn.revid.ai/ai-gen/ahwPdMnLiX.jpg",
+      poster: "/showcase/vid6.webp",
       src: "/showcase/vid6.webm",
       badge: "a video on a desert planet with sand-swimming nomads",
       link: "/tools/ai-music-video-generator",
@@ -167,7 +167,7 @@ export const Showcase = () => {
                 className="bg-white outline w-1/2 md:max-w-[500px] absolute hidden sm:block sm:-left-1/4 md:right-1/4 mx-auto outline-[6px] outline-[#636363]/25 rounded-xl object-cover">
                 <video
                   className="bg-white shadow-2xl rounded-[10px] object-cover w-full"
-                  poster="https://cdn.revid.ai/static/space-exploration.webp"
+                  poster="/showcase/vid7.webp"
                   preload="none"
                   loop
                   playsInline
@@ -182,7 +182,7 @@ export const Showcase = () => {
               <div className="bg-white outline w-11/12 md:w-3/4 md:max-w-[380px] relative z-10 mx-auto outline-[6px] outline-[#636363]/25 rounded-xl object-cover">
                 <video
                   className="bg-white shadow-2xl rounded-[10px] object-cover w-full"
-                  poster="https://cdn.revid.ai/static/boy-and-dog.webp"
+                  poster="/showcase/vid8.webp"
                   preload="none"
                   muted
                   loop
@@ -197,7 +197,7 @@ export const Showcase = () => {
               <div className="bg-white outline w-1/2 md:max-w-[500px] absolute hidden sm:block sm:-right-1/4 md:left-1/4 -z-0 mx-auto outline-[6px] outline-[#636363]/25 rounded-xl object-cover">
                 <video
                   className="bg-white shadow-2xl rounded-[10px] object-cover w-full"
-                  poster="https://cdn.revid.ai/static/men-scuffle.webp"
+                  poster="/showcase/vid9.webp"
                   preload="none"
                   loop
                   playsInline

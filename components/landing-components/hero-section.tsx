@@ -40,7 +40,7 @@ export const HeroSection = () => {
             <div className="w-full h-full">
               <video
                 className="bg-white shadow-2xl rounded-[10px] object-cover h-full w-full"
-                poster="https://cdn.revid.ai/thumbnail/5nD2OXg8d74hb3Avqjxq-1745743754440.webp"
+                poster="/showcase/vid9.webp"
                 preload="none"
                 muted
                 loop
@@ -60,7 +60,7 @@ export const HeroSection = () => {
             <div className="w-full h-full">
               <video
                 className="bg-white shadow-2xl rounded-[10px] object-cover h-full w-full"
-                poster="https://cdn.revid.ai/static/cinematic-music-to-video.webp"
+                poster="/showcase/vid3.webp"
                 preload="none"
                 muted
                 loop
@@ -77,7 +77,7 @@ export const HeroSection = () => {
             <div className="w-full h-full">
               <video
                 className="bg-white shadow-2xl rounded-[10px] object-cover h-full w-full"
-                poster="https://cdn.revid.ai/static/netherland-girl.webp"
+                poster="/showcase/vid5.webp"
                 preload="none"
                 muted
                 loop
