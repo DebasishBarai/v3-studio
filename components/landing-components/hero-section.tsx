@@ -67,7 +67,7 @@ export const HeroSection = () => {
                 playsInline
                 autoPlay
               >
-                <source src="/showcase/vid3.webm" type="video/mp4" />
+                <source src="/showcase/vid3.webm" type="video/webm" />
               </video>
             </div>
           </div>
@@ -96,3 +96,4 @@ export const HeroSection = () => {
     </article>
   );
 };
+
