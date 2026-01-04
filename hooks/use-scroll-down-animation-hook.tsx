@@ -6,6 +6,7 @@ import { useRef, useState, useEffect } from "react"
 export function useScrollDownAnimationHook() {
   const ref = useRef(null)
   const controls = useAnimation()
+  const [initial, setInitial] = useState('visible')
   const { scrollY } = useScroll()
   const isInView = useInView(ref, { amount: 0 })
   const [lastScrollY, setLastScrollY] = useState(0)
@@ -13,6 +14,14 @@ export function useScrollDownAnimationHook() {
 
   useEffect(() => {
     setLastScrollY(window.scrollY)
+    if (ref.current) {
+      const rect = (ref.current as HTMLElement).getBoundingClientRect()
+      const viewportHeight = window.innerHeight
+
+      if (rect.top > viewportHeight) {
+        setInitial('hidden')
+      }
+    }
   }, [])
 
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -40,5 +49,5 @@ export function useScrollDownAnimationHook() {
     }
   })
 
-  return { ref, controls }
+  return { ref, controls, initial }
 }

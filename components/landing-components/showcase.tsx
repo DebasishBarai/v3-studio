@@ -4,9 +4,9 @@ import { useScrollDownAnimationHook } from "@/hooks/use-scroll-down-animation-ho
 import { motion } from "framer-motion";
 
 export const Showcase = () => {
-  const { ref: ref1, controls: controls1 } = useScrollDownAnimationHook()
-  const { ref: ref2, controls: controls2 } = useScrollDownAnimationHook()
-  const { ref: ref3, controls: controls3 } = useScrollDownAnimationHook()
+  const { ref: ref1, controls: controls1, initial: initial1 } = useScrollDownAnimationHook()
+  const { ref: ref2, controls: controls2, initial: initial2 } = useScrollDownAnimationHook()
+  const { ref: ref3, controls: controls3, initial: initial3 } = useScrollDownAnimationHook()
   const videos = [
     {
       poster: "/showcase/vid1.webp",
@@ -62,7 +62,7 @@ export const Showcase = () => {
         <div className="relative z-20 mx-auto m-8">
           <motion.div
             ref={ref1}
-            initial="hidden"
+            initial={initial1}
             animate={controls1}
             variants={{
               hidden: {
@@ -91,7 +91,7 @@ export const Showcase = () => {
           {/* Video Grid */}
           <motion.div
             ref={ref2}
-            initial="hidden"
+            initial={initial2}
             animate={controls2}
             variants={{
               hidden: {
@@ -144,8 +144,8 @@ export const Showcase = () => {
           <div className="space-y-12 py-12 lg:py-12">
             <motion.div
               ref={ref3}
+              initial={initial3}
               animate={controls3}
-              initial="hidden"
               variants={{
                 hidden: {
                   opacity: 0,
