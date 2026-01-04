@@ -10,42 +10,42 @@ export const Showcase = () => {
   const videos = [
     {
       poster: "/showcase/vid1.webp",
-      src: "/showcase/vid1.webm",
+      src: "https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/u1vacbhxvf/out.mp4",
       badge: "a video on a world where every person has a unique superpower",
       link: "/tools/talking-avatar",
       cols: 1
     },
     {
       poster: "/showcase/vid2.webp",
-      src: "/showcase/vid2.webm",
+      src: "https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/99stlpz6jj/out.mp4",
       badge: "a motivational story of a guy who is left by his wife because he is poor but later he becomes one of the welthiest in the town",
       link: "/tools/prompt-to-video",
       cols: 1
     },
     {
       poster: "/showcase/vid3.webp",
-      src: "/showcase/vid3.webm",
+      src: "https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/8xirw1rdyi/out.mp4",
       badge: "a video on an inspiring story of someone who achieved success without formal training",
       link: "/tools/ai-cinematic-video",
       cols: 2
     },
     {
       poster: "/showcase/vid4.webp",
-      src: "/showcase/vid4.webm",
+      src: "https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/0un0z51qxx/out.mp4",
       badge: "a video on a gas giant with floating jellyfish cities",
       link: "/tools/talking-avatar",
       cols: 1
     },
     {
       poster: "/showcase/vid5.webp",
-      src: "/showcase/vid5.webm",
+      src: "https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/a7m9zpau1v/out.mp4",
       badge: "create a video of a person who is doing his 9 to 5 corporate job but bored by this monotonous job which he does not like and...",
       link: "/tools/ai-music-video-generator",
       cols: 2
     },
     {
       poster: "/showcase/vid6.webp",
-      src: "/showcase/vid6.webm",
+      src: "https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/k4c1f55uwd/out.mp4",
       badge: "a video on a desert planet with sand-swimming nomads",
       link: "/tools/ai-music-video-generator",
       cols: 1
@@ -174,7 +174,7 @@ export const Showcase = () => {
                   autoPlay
                   muted
                 >
-                  <source src="/showcase/vid7.webm" type="video/mp4" />
+                  <source src="https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/cpv2ozjqdl/out.mp4" type="video/mp4" />
                 </video>
               </div>
 
@@ -189,7 +189,7 @@ export const Showcase = () => {
                   playsInline
                   autoPlay
                 >
-                  <source src="/showcase/vid8.webm" type="video/mp4" />
+                  <source src="https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/4hrm7foqkb/out.mp4" type="video/mp4" />
                 </video>
               </div>
 
@@ -204,7 +204,7 @@ export const Showcase = () => {
                   autoPlay
                   muted
                 >
-                  <source src="/showcase/vid9.webm" type="video/mp4" />
+                  <source src="https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/k9axsstgbu/out.mp4" type="video/mp4" />
                 </video>
               </div>
 
