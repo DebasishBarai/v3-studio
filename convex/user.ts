@@ -177,6 +177,7 @@ export const createInternalUser = internalMutation({
       name: args.name ?? 'Anonymous',
       credits: 400,
       polarCustomerId: args.polarCustomerId,
+      onboardingDone: false,
     });
   }
 })

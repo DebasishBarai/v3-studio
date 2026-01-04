@@ -206,6 +206,7 @@ export default defineSchema({
     email: v.optional(v.string()),
     polarCustomerId: v.string(),
     subscriptionProductId: v.optional(v.string()),
+    onboardingDone: v.optional(v.boolean()),
   }).index('by_subject', ['subject']),
 
   ads: defineTable({
