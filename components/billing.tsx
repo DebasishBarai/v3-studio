@@ -95,7 +95,7 @@ const creditPacks: CreditPack[] = [
 ];
 
 export const PricingPage = () => {
-  const { ref, controls, initial } = useScrollDownAnimationHook()
+  const { ref, controls } = useScrollDownAnimationHook()
   const [activeTab, setActiveTab] = useState<'subscription' | 'credits'>('subscription');
   const [billedAnnually, setBilledAnnually] = useState(true);
 
@@ -145,7 +145,7 @@ export const PricingPage = () => {
     <motion.div
       id="pricing"
       ref={ref}
-      initial={initial}
+      initial="hidden"
       animate={controls}
       variants={{
         hidden: {

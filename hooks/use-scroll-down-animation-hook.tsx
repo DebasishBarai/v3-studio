@@ -6,23 +6,38 @@ import { useRef, useState, useEffect } from "react"
 export function useScrollDownAnimationHook() {
   const ref = useRef(null)
   const controls = useAnimation()
-  const [initial, setInitial] = useState('visible')
   const { scrollY } = useScroll()
   const isInView = useInView(ref, { amount: 0 })
   const [lastScrollY, setLastScrollY] = useState(0)
   const [lastTriggered, setLastTriggered] = useState(false)
 
   useEffect(() => {
-    setLastScrollY(window.scrollY)
-    if (ref.current) {
+    const syncVisibility = () => {
+      if (!ref.current) return
       const rect = (ref.current as HTMLElement).getBoundingClientRect()
       const viewportHeight = window.innerHeight
 
       if (rect.top > viewportHeight) {
-        setInitial('hidden')
+        controls.set("hidden")
+        setLastTriggered(false)
+      } else {
+        controls.set("visible")
+        setLastTriggered(true)
       }
     }
-  }, [])
+
+    // wait for layout + scroll restore
+    requestAnimationFrame(syncVisibility)
+
+    // handle back/forward cache restore
+    window.addEventListener("pageshow", syncVisibility)
+
+    setLastScrollY(window.scrollY)
+
+    return () => {
+      window.removeEventListener("pageshow", syncVisibility)
+    }
+  }, [controls])
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (!ref.current) return
@@ -49,5 +64,5 @@ export function useScrollDownAnimationHook() {
     }
   })
 
-  return { ref, controls, initial }
+  return { ref, controls }
 }

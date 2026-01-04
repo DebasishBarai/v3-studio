@@ -7,8 +7,8 @@ import { useScrollDownAnimationHook } from "@/hooks/use-scroll-down-animation-ho
 import { motion } from "framer-motion";
 
 const FeatureItem = ({ feature, index }: { feature: any; index: number }) => {
-  const { ref: ref1, controls: controls1, initial: initial1 } = useScrollDownAnimationHook()
-  const { ref: ref2, controls: controls2, initial: initial2 } = useScrollDownAnimationHook()
+  const { ref: ref1, controls: controls1 } = useScrollDownAnimationHook()
+  const { ref: ref2, controls: controls2 } = useScrollDownAnimationHook()
 
   return (
     <section className="py-16 sm:py-24">
@@ -18,7 +18,7 @@ const FeatureItem = ({ feature, index }: { feature: any; index: number }) => {
       >
         <motion.div
           ref={ref1}
-          initial={initial1}
+          initial="hidden"
           animate={controls1}
           variants={{
             hidden: {
@@ -50,7 +50,7 @@ const FeatureItem = ({ feature, index }: { feature: any; index: number }) => {
         </motion.div>
         <motion.div
           ref={ref2}
-          initial={initial2}
+          initial="hidden"
           animate={controls2}
           variants={{
             hidden: {

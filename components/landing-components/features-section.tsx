@@ -12,8 +12,8 @@ import {
 } from "lucide-react";
 
 export const Features = () => {
-  const { ref: ref1, controls: controls1, initial: initial1 } = useScrollDownAnimationHook()
-  const { ref: ref2, controls: controls2, initial: initial2 } = useScrollDownAnimationHook()
+  const { ref: ref1, controls: controls1 } = useScrollDownAnimationHook()
+  const { ref: ref2, controls: controls2 } = useScrollDownAnimationHook()
   const features = [
     {
       title: "Generate Short Films",
@@ -54,7 +54,7 @@ export const Features = () => {
     >
       <motion.div
         ref={ref1}
-        initial={initial1}
+        initial="hidden"
         animate={controls1}
         variants={{
           hidden: {
@@ -79,7 +79,7 @@ export const Features = () => {
 
       <motion.div
         ref={ref2}
-        initial={initial2}
+        initial="hidden"
         animate={controls2}
         variants={{
           hidden: {
