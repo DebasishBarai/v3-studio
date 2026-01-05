@@ -18,3 +18,10 @@ export const calculateTotalCreditsRequired = (video: Doc<'videos'>) => {
 
   return totalRequiredCredits
 }
+
+export const cdn = (url: string) => {
+  return url.replace(
+    's3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders',
+    'cdn.v3-studio.com'
+  );
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useScrollDownAnimationHook } from "@/hooks/use-scroll-down-animation-hook";
+import { cdn } from "@/lib/functions";
 import { motion } from "framer-motion";
 
 export const Showcase = () => {
@@ -133,7 +134,7 @@ export const Showcase = () => {
                     playsInline
                     autoPlay
                   >
-                    <source src={video.src} type="video/mp4" />
+                    <source src={cdn(video.src)} type="video/mp4" />
                   </video>
                 </div>
               </div>
@@ -174,7 +175,7 @@ export const Showcase = () => {
                   autoPlay
                   muted
                 >
-                  <source src="https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/cpv2ozjqdl/out.mp4" type="video/mp4" />
+                  <source src={cdn("https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/cpv2ozjqdl/out.mp4")} type="video/mp4" />
                 </video>
               </div>
 
@@ -189,7 +190,7 @@ export const Showcase = () => {
                   playsInline
                   autoPlay
                 >
-                  <source src="https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/4hrm7foqkb/out.mp4" type="video/mp4" />
+                  <source src={cdn("https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/4hrm7foqkb/out.mp4")} type="video/mp4" />
                 </video>
               </div>
 
@@ -204,7 +205,7 @@ export const Showcase = () => {
                   autoPlay
                   muted
                 >
-                  <source src="https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/k9axsstgbu/out.mp4" type="video/mp4" />
+                  <source src={cdn("https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/k9axsstgbu/out.mp4")} type="video/mp4" />
                 </video>
               </div>
 

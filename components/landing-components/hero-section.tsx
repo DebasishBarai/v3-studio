@@ -1,5 +1,7 @@
 'use client';
 
+import { cdn } from "@/lib/functions";
+
 export const HeroSection = () => {
   return (
     <article className="rounded-3xl px-4 sm:px-6 md:px-8 w-full flex flex-col items-center justify-center">
@@ -47,7 +49,7 @@ export const HeroSection = () => {
                 playsInline
                 autoPlay
               >
-                <source src="https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/k9axsstgbu/out.mp4" type="video/mp4" />
+                <source src={cdn("https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/k9axsstgbu/out.mp4")} type="video/mp4" />
               </video>
             </div>
           </div>
@@ -67,7 +69,7 @@ export const HeroSection = () => {
                 playsInline
                 autoPlay
               >
-                <source src="https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/8xirw1rdyi/out.mp4" type="video/mp4" />
+                <source src={cdn("https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/8xirw1rdyi/out.mp4")} type="video/mp4" />
               </video>
             </div>
           </div>
@@ -84,7 +86,7 @@ export const HeroSection = () => {
                 playsInline
                 autoPlay
               >
-                <source src="https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/a7m9zpau1v/out.mp4" type="video/mp4" />
+                <source src={cdn("https://s3.ap-south-1.amazonaws.com/remotionlambda-apsouth1-o0ii9qrpg0/renders/a7m9zpau1v/out.mp4")} type="video/mp4" />
               </video>
             </div>
           </div>
