@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Play, ImageOff, SquarePen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
+import { cdn } from "@/lib/functions"
 
 export default function VideoCard({ video, index }: { video: any; index: number }) {
   const sceneImages = video?.scenes
@@ -68,7 +69,7 @@ export default function VideoCard({ video, index }: { video: any; index: number 
           </Link>
 
           {video?.videoUrl && (
-            <Link href={video.videoUrl} target="_blank">
+            <Link href={cdn(video.videoUrl)} target="_blank">
               <Button size="sm" className="bg-white/20 hover:bg-white/30 text-white border-none">
                 <Play className="w-4 h-4" />
               </Button>
