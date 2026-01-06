@@ -5,8 +5,50 @@ import { useQuery } from 'convex/react';
 import Image from 'next/image';
 import VideoCard from './video-card';
 import { CreateVideoBlueprint } from '@/components/create-video-blueprint';
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+import { useEffect, useRef } from 'react';
 
 export const UsersVideosList = () => {
+
+  const tourRef = useRef<ReturnType<typeof driver> | null>(null);
+
+  useEffect(() => {
+    tourRef.current = driver({
+      popoverClass: 'driverjs-theme',
+      allowClose: false,
+    });
+
+    tourRef.current?.highlight({
+      element: "#create-ai-video-button",
+      popover: {
+        title: "Create AI Powered Video",
+        description:
+          "Click here to generate your first AI video.",
+        side: "bottom",
+        align: "start",
+      },
+    });
+
+    // Add click listener to close tour when button is clicked
+    const button = document.querySelector("#create-ai-video-button");
+    const handleClick = () => {
+      tourRef.current?.destroy();
+    };
+
+    if (button) {
+      button.addEventListener("click", handleClick);
+    }
+
+    // Cleanup
+    return () => {
+      if (button) {
+        button.removeEventListener("click", handleClick);
+      }
+      tourRef.current?.destroy();
+    };
+  }, []);
+
   const videos = useQuery(api.video.video.getVideos)
   return (
     <div>
@@ -14,7 +56,9 @@ export const UsersVideosList = () => {
         {/* Page header */}
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-2xl mb-2 mt-5">My Videos</h2>
-          <div className="hidden md:flex items-center gap-5">
+          <div
+            id='create-ai-video-button'
+            className="hidden md:flex items-center gap-5">
             <CreateVideoBlueprint />
           </div>
         </div>
@@ -46,10 +90,12 @@ export const UsersVideosList = () => {
             </div>
           ))}
         </div>
-        <div className="md:hidden mx-auto w-fit gap-5">
+        <div
+          id='create-ai-video-button'
+          className="md:hidden mx-auto w-fit gap-5">
           <CreateVideoBlueprint />
         </div>
       </div>
     </div >
   )
-} 
+}
