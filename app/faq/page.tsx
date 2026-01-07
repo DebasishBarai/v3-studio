@@ -61,58 +61,6 @@ const faqs = [
   },
 ];
 
-const FeaturedHeroImage = ({ imageUrl }: { imageUrl: string }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.6, delay: 0.3 }}
-      className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl shadow-purple-500/20 border border-purple-500/20"
-    >
-      <img
-        src={imageUrl}
-        alt="V3 Studio FAQ Hero"
-        className="w-full h-full object-cover"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-    </motion.div>
-  );
-};
-
-const QuickStats = ({ stats }: { stats: Array<{ icon: string; label: string; value: string }> }) => {
-  const iconMap: Record<string, any> = {
-    trending: TrendingUp,
-    video: Video,
-    dollar: DollarSign,
-    users: Users,
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.4 }}
-      className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12"
-    >
-      {stats.map((stat, i) => {
-        const Icon = iconMap[stat.icon];
-        return (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.5 + i * 0.1 }}
-            className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl p-6 text-center hover:shadow-lg hover:shadow-purple-500/20 transition-all"
-          >
-            <Icon className="w-8 h-8 text-purple-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
-            <div className="text-sm text-slate-400">{stat.label}</div>
-          </motion.div>
-        );
-      })}
-    </motion.div>
-  );
-};
 
 export default function FAQPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -163,21 +111,6 @@ export default function FAQPage() {
             <span>💡 Expert Tips</span>
           </motion.div>
         </div>
-
-        {/* Hero Image */}
-        <FeaturedHeroImage imageUrl="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1200&auto=format&fit=crop" />
-      </section>
-
-      {/* Quick Stats */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        <QuickStats
-          stats={[
-            { icon: 'trending', label: 'Customer Satisfaction', value: '98%' },
-            { icon: 'video', label: 'Videos Created', value: '1M+' },
-            { icon: 'users', label: 'Active Users', value: '50K+' },
-            { icon: 'dollar', label: 'Time Saved', value: '80%' },
-          ]}
-        />
       </section>
 
       {/* FAQ Accordion */}
