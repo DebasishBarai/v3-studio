@@ -115,7 +115,7 @@ export const PricingPage = () => {
 
   useEffect(() => {
     updateUserSubscription()
-  }, [updateUserSubscription])
+  }, [])
 
   // Open checkout programmatically when needed
   const openCheckout = async ({ products }: { products: string[] }) => {
