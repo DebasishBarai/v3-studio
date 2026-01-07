@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Sparkles, Zap, Shield, Clock, Video, DollarSign, Users, TrendingUp } from 'lucide-react';
 
@@ -203,6 +204,7 @@ export default function FAQPage() {
           <p className="text-neutral-400 mb-6">
             Our support team is here to help you get the most out of V3 Studio.
           </p>
+          <Link href='/contact-us'>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -210,6 +212,7 @@ export default function FAQPage() {
           >
             Contact Support
           </motion.button>
+            </Link>
         </motion.div>
       </section>
     </div>
