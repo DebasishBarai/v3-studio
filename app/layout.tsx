@@ -39,7 +39,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          <ClerkProvider appearance={{ baseTheme: dark }}>
+          <ClerkProvider appearance={{ theme: dark }}>
             <ConvexClientProvider>{children}</ConvexClientProvider>
           </ClerkProvider>
           <Toaster richColors />
