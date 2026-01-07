@@ -2,9 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { Check, Gift, Coins } from 'lucide-react';
-import { PolarEmbedCheckout } from "@polar-sh/checkout/embed";
-import { useAction, useQuery } from 'convex/react';
-import { api } from '@/convex/_generated/api';
 import { Button } from '@/components/ui/button';
 import { useScrollDownAnimationHook } from "@/hooks/use-scroll-down-animation-hook";
 import { motion } from "framer-motion";
@@ -98,48 +95,6 @@ export const PricingPage = () => {
   const { ref, controls } = useScrollDownAnimationHook()
   const [activeTab, setActiveTab] = useState<'subscription' | 'credits'>('subscription');
   const [billedAnnually, setBilledAnnually] = useState(true);
-
-  let user = null
-  try {
-    const convexUser = useQuery(api.user.getUser)
-    user = convexUser
-  } catch (error) {
-    console.error(error)
-  }
-
-  const getCustomerCheckoutUrl = useAction(api.polar.getCustomerCheckoutUrl)
-
-  const getCustomerPortalUrl = useAction(api.polar.getCustomerPortalUrl)
-
-  const updateUserSubscription = useAction(api.user.updateUserSubscription)
-
-  useEffect(() => {
-    updateUserSubscription()
-  }, [])
-
-  // Open checkout programmatically when needed
-  const openCheckout = async ({ products }: { products: string[] }) => {
-    const theme = "dark"; // or 'light'
-
-    try {
-      // Get the customer checkout URL
-      const checkoutLink = await getCustomerCheckoutUrl({ products });
-
-      // This creates the checkout iframe and returns a Promise
-      // that resolves when the checkout is fully loaded
-      const checkout = await PolarEmbedCheckout.create(checkoutLink, theme);
-
-      // Now you can interact with the checkout instance
-      return checkout;
-    } catch (error) {
-      console.error("Failed to open checkout", error);
-    }
-  };
-
-  const openCustomerPortal = async () => {
-    const customerPortalUrl = await getCustomerPortalUrl();
-    window.open(customerPortalUrl, '_blank');
-  };
 
   return (
     <motion.div
@@ -264,22 +219,6 @@ export const PricingPage = () => {
                     </ul>
                   </div>
 
-                  {/* CTA Button */}
-                  {user &&
-                    <div className="px-6 py-4 border-t border-zinc-800">
-                      <button
-                        className={`w-full py-2.5 px-4 rounded-lg font-medium cursor-pointer transition-all duration-300 ${tier.name === 'Free'
-                          ? 'bg-slate-800/50 border border-slate-700 text-white hover:bg-slate-700/50 hover:border-slate-600'
-                          : (user?.subscriptionProductId === tier.productId)
-                            ? 'bg-gradient-to-r from-[#45EC82] to-[#75CEFC] text-black font-semibold border border-emerald-500 shadow-md shadow-emerald-500/20 hover:bg-emerald-500'
-                            : 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/25 hover:from-indigo-600 hover:to-purple-500 hover:shadow-indigo-500/40 hover:scale-105'
-                          }`}
-                        onClick={async () => await openCheckout({ products: [tier.productId] })}
-                      >
-                        {user?.subscriptionProductId === tier.productId ? 'Subscribed' : 'Subscribe'}
-                      </button>
-                    </div>
-                  }
                 </div>
               ))}
             </div>
@@ -321,16 +260,10 @@ export const PricingPage = () => {
                       </div>
                     )}
                   </div>
-
+                  
                   {/* Price and Button */}
-                  <div className="mt-6 flex items-center justify-between">
+                  <div className="mt-6 flex items-center justify-start">
                     <div className="text-2xl font-semibold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">${pack.price}</div>
-                    <button
-                      className="inline-flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap rounded-md font-medium transition-colors bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 h-8 px-4 text-sm"
-                      onClick={async () => await openCheckout({ products: [pack.productId] })}
-                    >
-                      Purchase Now
-                    </button>
                   </div>
                 </div>
               ))}
@@ -339,17 +272,6 @@ export const PricingPage = () => {
         )}
       </div>
 
-      {
-        user &&
-        <div className="w-full flex flex-col justify-center items-center" >
-          <Button variant="default"
-            className="mt-8 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-500 hover:to-purple-500 shadow-lg shadow-indigo-500/25 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
-            onClick={async () => await openCustomerPortal()}
-          >
-            Manage your subscriptions
-          </Button>
-        </div>
-      }
     </motion.div >
   );
 }
