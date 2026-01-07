@@ -260,8 +260,12 @@ export const PricingPage = () => {
                       </div>
                     )}
                   </div>
+                  
+                  {/* Price and Button */}
+                  <div className="mt-6 flex items-center justify-start">
+                    <div className="text-2xl font-semibold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">${pack.price}</div>
+                  </div>
                 </div>
-
               ))}
             </div>
           </div>
