@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Sparkles, Zap, Shield, Clock, Video, DollarSign, Users, TrendingUp } from 'lucide-react';
 import { LogoSection } from '@/components/landing-components/logo-section';
+import Footer from '@/components/footer';
 
 const faqs = [
   {
@@ -68,6 +69,7 @@ export default function FAQPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
+    <>
     <div className="bg-black text-white min-h-screen min-w-full flex flex-col justify-start items-center">
         {/* Header */}
         <LogoSection />
@@ -219,5 +221,7 @@ export default function FAQPage() {
         </motion.div>
       </section>
     </div>
+      <Footer />
+    </>
   );
 }
