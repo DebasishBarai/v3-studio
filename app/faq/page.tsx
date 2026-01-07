@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Sparkles, Zap, Shield, Clock, Video, DollarSign, Users, TrendingUp } from 'lucide-react';
+import { LogoSection } from '@/components/landing-components/logo-section';
 
 const faqs = [
   {
@@ -67,7 +68,9 @@ export default function FAQPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 text-white">
+    <div className="bg-black text-white min-h-screen min-w-full flex flex-col justify-start items-center">
+        {/* Header */}
+        <LogoSection />
       {/* Hero Section */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
         <div className="text-center mb-12">
