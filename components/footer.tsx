@@ -17,6 +17,10 @@ const Footer = () => {
             Contact Us
           </Link>
           <div className="hidden md:block text-muted-foreground">•</div>
+          <Link href="/faq" className="text-sm text-muted-foreground hover:text-primary">
+            FAQ
+          </Link>
+          <div className="hidden md:block text-muted-foreground">•</div>
           <Link href="/blogs" className="text-sm text-muted-foreground hover:text-primary">
             Blogs
           </Link>
