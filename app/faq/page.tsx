@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Sparkles, Zap, Shield, Clock } from 'lucide-react';
+import { ChevronDown, Sparkles, Zap, Shield, Clock, Video, DollarSign, Users, TrendingUp } from 'lucide-react';
 
 const faqs = [
   {
@@ -15,7 +15,7 @@ const faqs = [
     question: 'Who is V3 Studio for?',
     answer:
       'V3 Studio is designed for faceless YouTube creators, short-form content creators, marketers, founders, and anyone who wants to create videos quickly and at scale.',
-    icon: Zap,
+    icon: Users,
   },
   {
     question: 'Do I need video editing experience?',
@@ -27,7 +27,7 @@ const faqs = [
     question: 'Are the videos completely faceless?',
     answer:
       'Yes. All videos generated on V3 Studio are 100% faceless and optimized for creators who don't want to appear on camera.',
-    icon: Shield,
+    icon: Video,
   },
   {
     question: 'How long does it take to generate a video?',
@@ -39,7 +39,7 @@ const faqs = [
     question: 'Can I upload videos to YouTube or social platforms?',
     answer:
       'Absolutely! You can upload videos to YouTube, YouTube Shorts, Instagram Reels, TikTok, and other platforms. All content is platform-optimized and ready to publish.',
-    icon: Zap,
+    icon: TrendingUp,
   },
   {
     question: 'Do I own the videos I create?',
@@ -51,59 +51,149 @@ const faqs = [
     question: 'Is V3 Studio free to use?',
     answer:
       'V3 Studio offers a free tier with limited usage. Paid plans unlock higher limits, advanced features, and priority generation speeds.',
-    icon: Sparkles,
+    icon: DollarSign,
   },
   {
     question: 'Is V3 Studio still in beta?',
     answer:
       'Yes. V3 Studio is currently in beta, and we're actively improving performance, features, and customization options based on user feedback.',
-    icon: Clock,
+    icon: Zap,
   },
 ];
+
+const FeaturedHeroImage = ({ imageUrl }: { imageUrl: string }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6, delay: 0.3 }}
+      className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl shadow-purple-500/20 border border-purple-500/20"
+    >
+      <img
+        src={imageUrl}
+        alt="V3 Studio FAQ Hero"
+        className="w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+    </motion.div>
+  );
+};
+
+const QuickStats = ({ stats }: { stats: Array<{ icon: string; label: string; value: string }> }) => {
+  const iconMap: Record<string, any> = {
+    trending: TrendingUp,
+    video: Video,
+    dollar: DollarSign,
+    users: Users,
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.4 }}
+      className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12"
+    >
+      {stats.map((stat, i) => {
+        const Icon = iconMap[stat.icon];
+        return (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.5 + i * 0.1 }}
+            className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl p-6 text-center hover:shadow-lg hover:shadow-purple-500/20 transition-all"
+          >
+            <Icon className="w-8 h-8 text-purple-400 mx-auto mb-2" />
+            <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+            <div className="text-sm text-slate-400">{stat.label}</div>
+          </motion.div>
+        );
+      })}
+    </motion.div>
+  );
+};
 
 export default function FAQPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 text-white flex items-center justify-center px-6 py-20">
-      <div className="w-full max-w-4xl">
-        {/* Header Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16 space-y-4"
-        >
+    <div className="min-h-screen bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 text-white">
+      {/* Hero Section */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
+        <div className="text-center mb-12">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
             className="inline-block"
           >
-            <div className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-4">
+            <div className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6">
               <Sparkles className="w-4 h-4 text-purple-400" />
               <span className="text-sm font-medium text-purple-400">Support Center</span>
             </div>
           </motion.div>
+
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent"
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight"
           >
             Frequently Asked Questions
           </motion.h1>
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-neutral-400 text-lg max-w-2xl mx-auto"
+            transition={{ duration: 0.6, delay: 0.25 }}
+            className="text-xl text-slate-300 mb-8"
           >
-            Everything you need to know about V3 Studio. Can't find what you're looking for? Feel free to reach out via our Contact page.
+            Everything you need to know about V3 Studio. Can't find what you're looking for?
           </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex items-center justify-center gap-6 text-sm text-slate-400 mb-12"
+          >
+            <span>📚 Complete Guide</span>
+            <span>⚡ Quick Answers</span>
+            <span>💡 Expert Tips</span>
+          </motion.div>
+        </div>
+
+        {/* Hero Image */}
+        <FeaturedHeroImage imageUrl="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1200&auto=format&fit=crop" />
+      </section>
+
+      {/* Quick Stats */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <QuickStats
+          stats={[
+            { icon: 'trending', label: 'Customer Satisfaction', value: '98%' },
+            { icon: 'video', label: 'Videos Created', value: '1M+' },
+            { icon: 'users', label: 'Active Users', value: '50K+' },
+            { icon: 'dollar', label: 'Time Saved', value: '80%' },
+          ]}
+        />
+      </section>
+
+      {/* FAQ Accordion */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="mb-8"
+        >
+          <h2 className="text-3xl font-bold text-white text-center mb-4">Common Questions</h2>
+          <p className="text-slate-400 text-center max-w-2xl mx-auto">
+            Find quick answers to the most commonly asked questions about V3 Studio
+          </p>
         </motion.div>
 
-        {/* FAQ Accordion */}
         <div className="space-y-4">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
@@ -114,7 +204,7 @@ export default function FAQPage() {
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
+                transition={{ duration: 0.4, delay: 0.9 + index * 0.08 }}
                 className={`group border rounded-2xl transition-all duration-300 ${
                   isOpen
                     ? 'border-purple-500/50 bg-gradient-to-br from-purple-500/10 to-pink-500/10 shadow-lg shadow-purple-500/10'
@@ -185,7 +275,7 @@ export default function FAQPage() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.4 }}
+          transition={{ duration: 0.6, delay: 1.8 }}
           className="mt-16 text-center p-8 rounded-2xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20"
         >
           <h3 className="text-2xl font-bold text-white mb-2">Still have questions?</h3>
@@ -200,7 +290,7 @@ export default function FAQPage() {
             Contact Support
           </motion.button>
         </motion.div>
-      </div>
+      </section>
     </div>
   );
 }
