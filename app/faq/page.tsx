@@ -26,7 +26,7 @@ const faqs = [
   {
     question: 'Are the videos completely faceless?',
     answer:
-      'Yes. All videos generated on V3 Studio are 100% faceless and optimized for creators who don't want to appear on camera.',
+      'Yes. All videos generated on V3 Studio are 100% faceless and optimized for creators who don\'t want to appear on camera.',
     icon: Video,
   },
   {
@@ -56,7 +56,7 @@ const faqs = [
   {
     question: 'Is V3 Studio still in beta?',
     answer:
-      'Yes. V3 Studio is currently in beta, and we're actively improving performance, features, and customization options based on user feedback.',
+      'Yes. V3 Studio is currently in beta, and we\'re actively improving performance, features, and customization options based on user feedback.',
     icon: Zap,
   },
 ];
