@@ -13,6 +13,10 @@ export const UsersVideosList = () => {
 
   const tourRef = useRef<ReturnType<typeof driver> | null>(null);
 
+  const isMobile = window.innerWidth < 768; // md breakpoint
+
+  const elementId = isMobile ? "#create-ai-video-button-mobile" : "#create-ai-video-button";
+
   useEffect(() => {
     tourRef.current = driver({
       popoverClass: 'driverjs-theme',
@@ -20,7 +24,7 @@ export const UsersVideosList = () => {
     });
 
     tourRef.current?.highlight({
-      element: "#create-ai-video-button",
+      element: elementId,
       popover: {
         title: "Create AI Powered Video",
         description:
@@ -31,7 +35,7 @@ export const UsersVideosList = () => {
     });
 
     // Add click listener to close tour when button is clicked
-    const button = document.querySelector("#create-ai-video-button");
+    const button = document.querySelector(elementId);
     const handleClick = () => {
       tourRef.current?.destroy();
     };
@@ -47,7 +51,7 @@ export const UsersVideosList = () => {
       }
       tourRef.current?.destroy();
     };
-  }, []);
+  }, [elementId]);
 
   const videos = useQuery(api.video.video.getVideos)
   return (
@@ -91,7 +95,7 @@ export const UsersVideosList = () => {
           ))}
         </div>
         <div
-          id='create-ai-video-button'
+          id='create-ai-video-button-mobile'
           className="md:hidden mx-auto w-fit gap-5">
           <CreateVideoBlueprint />
         </div>

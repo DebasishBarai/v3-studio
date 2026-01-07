@@ -113,7 +113,7 @@ export default function DashboardPage() {
           </Link>
           <Button
             onClick={startTour}
-            className="m-4 inline-block px-6 py-3 bg-gradient-to-r from-[#45EC82] to-[#75CEFC] text-black font-semibold rounded-lg hover:opacity-90 transition-opacity">
+            className="mt-4 md:mx-4 bg-gradient-to-r from-[#45EC82] to-[#75CEFC] text-black font-semibold rounded-lg hover:opacity-90 transition-opacity">
             Start guided tour
           </Button>
         </div>

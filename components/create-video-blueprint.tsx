@@ -7,6 +7,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 import { useAction, useConvex, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -17,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import { Spinner } from '@/components/ui/spinner';
 import { ConfirmDialog } from '@/components/confirm-dialog';
 import { useConfirmDialogHook } from '@/hooks/use-confirm-dialog-hook';
+import next from 'next';
 
 interface VoiceType {
   id: number;
@@ -49,6 +52,9 @@ export const CreateVideoBlueprint = () => {
   const [selectedModel, setSelectedModel] = useState<string | null>(null);
   const [selectedResolution, setSelectedResolution] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const tourRef = useRef<ReturnType<typeof driver> | null>(null);
+  const [nextButtonTour, setNextButtonTour] = useState<boolean>(false);
 
   const router = useRouter()
   const convex = useConvex()
@@ -133,6 +139,65 @@ export const CreateVideoBlueprint = () => {
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 10}px`;
     }
   }, [prompt]);
+
+  if (isOpen) {
+    setTimeout(() => {
+      tourRef.current = driver({
+        popoverClass: 'driverjs-theme',
+        allowClose: false,
+        showButtons: ['next'],
+        onNextClick: () => {
+          tourRef.current?.destroy()
+          setNextButtonTour(true)
+        },
+        steps: [
+          {
+            element: getElementByCurrentStep(currentStep),
+            popover: {
+              title: "Write your video idea",
+              description:
+                "Write your video idea in the text area. You can click on the AI prompt writer to generate a random prompt.",
+              side: "top",
+              align: "start",
+            },
+          },
+          {
+            element: "#next-button",
+            popover: {
+              title: "Next",
+              description:
+                "Click here to move to the next step.",
+              side: "top",
+              align: "start",
+            },
+          },
+        ]
+      });
+
+      if (nextButtonTour) {
+        tourRef.current?.highlight({
+          element: "#next-button",
+          popover: {
+            title: "Next",
+            description:
+              "Click here to move to the next step.",
+            side: "top",
+            align: "start",
+          },
+          onHighlightStarted: (element) => {
+            element?.addEventListener("click", () => {
+              tourRef.current?.destroy();
+              setNextButtonTour(false)
+            }, { once: true }); // 'once' automatically removes the listener
+          },
+        });
+      } else {
+        tourRef.current?.drive()
+      }
+    }, 100)
+  } else {
+    tourRef.current?.destroy()
+  }
 
   useEffect(() => {
     return () => {
@@ -313,6 +378,7 @@ export const CreateVideoBlueprint = () => {
     setStoryTellingStyle(null);
     setSelectedModel(null);
     setSelectedResolution(null);
+    setNextButtonTour(false)
   };
 
   const slideVariants = {
@@ -391,7 +457,9 @@ export const CreateVideoBlueprint = () => {
                 <p className="text-muted-foreground mb-4">
                   Describe the video you want to create. Be specific about the scenes, mood, and story.
                 </p>
-                <div className="space-y-4">
+                <div
+                  id='write-video-prompt'
+                  className="space-y-4">
                   <textarea
                     ref={textareaRef}
                     value={prompt}
@@ -435,7 +503,9 @@ export const CreateVideoBlueprint = () => {
                         selectedStyle === style.id ? 'border-green-500 ring-2 ring-purple-500/50' : 'border-border'
                       )}
                     >
-                      <div className="relative rounded-lg overflow-hidden bg-black">
+                      <div
+                        id='story-style-section'
+                        className="relative rounded-lg overflow-hidden bg-black">
                         <Image
                           alt={style.name}
                           loading="lazy"
@@ -937,6 +1007,7 @@ export const CreateVideoBlueprint = () => {
                   </Button>
                 ) : (
                   <Button
+                    id='next-button'
                     onClick={() => {
                       handleNext();
                       paginate(1);
@@ -971,4 +1042,19 @@ export const CreateVideoBlueprint = () => {
       />
     </div>
   );
+}
+
+const getElementByCurrentStep = (currentStep: number) => {
+  switch (currentStep) {
+    case 0: return '#write-video-prompt';
+    case 1: return '#story-style-section';
+    case 2: return '#aspect-ratio-section';
+    case 3: return '#duration-section';
+    case 4: return '#ai-model-section';
+    case 5: return '#video-quality-section';
+    case 6: return '#story-style-section';
+    case 7: return '#music-section';
+    case 8: return '#voice-section';
+    default: return '#write-video-prompt';
+  }
 }
