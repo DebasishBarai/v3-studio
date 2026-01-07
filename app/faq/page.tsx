@@ -97,7 +97,7 @@ export default function FAQPage() {
             transition={{ duration: 0.6, delay: 0.25 }}
             className="text-xl text-slate-300 mb-8"
           >
-            Everything you need to know about V3 Studio. Can't find what you're looking for?
+            Find quick answers to the most commonly asked questions about V3 Studio
           </motion.p>
 
           <motion.div
@@ -115,18 +115,6 @@ export default function FAQPage() {
 
       {/* FAQ Accordion */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="mb-8"
-        >
-          <h2 className="text-3xl font-bold text-white text-center mb-4">Common Questions</h2>
-          <p className="text-slate-400 text-center max-w-2xl mx-auto">
-            Find quick answers to the most commonly asked questions about V3 Studio
-          </p>
-        </motion.div>
-
         <div className="space-y-4">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
