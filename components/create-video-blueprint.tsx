@@ -19,7 +19,6 @@ import { useRouter } from 'next/navigation';
 import { Spinner } from '@/components/ui/spinner';
 import { ConfirmDialog } from '@/components/confirm-dialog';
 import { useConfirmDialogHook } from '@/hooks/use-confirm-dialog-hook';
-import next from 'next';
 
 interface VoiceType {
   id: number;
@@ -131,6 +130,8 @@ export const CreateVideoBlueprint = () => {
     { id: 8, title: 'Voice', icon: Mic, color: 'text-green-500' },
   ];
 
+  const [tourReady, setTourReady] = useState(false);
+
   useEffect(() => {
     if (textareaRef.current) {
       // Reset height to auto to get the correct scrollHeight
@@ -140,23 +141,57 @@ export const CreateVideoBlueprint = () => {
     }
   }, [prompt]);
 
-  if (isOpen) {
-    setTimeout(() => {
+  // Reset tourReady when step changes
+  useEffect(() => {
+    setTourReady(false);
+  }, [currentStep]);
+
+  // Start tour when animation completes
+  useEffect(() => {
+    if (!isOpen || !tourReady) {
+      if (!isOpen) tourRef.current?.destroy();
+      return;
+    }
+
+    tourRef.current?.destroy();
+
+    if (nextButtonTour) {
+      tourRef.current = driver({
+        popoverClass: 'driverjs-theme',
+        allowClose: false,
+        showButtons: [],
+      });
+
+      tourRef.current.highlight({
+        element: "#next-button",
+        popover: {
+          title: "Next",
+          description: "Click here to move to the next step.",
+          side: "top",
+          align: "start",
+        },
+        onHighlightStarted: (element) => {
+          element?.addEventListener("click", () => {
+            tourRef.current?.destroy();
+            setNextButtonTour(false);
+          }, { once: true });
+        },
+      });
+    } else {
       tourRef.current = driver({
         popoverClass: 'driverjs-theme',
         allowClose: false,
         showButtons: ['next'],
         onNextClick: () => {
-          tourRef.current?.destroy()
-          setNextButtonTour(true)
+          tourRef.current?.destroy();
+          setNextButtonTour(true);
         },
         steps: [
           {
             element: getElementByCurrentStep(currentStep),
             popover: {
-              title: "Write your video idea",
-              description:
-                "Write your video idea in the text area. You can click on the AI prompt writer to generate a random prompt.",
+              title: getStepTitle(currentStep),
+              description: getStepDescription(currentStep),
               side: "top",
               align: "start",
             },
@@ -165,8 +200,7 @@ export const CreateVideoBlueprint = () => {
             element: "#next-button",
             popover: {
               title: "Next",
-              description:
-                "Click here to move to the next step.",
+              description: "Click here to move to the next step.",
               side: "top",
               align: "start",
             },
@@ -174,30 +208,13 @@ export const CreateVideoBlueprint = () => {
         ]
       });
 
-      if (nextButtonTour) {
-        tourRef.current?.highlight({
-          element: "#next-button",
-          popover: {
-            title: "Next",
-            description:
-              "Click here to move to the next step.",
-            side: "top",
-            align: "start",
-          },
-          onHighlightStarted: (element) => {
-            element?.addEventListener("click", () => {
-              tourRef.current?.destroy();
-              setNextButtonTour(false)
-            }, { once: true }); // 'once' automatically removes the listener
-          },
-        });
-      } else {
-        tourRef.current?.drive()
-      }
-    }, 100)
-  } else {
-    tourRef.current?.destroy()
-  }
+      tourRef.current.drive();
+    }
+
+    return () => {
+      tourRef.current?.destroy();
+    };
+  }, [isOpen, tourReady, nextButtonTour]);
 
   useEffect(() => {
     return () => {
@@ -452,6 +469,10 @@ export const CreateVideoBlueprint = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
+                onAnimationComplete={() => {
+                  // Set tourReady after animation completes
+                  setTimeout(() => setTourReady(true), 0);
+                }}
               >
                 {/* Prompt Section */}
                 <p className="text-muted-foreground mb-4">
@@ -485,12 +506,18 @@ export const CreateVideoBlueprint = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
+                onAnimationComplete={() => {
+                  // Set tourReady after animation completes
+                  setTimeout(() => setTourReady(true), 0);
+                }}
+                id='story-style-section'
               >
                 {/* Video Style Section */}
                 <p className="text-muted-foreground mb-4">
                   Choose a visual style that matches your video&apos;s aesthetic.
                 </p>
-                <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[350px] overflow-auto">
+                <div
+                  className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[350px] overflow-auto">
                   {styles.map((style, index) => (
                     <motion.div
                       key={style.id}
@@ -504,7 +531,6 @@ export const CreateVideoBlueprint = () => {
                       )}
                     >
                       <div
-                        id='story-style-section'
                         className="relative rounded-lg overflow-hidden bg-black">
                         <Image
                           alt={style.name}
@@ -538,12 +564,18 @@ export const CreateVideoBlueprint = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
+                onAnimationComplete={() => {
+                  // Set tourReady after animation completes
+                  setTimeout(() => setTourReady(true), 0);
+                }}
+                id='aspect-ratio-section'
               >
                 {/* Aspect Ratio Section */}
                 <p className="text-muted-foreground mb-4">
                   Select the aspect ratio for your video output.
                 </p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div
+                  className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {aspectRatios.map((ratio, index) => (
                     <motion.button
                       key={ratio.id}
@@ -582,12 +614,18 @@ export const CreateVideoBlueprint = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
+                onAnimationComplete={() => {
+                  // Set tourReady after animation completes
+                  setTimeout(() => setTourReady(true), 0);
+                }}
+                id='duration-section'
               >
                 {/* Duration Section */}
                 <p className="text-muted-foreground mb-4">
                   Set the length of your video
                 </p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div
+                  className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {durations.map((duration, index) => (
                     <motion.button
                       key={duration.id}
@@ -626,12 +664,18 @@ export const CreateVideoBlueprint = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
+                onAnimationComplete={() => {
+                  // Set tourReady after animation completes
+                  setTimeout(() => setTourReady(true), 0);
+                }}
+                id='ai-model-section'
               >
                 {/* AI Model Section */}
                 <p className="text-muted-foreground mb-4">
                   Select the AI model to use for generating the video.
                 </p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div
+                  className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {models.map((model, index) => (
                     <motion.button
                       key={model.id}
@@ -677,12 +721,18 @@ export const CreateVideoBlueprint = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
+                onAnimationComplete={() => {
+                  // Set tourReady after animation completes
+                  setTimeout(() => setTourReady(true), 0);
+                }}
+                id='video-quality-section'
               >
                 {/* Video Quality Section */}
                 <p className="text-muted-foreground mb-4">
                   Select the resolution for your video output.
                 </p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div
+                  className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {resolutions.map((resolution, index) => (
                     <motion.button
                       key={resolution.id}
@@ -723,12 +773,18 @@ export const CreateVideoBlueprint = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
+                onAnimationComplete={() => {
+                  // Set tourReady after animation completes
+                  setTimeout(() => setTourReady(true), 0);
+                }}
+                id='story-telling-style-section'
               >
                 {/* Storytelling Style Section */}
                 <p className="text-muted-foreground mb-4">
                   Choose the storytelling approach for your video.
                 </p>
-                <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
+                <div
+                  className="grid grid-cols-2 gap-4 max-w-md mx-auto">
                   {['default', 'dramatic'].map((style, index) => (
                     <motion.button
                       key={style}
@@ -769,12 +825,18 @@ export const CreateVideoBlueprint = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
+                onAnimationComplete={() => {
+                  // Set tourReady after animation completes
+                  setTimeout(() => setTourReady(true), 0);
+                }}
+                id='music-section'
               >
                 {/* Background Music Section */}
                 <p className="text-muted-foreground mb-4">
                   Select background music to set the mood.
                 </p>
-                <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[350px] overflow-auto">
+                <div
+                  className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[350px] overflow-auto">
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -850,12 +912,18 @@ export const CreateVideoBlueprint = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
+                onAnimationComplete={() => {
+                  // Set tourReady after animation completes
+                  setTimeout(() => setTourReady(true), 0);
+                }}
+                id='voice-section'
               >
                 {/* Voiceover Section */}
                 <p className="text-muted-foreground mb-4">
                   Choose a voice for the narration.
                 </p>
-                <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[350px] overflow-auto">
+                <div
+                  className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[350px] overflow-auto">
                   {voices.map((voice, index) => (
                     <motion.div
                       key={voice.id}
@@ -1001,6 +1069,7 @@ export const CreateVideoBlueprint = () => {
                     onClick={generateVideo}
                     disabled={!canProceed()}
                     className="bg-red-500 hover:to-purple-700 text-white"
+                    id='next-button'
                   >
                     {isLoading ? <Spinner /> : <Sparkles className="w-6 h-6" />}
                     {isLoading ? 'Generating...' : 'Generate Outline'}
@@ -1045,16 +1114,47 @@ export const CreateVideoBlueprint = () => {
 }
 
 const getElementByCurrentStep = (currentStep: number) => {
-  switch (currentStep) {
-    case 0: return '#write-video-prompt';
-    case 1: return '#story-style-section';
-    case 2: return '#aspect-ratio-section';
-    case 3: return '#duration-section';
-    case 4: return '#ai-model-section';
-    case 5: return '#video-quality-section';
-    case 6: return '#story-style-section';
-    case 7: return '#music-section';
-    case 8: return '#voice-section';
-    default: return '#write-video-prompt';
-  }
+  const stepElements = [
+    '#write-video-prompt',      // Step 0
+    '#story-style-section',     // Step 1
+    '#aspect-ratio-section',    // Step 2
+    '#duration-section',        // Step 3
+    '#ai-model-section',        // Step 4
+    '#video-quality-section',   // Step 5
+    '#story-telling-style-section', // Step 6
+    '#music-section',           // Step 7
+    '#voice-section',           // Step 8
+  ];
+  return stepElements[currentStep] || stepElements[0];
 }
+
+// Helper functions for dynamic content
+const getStepTitle = (step: number) => {
+  const titles = [
+    "Write your video idea",
+    "Choose your style",
+    "Select aspect ratio",
+    "Set duration",
+    "Choose AI model",
+    "Select quality",
+    "Pick story style",
+    "Add background music",
+    "Choose voice"
+  ];
+  return titles[step] || "Complete this step";
+};
+
+const getStepDescription = (step: number) => {
+  const descriptions = [
+    "Write your video idea in the text area. You can click on the AI prompt writer to generate a random prompt.",
+    "Select the visual style that matches your video's aesthetic.",
+    "Choose the aspect ratio for your video output.",
+    "Set the length of your video.",
+    "Select the AI model for video generation.",
+    "Choose the resolution for your video.",
+    "Select your storytelling approach.",
+    "Pick background music to set the mood.",
+    "Choose a voice for narration."
+  ];
+  return descriptions[step] || "Follow the instructions to complete this step.";
+};
