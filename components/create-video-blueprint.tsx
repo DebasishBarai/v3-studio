@@ -214,7 +214,7 @@ export const CreateVideoBlueprint = () => {
     return () => {
       tourRef.current?.destroy();
     };
-  }, [isOpen, tourReady, nextButtonTour, currentStep]);
+  }, [isOpen, tourReady, nextButtonTour]);
 
   useEffect(() => {
     return () => {
