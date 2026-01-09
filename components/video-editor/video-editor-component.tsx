@@ -283,19 +283,10 @@ export const VideoEditorComponent = ({ videoId, tour = false }: { videoId: strin
           },
         },
         {
-          element: '#render-video-button',
-          popover: {
-            title: 'Render Video',
-            description: 'Click this button to render the video to your local machine. It will take some time to render the video. After the video is fully rendered, Download video button will show up',
-            side: 'bottom',
-            align: 'start',
-          },
-        },
-        {
           element: '#save-changes-button',
           popover: {
             title: 'Save Changes',
-            description: 'Click this button to save your changes',
+            description: 'Do the changes in the scenes and Characters and Click this button to save your changes',
             side: 'bottom',
             align: 'start',
           },
