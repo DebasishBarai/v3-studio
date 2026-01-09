@@ -5,10 +5,17 @@ import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import Image from "next/image";
 import Link from "next/link";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+import { useEffect, useRef } from "react";
+import { useState } from "react";
 
 export default function DashboardPage() {
 
+  const tourRef = useRef<ReturnType<typeof driver> | null>(null);
   const user = useQuery(api.user.getUser)
+
+  const [tour, setTour] = useState(false);
 
   /*
   const seedPrompt = useMutation(api.prompt.seedPrompt)
@@ -39,6 +46,31 @@ export default function DashboardPage() {
 
 */
 
+  useEffect(() => {
+    tourRef.current = driver({
+      popoverClass: 'driverjs-theme',
+      allowClose: false,
+    });
+  }, []);
+
+  if (tour) {
+    tourRef.current?.highlight({
+      element: "#start-creating-button",
+      popover: {
+        title: "Start here 👋",
+        description:
+          "Click here to generate your first AI video. We’ll guide you step by step.",
+        side: "bottom",
+        align: "start",
+      },
+      onHighlightStarted: (element) => {
+        element?.addEventListener("click", () => {
+          tourRef.current?.destroy();
+        }, { once: true });
+      },
+    });
+  };
+
   return (
     <div className="max-w-full mx-auto">
       {/* Header Section */}
@@ -50,11 +82,22 @@ export default function DashboardPage() {
           <p className="text-gray-300 mt-2 leading-relaxed">
             Lights, camera, AI! 🚀 Instantly transform your text or images into stunning cinematic videos. Create stories that move — literally.
           </p>
-          <Link href="ai-tools/ai-video">
-            <Button className="mt-4 text-white border-white/30 hover:bg-white hover:text-black transition-all bg-transparent border">
+          <Link href={
+            tour
+              ? { pathname: "/ai-tools/ai-video", query: { tour: 'true' } }
+              : { pathname: "/ai-tools/ai-video" }
+          }>
+            <Button
+              id='start-creating-button'
+              className="mt-4 text-white border-white/30 hover:bg-white hover:text-black transition-all bg-transparent border">
               ✨ Start Creating
             </Button>
           </Link>
+          <Button
+            onClick={() => setTour(true)}
+            className="mt-4 md:mx-4 bg-gradient-to-r from-[#45EC82] to-[#75CEFC] text-black font-semibold rounded-lg hover:opacity-90 transition-opacity">
+            Start guided tour
+          </Button>
         </div>
 
         {!user?.subscriptionProductId && (
@@ -96,7 +139,9 @@ export default function DashboardPage() {
               Instantly turn your script or idea into a visual storyboard powered by AI. Perfect for pre-production planning.
             </p>
             <Link href="ai-tools/ai-video">
-              <Button className="bg-black hover:bg-white hover:text-black text-white mt-2 transition-all">
+              <Button
+                id='storyboard-button'
+                className="bg-black hover:bg-white hover:text-black text-white mt-2 transition-all">
                 Create Storyboard
               </Button>
             </Link>

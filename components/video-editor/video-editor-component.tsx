@@ -26,6 +26,9 @@ import { ConfirmDialog } from '@/components/confirm-dialog';
 import { useConfirmDialogHook } from '@/hooks/use-confirm-dialog-hook';
 import { calculateTotalCreditsRequired } from "@/lib/functions"
 
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+
 const ItemType = 'SCENE';
 
 interface DragItem {
@@ -79,7 +82,7 @@ const DraggableSceneCard = ({
   );
 };
 
-export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
+export const VideoEditorComponent = ({ videoId, tour = false }: { videoId: string, tour?: boolean }) => {
   const id = videoId as Id<'videos'>;
   const video = useQuery(api.video.video.getVideo, { id: id });
   const updateVideo = useMutation(api.video.video.updateVideo);
@@ -137,6 +140,8 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
       previewUrl: member.fields.previewUrl.value,
     } as Infer<typeof voiceValidator>,
   }));
+
+  const tourRef = useRef<ReturnType<typeof driver> | null>(null);
 
   // Initialize videoData from query
   useEffect(() => {
@@ -246,6 +251,64 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
     setIsRenderEligible(allScenesHaveUrl);
   }, [videoData]);
 
+  useEffect(() => {
+    if (!videoData) {
+      return;
+    }
+
+    if (!tour) {
+      return
+    }
+
+    tourRef.current = driver({
+      popoverClass: 'driverjs-theme',
+      allowClose: false,
+      steps: [
+        {
+          element: '#auto-generate-button',
+          popover: {
+            title: 'Auto Generate',
+            description: 'Click this button to Auto Generate the entire video for you. You can also generate individual characters and the scenes all by yourself',
+            side: 'bottom',
+            align: 'start',
+          },
+        },
+        {
+          element: '#preview-video-button',
+          popover: {
+            title: 'Preview Video',
+            description: 'Click this button to preview the generated video',
+            side: 'bottom',
+            align: 'start',
+          },
+        },
+        {
+          element: '#render-video-button',
+          popover: {
+            title: 'Render Video',
+            description: 'Click this button to render the video to your local machine. It will take some time to render the video. After the video is fully rendered, Download video button will show up',
+            side: 'bottom',
+            align: 'start',
+          },
+        },
+        {
+          element: '#save-changes-button',
+          popover: {
+            title: 'Save Changes',
+            description: 'Click this button to save your changes',
+            side: 'bottom',
+            align: 'start',
+          },
+        }],
+    });
+
+    tourRef.current.drive();
+
+    return () => {
+      tourRef.current?.destroy();
+    };
+
+  }, [tour, videoData])
 
   if (!video || !videoData) {
     return (
@@ -823,6 +886,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
               )}
               {!videoData.videoUrl && (
                 <button
+                  id='auto-generate-button'
                   onClick={autoGenerate}
                   disabled={isSaving}
                   className={cn(
@@ -854,6 +918,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
               {/* Render button */}
               {isRenderEligible && (
                 <button
+                  id='render-video-button'
                   onClick={renderVideo}
                   disabled={isSaving}
                   className={cn(
@@ -885,6 +950,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
               <Dialog>
                 <DialogTrigger asChild>
                   <Button
+                    id='preview-video-button'
                     disabled={isSaving || isVideoLoading}
                     className={cn(
                       "relative inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium",
@@ -946,6 +1012,7 @@ export const VideoEditorComponent = ({ videoId }: { videoId: string }) => {
                 </DialogContent>
               </Dialog>
               <button
+                id='save-changes-button'
                 onClick={handleSave}
                 disabled={isSaving || !!video.renderId || !!video.videoUrl}
                 className={cn(
