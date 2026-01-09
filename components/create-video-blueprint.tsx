@@ -36,7 +36,7 @@ interface AudioState {
   url: string;
 }
 
-export const CreateVideoBlueprint = () => {
+export const CreateVideoBlueprint = ({ tour: false }: { tour: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [prompt, setPrompt] = useState('');
@@ -143,7 +143,7 @@ export const CreateVideoBlueprint = () => {
 
   // Set tourReady when dialog opens
 useEffect(() => {
-  if (isOpen && currentStep === 0) {
+  if (isOpen && tour && currentStep === 0) {
     // Delay to allow dialog animation to complete
     const timeoutId = setTimeout(() => {
       setTourReady(true);
@@ -159,7 +159,7 @@ useEffect(() => {
 
   // Start tour when animation completes
   useEffect(() => {
-    if (!isOpen || !tourReady) {
+    if (!isOpen || !tour || !tourReady) {
       if (!isOpen) tourRef.current?.destroy();
       return;
     }
