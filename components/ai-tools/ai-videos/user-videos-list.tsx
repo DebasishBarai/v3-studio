@@ -103,7 +103,7 @@ export const UsersVideosList = () => {
         <div
           id='create-ai-video-button-mobile'
           className="md:hidden mx-auto w-fit gap-5">
-          <CreateVideoBlueprint />
+          <CreateVideoBlueprint tour={ true } />
         </div>
       </div>
     </div >
