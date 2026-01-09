@@ -69,7 +69,7 @@ export const UsersVideosList = () => {
           <div
             id='create-ai-video-button'
             className="hidden md:flex items-center gap-5">
-            <CreateVideoBlueprint />
+            <CreateVideoBlueprint tour={ true } />
           </div>
         </div>
 
