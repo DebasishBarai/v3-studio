@@ -48,7 +48,6 @@ export const UsersVideosList = () => {
     if (button) {
       button.addEventListener("click", handleClick);
     }
-    }
     
     // Cleanup
     return () => {
@@ -57,6 +56,7 @@ export const UsersVideosList = () => {
       }
       tourRef.current?.destroy();
     };
+    }
   }, [elementId, tour]);
 
   const videos = useQuery(api.video.video.getVideos)
