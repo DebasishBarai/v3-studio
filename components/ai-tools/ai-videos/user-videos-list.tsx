@@ -8,9 +8,13 @@ import { CreateVideoBlueprint } from '@/components/create-video-blueprint';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import { useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export const UsersVideosList = () => {
 
+  const searchParams = useSearchParams();
+  const tour = searchParams.get('tour') === 'true';
+  
   const tourRef = useRef<ReturnType<typeof driver> | null>(null);
 
   const isMobile = window.innerWidth < 768; // md breakpoint
@@ -18,6 +22,7 @@ export const UsersVideosList = () => {
   const elementId = isMobile ? "#create-ai-video-button-mobile" : "#create-ai-video-button";
 
   useEffect(() => {
+    if (tour) {
     tourRef.current = driver({
       popoverClass: 'driverjs-theme',
       allowClose: false,
@@ -43,7 +48,8 @@ export const UsersVideosList = () => {
     if (button) {
       button.addEventListener("click", handleClick);
     }
-
+    }
+    
     // Cleanup
     return () => {
       if (button) {
@@ -51,7 +57,7 @@ export const UsersVideosList = () => {
       }
       tourRef.current?.destroy();
     };
-  }, [elementId]);
+  }, [elementId, tour]);
 
   const videos = useQuery(api.video.video.getVideos)
   return (
