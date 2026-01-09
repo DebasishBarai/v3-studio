@@ -142,16 +142,16 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
   }, [prompt]);
 
   // Set tourReady when dialog opens
-useEffect(() => {
-  if (isOpen && tour && currentStep === 0) {
-    // Delay to allow dialog animation to complete
-    const timeoutId = setTimeout(() => {
-      setTourReady(true);
-    }, 300);
-    return () => clearTimeout(timeoutId);
-  }
-}, [isOpen, currentStep]);
-  
+  useEffect(() => {
+    if (isOpen && tour && currentStep === 0) {
+      // Delay to allow dialog animation to complete
+      const timeoutId = setTimeout(() => {
+        setTourReady(true);
+      }, 300);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isOpen, tour, currentStep]);
+
   // Reset tourReady when step changes
   useEffect(() => {
     setTourReady(false);
@@ -225,7 +225,7 @@ useEffect(() => {
     return () => {
       tourRef.current?.destroy();
     };
-  }, [isOpen, tourReady, nextButtonTour, currentStep]);
+  }, [isOpen, tourReady, nextButtonTour, currentStep, tour]);
 
   useEffect(() => {
     return () => {
