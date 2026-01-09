@@ -352,7 +352,11 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
         });
       }
 
-      router.push(`/ai-tools/ai-video/editor/${videoId}`);
+      if (tour) {
+        router.push(`/ai-tools/ai-video/editor/${videoId}?tour=true`)
+      } else {
+        router.push(`/ai-tools/ai-video/editor/${videoId}`);
+      }
     } catch (error) {
       toast.error('An error occurred while connecting to the backend');
     } finally {
