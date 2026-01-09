@@ -141,6 +141,17 @@ export const CreateVideoBlueprint = () => {
     }
   }, [prompt]);
 
+  // Set tourReady when dialog opens
+useEffect(() => {
+  if (isOpen && currentStep === 0) {
+    // Delay to allow dialog animation to complete
+    const timeoutId = setTimeout(() => {
+      setTourReady(true);
+    }, 300);
+    return () => clearTimeout(timeoutId);
+  }
+}, [isOpen, currentStep]);
+  
   // Reset tourReady when step changes
   useEffect(() => {
     setTourReady(false);
@@ -396,6 +407,7 @@ export const CreateVideoBlueprint = () => {
     setSelectedModel(null);
     setSelectedResolution(null);
     setNextButtonTour(false)
+    setTourReady(false)
   };
 
   const slideVariants = {
