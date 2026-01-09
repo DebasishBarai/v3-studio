@@ -54,6 +54,7 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
 
   const tourRef = useRef<ReturnType<typeof driver> | null>(null);
   const [nextButtonTour, setNextButtonTour] = useState<boolean>(false);
+  const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
 
   const router = useRouter()
   const convex = useConvex()
@@ -159,7 +160,7 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
 
   // Start tour when animation completes
   useEffect(() => {
-    if (!isOpen || !tour || !tourReady) {
+    if (!isOpen || !tour || !tourReady || isGeneratingVideo) {
       if (!isOpen) tourRef.current?.destroy();
       return;
     }
@@ -225,7 +226,7 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
     return () => {
       tourRef.current?.destroy();
     };
-  }, [isOpen, tourReady, nextButtonTour, currentStep, tour]);
+  }, [isOpen, tourReady, nextButtonTour, currentStep, tour, isGeneratingVideo]);
 
   useEffect(() => {
     return () => {
@@ -297,6 +298,7 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
 
     try {
       setIsLoading(true);
+      setIsGeneratingVideo(true);
 
       let videoId;
 
@@ -361,6 +363,7 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
       toast.error('An error occurred while connecting to the backend');
     } finally {
       setIsLoading(false);
+      setIsGeneratingVideo(false);
       setPrompt('');
       setSelectedStyle(null);
       setSelectedMusic(null);
