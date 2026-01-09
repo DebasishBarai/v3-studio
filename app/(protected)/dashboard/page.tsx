@@ -8,14 +8,14 @@ import Link from "next/link";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import { useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function DashboardPage() {
 
   const tourRef = useRef<ReturnType<typeof driver> | null>(null);
   const user = useQuery(api.user.getUser)
 
-  const router = useRouter();
+  const [tour, setTour] = useState(false);
 
   /*
   const seedPrompt = useMutation(api.prompt.seedPrompt)
@@ -50,32 +50,10 @@ export default function DashboardPage() {
     tourRef.current = driver({
       popoverClass: 'driverjs-theme',
       allowClose: false,
-      // steps: [
-      //   {
-      //     element: "#start-creating-button",
-      //     popover: {
-      //       title: "Start here 👋",
-      //       description:
-      //         "Click here to generate your first AI video. We’ll guide you step by step.",
-      //       side: "bottom",
-      //       align: "start",
-      //     },
-      //   },
-      //   {
-      //     element: "#storyboard-button",
-      //     popover: {
-      //       title: "Start here 👋",
-      //       description:
-      //         "Click here to generate your first AI video. We’ll guide you step by step.",
-      //       side: "bottom",
-      //       align: "start",
-      //     },
-      //   },
-      // ],
     });
   }, []);
 
-  const startTour = () => {
+  if (tour) {
     tourRef.current?.highlight({
       element: "#start-creating-button",
       popover: {
@@ -88,7 +66,7 @@ export default function DashboardPage() {
       onHighlightStarted: (element) => {
         element?.addEventListener("click", () => {
           tourRef.current?.destroy();
-        }, { once: true }); // 'once' automatically removes the listener
+        }, { once: true });
       },
     });
   };
@@ -104,7 +82,11 @@ export default function DashboardPage() {
           <p className="text-gray-300 mt-2 leading-relaxed">
             Lights, camera, AI! 🚀 Instantly transform your text or images into stunning cinematic videos. Create stories that move — literally.
           </p>
-          <Link href="/ai-tools/ai-video">
+          <Link href={
+            tour
+              ? { pathname: "/ai-tools/ai-video", query: { tour: 'true' } }
+              : { pathname: "/ai-tools/ai-video" }
+          }>
             <Button
               id='start-creating-button'
               className="mt-4 text-white border-white/30 hover:bg-white hover:text-black transition-all bg-transparent border">
@@ -112,7 +94,7 @@ export default function DashboardPage() {
             </Button>
           </Link>
           <Button
-            onClick={startTour}
+            onClick={() => setTour(true)}
             className="mt-4 md:mx-4 bg-gradient-to-r from-[#45EC82] to-[#75CEFC] text-black font-semibold rounded-lg hover:opacity-90 transition-opacity">
             Start guided tour
           </Button>
