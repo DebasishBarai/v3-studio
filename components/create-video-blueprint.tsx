@@ -36,7 +36,7 @@ interface AudioState {
   url: string;
 }
 
-export const CreateVideoBlueprint = ({ tour: false }: { tour?: boolean }) => {
+export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [prompt, setPrompt] = useState('');
