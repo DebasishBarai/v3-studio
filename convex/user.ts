@@ -119,7 +119,6 @@ export const updateUserSubscription = action({
 
     const polarCustomerState = await polarResponse.json();
 
-    // @ts-expect-error - subscription state is not typed
     const activeSubscriptionProductId = polarCustomerState.active_subscriptions.find(s => s.status === 'active').product_id
 
     await ctx.runMutation(internal.user.updateInternalUser, {

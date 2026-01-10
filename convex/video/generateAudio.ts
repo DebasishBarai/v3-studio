@@ -4,7 +4,7 @@ import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js'
 import { v } from "convex/values";
 import { action, internalAction } from "../_generated/server";
 import { internal } from "../_generated/api";
-import { Id } from "../_generated/dataModel";
+import { Doc, Id } from "../_generated/dataModel";
 
 import { AssemblyAI, SpeechModel } from "assemblyai";
 
@@ -39,7 +39,7 @@ export const internalGenerateAudio = internalAction({
   handler: async (ctx, args): Promise<{ audioStorageId: Id<'_storage'>, audioUrl: string }> => {
     console.log('generate audio');
 
-    let user = null
+    let user: Doc<'users'> | null = null
 
     if (!args.userId) {
       const identity = await ctx.auth.getUserIdentity();

@@ -229,9 +229,9 @@ const generateCharacterIds = ({
   characters: Infer<typeof characterSchema>[];
   characterNames: string[];
 }) => {
-  const characterImageIds = [];
-  const missingCharacters = [];
-  const charactersWithoutImages = [];
+  const characterImageIds: string[] = [];
+  const missingCharacters: string[] = [];
+  const charactersWithoutImages: string[] = [];
 
   for (const characterName of characterNames) {
     // Find the character in the video.characters array

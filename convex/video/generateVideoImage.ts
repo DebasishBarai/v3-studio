@@ -5,7 +5,7 @@ import { action, internalAction } from '../_generated/server'
 import { internal } from '../_generated/api'
 import { v } from "convex/values";
 import { aspectRatioValidator } from "../schema";
-import { Id } from "../_generated/dataModel";
+import { Doc, Id } from "../_generated/dataModel";
 
 const genai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_API_KEY,
@@ -38,7 +38,7 @@ export const internalGenerateCharacterImage = internalAction({
 
     console.log('generate character image');
 
-    let user = null
+    let user: Doc<'users'> | null = null
 
     if (!args.userId) {
       const identity = await ctx.auth.getUserIdentity();
@@ -267,7 +267,7 @@ export const internalGenerateSceneImage = internalAction({
 
     console.log('generate scene image');
 
-    let user = null
+    let user: Doc<'users'> | null = null
 
     if (!args.userId) {
       const identity = await ctx.auth.getUserIdentity();
@@ -332,7 +332,7 @@ export const internalGenerateSceneImage = internalAction({
         baseImage = Buffer.from(await baseImageBlob.arrayBuffer()).toString("base64");
       }
 
-      const characterImages = []
+      const characterImages: string[] = [];
       if (args.characterImageIds && args.characterImageIds.length > 0) {
         for (const imageId of args.characterImageIds) {
           const imageBlob = await ctx.storage.get(imageId);

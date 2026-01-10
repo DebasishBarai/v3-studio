@@ -11,7 +11,9 @@
 import type * as ad_ad from "../ad/ad.js";
 import type * as ad_generateAdImage from "../ad/generateAdImage.js";
 import type * as ad_generateAdVideo from "../ad/generateAdVideo.js";
+import type * as admin from "../admin.js";
 import type * as affiliates_firstpromoter from "../affiliates/firstpromoter.js";
+import type * as emails from "../emails.js";
 import type * as helper from "../helper.js";
 import type * as http from "../http.js";
 import type * as index from "../index.js";
@@ -41,7 +43,9 @@ declare const fullApi: ApiFromModules<{
   "ad/ad": typeof ad_ad;
   "ad/generateAdImage": typeof ad_generateAdImage;
   "ad/generateAdVideo": typeof ad_generateAdVideo;
+  admin: typeof admin;
   "affiliates/firstpromoter": typeof affiliates_firstpromoter;
+  emails: typeof emails;
   helper: typeof helper;
   http: typeof http;
   index: typeof index;

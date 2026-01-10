@@ -4,7 +4,7 @@ import { v } from "convex/values";
 import { internal } from "../_generated/api";
 import { action, internalAction } from "../_generated/server";
 import Replicate from "replicate";
-import { Id } from "../_generated/dataModel";
+import { Doc, Id } from "../_generated/dataModel";
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
@@ -34,7 +34,7 @@ export const internalGenerateSceneVideo = internalAction({
 
     console.log('generate scene video');
 
-    let user = null
+    let user: Doc<'users'> | null = null
 
     if (!args.userId) {
       const identity = await ctx.auth.getUserIdentity();
