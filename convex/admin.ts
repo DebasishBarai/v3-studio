@@ -51,7 +51,12 @@ export const updateUserEmail = internalMutation({
 // Action to backfill emails from Clerk for users missing email data
 export const backfillUserEmailsFromClerk = action({
   args: {},
-  handler: async (ctx) => {
+  handler: async (ctx): Promise<{
+    totalUsersChecked: number;
+    updatedCount: number;
+    errors: Array<{ subject: string; error: string }>;
+    success: boolean;
+  }> => {
     // Get all users with missing emails
     const usersWithMissingEmails = await ctx.runMutation(
       internal.admin.getUsersWithMissingEmails,

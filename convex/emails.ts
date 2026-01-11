@@ -133,8 +133,12 @@ export const sendTestEmail = action({
 // Get user count - helpful to check before sending
 export const getUserCount = action({
   args: {},
-  handler: async (ctx) => {
-    const users = await ctx.runQuery(api.users.getAllUsers);
+  handler: async (ctx): Promise<{
+    totalUsers: number;
+    usersWithEmail: number;
+    emails: (string | null | undefined)[];
+  }> => {
+    const users = await ctx.runQuery(internal.admin.getAllUsers);
     const usersWithEmail = users.filter(u => u.email);
 
     return {

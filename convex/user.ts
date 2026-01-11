@@ -119,6 +119,8 @@ export const updateUserSubscription = action({
 
     const polarCustomerState = await polarResponse.json();
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const activeSubscriptionProductId = polarCustomerState.active_subscriptions.find(s => s.status === 'active').product_id
 
     await ctx.runMutation(internal.user.updateInternalUser, {

@@ -15,19 +15,19 @@ import { Button } from "@/components/ui/button"
 import { parseMedia } from '@remotion/media-parser'
 import { getCachedVideoUrl } from "@/lib/video-cache"
 import { cn } from "@/lib/utils"
-import { musicValidator, voiceValidator } from "@/convex/schema"
+import { characterSchema, musicValidator, voiceValidator } from "@/convex/schema"
 import { Infer } from "convex/values"
 import { CaptionStyleControls } from "./caption-style-control"
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { AutoGenerateProgressDialog } from "@/components/video-editor/auto-generate-dialog"
 
-import { ConfirmDialog } from '@/components/confirm-dialog';
-import { useConfirmDialogHook } from '@/hooks/use-confirm-dialog-hook';
+import { ConfirmDialog } from '@/components/confirm-dialog'
+import { useConfirmDialogHook } from '@/hooks/use-confirm-dialog-hook'
 import { calculateTotalCreditsRequired } from "@/lib/functions"
 
-import { driver } from "driver.js";
-import "driver.js/dist/driver.css";
+import { driver } from "driver.js"
+import "driver.js/dist/driver.css"
 
 const ItemType = 'SCENE';
 
@@ -558,7 +558,7 @@ export const VideoEditorComponent = ({ videoId, tour = false }: { videoId: strin
           for (const characterName of characterNames) {
             // Find the character in the video.characters array
             const character = video.characters.find(
-              (char) => char.name === characterName
+              (char: typeof characterSchema.type) => char.name === characterName
             );
 
             if (!character) {

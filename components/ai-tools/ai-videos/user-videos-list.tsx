@@ -9,12 +9,13 @@ import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { Doc } from '@/convex/_generated/dataModel';
 
 export const UsersVideosList = () => {
 
   const searchParams = useSearchParams();
   const tour = searchParams.get('tour') === 'true';
-  
+
   const tourRef = useRef<ReturnType<typeof driver> | null>(null);
 
   const isMobile = window.innerWidth < 768; // md breakpoint
@@ -23,39 +24,39 @@ export const UsersVideosList = () => {
 
   useEffect(() => {
     if (tour) {
-    tourRef.current = driver({
-      popoverClass: 'driverjs-theme',
-      allowClose: false,
-    });
+      tourRef.current = driver({
+        popoverClass: 'driverjs-theme',
+        allowClose: false,
+      });
 
-    tourRef.current?.highlight({
-      element: elementId,
-      popover: {
-        title: "Create AI Powered Video",
-        description:
-          "Click here to generate your first AI video.",
-        side: "bottom",
-        align: "start",
-      },
-    });
+      tourRef.current?.highlight({
+        element: elementId,
+        popover: {
+          title: "Create AI Powered Video",
+          description:
+            "Click here to generate your first AI video.",
+          side: "bottom",
+          align: "start",
+        },
+      });
 
-    // Add click listener to close tour when button is clicked
-    const button = document.querySelector(elementId);
-    const handleClick = () => {
-      tourRef.current?.destroy();
-    };
+      // Add click listener to close tour when button is clicked
+      const button = document.querySelector(elementId);
+      const handleClick = () => {
+        tourRef.current?.destroy();
+      };
 
-    if (button) {
-      button.addEventListener("click", handleClick);
-    }
-    
-    // Cleanup
-    return () => {
       if (button) {
-        button.removeEventListener("click", handleClick);
+        button.addEventListener("click", handleClick);
       }
-      tourRef.current?.destroy();
-    };
+
+      // Cleanup
+      return () => {
+        if (button) {
+          button.removeEventListener("click", handleClick);
+        }
+        tourRef.current?.destroy();
+      };
     }
   }, [elementId, tour]);
 
@@ -69,7 +70,7 @@ export const UsersVideosList = () => {
           <div
             id='create-ai-video-button'
             className="hidden md:flex items-center gap-5">
-            <CreateVideoBlueprint tour={ tour } />
+            <CreateVideoBlueprint tour={tour} />
           </div>
         </div>
 
@@ -93,7 +94,7 @@ export const UsersVideosList = () => {
         )}
 
         <div className='grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-5'>
-          {videos && videos.map((video, index) => (
+          {videos && videos.map((video: Doc<'videos'>, index: number) => (
             <div key={index}
             >
               <VideoCard video={video} index={index} />
@@ -103,7 +104,7 @@ export const UsersVideosList = () => {
         <div
           id='create-ai-video-button-mobile'
           className="md:hidden mx-auto w-fit gap-5">
-          <CreateVideoBlueprint tour={ tour } />
+          <CreateVideoBlueprint tour={tour} />
         </div>
       </div>
     </div >

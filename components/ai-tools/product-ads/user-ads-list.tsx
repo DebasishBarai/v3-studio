@@ -2,11 +2,11 @@
 
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import React from 'react'
 import { Play } from 'lucide-react';
 import Link from 'next/link';
 import { api } from '@/convex/_generated/api';
 import { useQuery } from 'convex/react';
+import { Doc } from '@/convex/_generated/dataModel';
 
 export const UsersAdsList = () => {
 
@@ -31,7 +31,7 @@ export const UsersAdsList = () => {
       }
 
       <div className='grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-5'>
-        {ads && ads.map((ad, index) => (
+        {ads && ads.map((ad: Doc<'ads'>, index: number) => (
           <div key={index}>
             <Image src={ad.adImageUrl ?? ''} alt={ad.adImageUrl ?? ''}
               width={400}

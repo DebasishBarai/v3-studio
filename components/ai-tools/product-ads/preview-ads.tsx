@@ -74,7 +74,7 @@ export const PreviewAds = () => {
       <h2 className="font-bold text-2xl">Generated Result</h2>
 
       <div className='grid grid-cols-2 mt-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3 h-[90vh] overflow-auto'>
-        {ads?.map((ad, index) => (
+        {ads?.map((ad: Doc<'ads'>, index: number) => (
           <div key={index}>
             {ad?.adImageStorageId ?
               <div>
