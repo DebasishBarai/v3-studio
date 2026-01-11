@@ -705,17 +705,63 @@ export const promptVariations = {
   ]
 }
 
+// standard non premium video scripts
+// {
+//   "title": "string",
+//   "characters": [
+//     {
+//       "name": "string",
+//       "imagePrompt": "string"
+//     }
+//   ],
+//   "scenes": [
+//     {
+//       "index": 0,
+//       "charactersInTheScene": ["CharacterName"],
+//       "narration": "string",  // ← Has this field
+//       "imagePrompt": "string",
+//       "videoPrompt": "string",
+//       "angles": [
+//         {
+//           "index": 0,
+//           "angleVideoPrompt": "string"  // ← Only video, no audio
+//         }
+//       ]
+//     }
+//   ]
+// }
+
+// premium video scripts
+// {
+//   "title": "string",
+//   "characters": [
+//     {
+//       "name": "string",
+//       "imagePrompt": "string",
+//       "voiceProfile": "string"  // ← NEW field
+//     }
+//   ],
+//   "scenes": [
+//     {
+//       "index": 0,
+//       "charactersInTheScene": ["CharacterName"],
+//       "imagePrompt": "string",
+//       "videoPrompt": "string",
+//       "audioPrompt": "string",  // ← NEW field (replaces narration)
+//       "angles": [
+//         {
+//           "index": 0,
+//           "angleVideoPrompt": "string",
+//           "angleAudioPrompt": "string"  // ← NEW field
+//         }
+//       ]
+//     }
+//   ]
+// }
+
 // [TODO]
 // 1. Create a demo video for the app and put it in the landing page
 // 2. Create options for the captions and the user should be able to tweak it on the go - done
 // 3. components/billing page to be used uniformly
 // 4. Write blogs for improving SEO - started
-// background music
-// feeling blue
-// timeless
-// anthwave goose
-// anno domini dark tranquility
-// audio hetz mission to mars
-// eveningland nimbus
-// clang
-// anno domini schizo
+

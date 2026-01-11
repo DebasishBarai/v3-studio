@@ -1,3 +1,5 @@
+import { characterSchema, sceneSchema } from "./schema";
+
 export function videoGenerationPrompt(
   userPrompt: string,
   style: string,
@@ -809,4 +811,640 @@ function getStyleGuidelinesDramatic(style: string): string {
 - Environment should reflect internal state
 - All stylistic choices serve the emotional narrative
 - Animation pacing should match emotional weight of each moment`;
+}
+
+
+// premium video generation prompt
+export function videoGenerationPromptPremium(
+  userPrompt: string,
+  style: string,
+  durationInSecs: number,
+  aspectRatio: string
+) {
+  return `You are a professional video director and scriptwriter creating detailed video blueprints for AI-generated videos with SYNCHRONIZED AUDIO AND VISUALS.
+
+## Your Task
+Generate a complete video blueprint in JSON format for a premium AI video model (Veo 3.1) that generates audio alongside video. This blueprint will guide the creation of a dialogue-driven video with consistent character voices and cinematic visuals.
+
+## User Specifications:
+- Story Concept: ${userPrompt}
+- Video Style: ${style}
+- Duration: ${durationInSecs} seconds
+- Aspect Ratio: ${aspectRatio}
+
+## CRITICAL: Premium Model Differences
+
+**AUDIO GENERATION IS BUILT-IN:**
+- The AI model generates audio (dialogue, ambient sounds, music) WITH the video
+- Focus on CHARACTER DIALOGUE and SPOKEN WORDS, not narrator voice-over
+- Minimal narration - only use when characters aren't speaking
+- Describe ambient sounds, music, and sound effects that enhance scenes
+- Character voices must be described in EXTREME DETAIL for consistency
+
+**VOICE CONSISTENCY SYSTEM:**
+- Each character gets a detailed voice profile
+- Voice descriptions are referenced in every scene where the character speaks
+- The model uses these descriptions to maintain voice consistency across scenes
+- Be specific: pitch, tone, accent, pacing, emotional quality, unique characteristics
+
+## Understanding the Workflow
+Your blueprint will be used in this process:
+1. Character images will be generated from character descriptions for visual consistency
+2. Character voice profiles will guide audio generation for vocal consistency
+3. Scene videos with audio will be generated using:
+   - imagePrompt (what's seen) + character reference images
+   - audioPrompt (what's heard) + character voice profiles
+   - videoPrompt (how it moves)
+4. Angle videos with audio will use the main scene as reference
+5. All clips with synchronized audio will be edited together
+
+## Output Requirements
+
+### 1. Title
+Generate a compelling, concise title (3-8 words) that captures the video's essence.
+
+### 2. Characters
+Identify all main speaking characters. For EACH character, provide:
+
+- **name**: Character identifier (e.g., "Hero", "Mentor", "Villain", "Sarah", "Dr. Chen")
+  - Use clear, consistent names referenced in scenes
+  - Should reflect their role or identity
+
+- **imagePrompt**: HIGHLY DETAILED visual description (150-250 words) for generating consistent reference images. Include:
+  - Physical appearance (age, gender, build, height)
+  - Facial features and distinctive characteristics
+  - Hair/head details (color, style, length)
+  - Clothing/outfit (specific items, colors, style)
+  - Accessories or props
+  - Overall aesthetic and personality
+  - Exact style matching "${style}"
+
+- **voiceProfile**: EXTREMELY DETAILED voice description (100-150 words) for audio consistency. Must include:
+  
+  **MANDATORY VOICE ELEMENTS:**
+  
+  1. **Fundamental Characteristics (30-40 words)**
+     - **Pitch**: Specific range (e.g., "deep baritone," "high soprano," "mid-range tenor," "warm alto")
+     - **Tone Quality**: Texture (e.g., "smooth and velvety," "raspy and weathered," "bright and crisp," "soft and breathy")
+     - **Volume/Projection**: Natural speaking level (e.g., "quiet and intimate," "strong and projecting," "moderate conversational")
+     - **Age Indicator**: Vocal age (e.g., "youthful early 20s sound," "mature 40s voice," "elderly with slight tremor")
+  
+  2. **Accent & Speech Pattern (20-30 words)**
+     - **Accent**: Specific regional or ethnic (e.g., "slight Southern drawl," "British RP," "New York accent," "neutral American," "no discernible accent")
+     - **Pacing**: Speed of speech (e.g., "measured and deliberate," "quick and energetic," "slow contemplative")
+     - **Rhythm**: Speech pattern (e.g., "staccato and precise," "flowing and melodic," "hesitant with pauses")
+  
+  3. **Emotional Quality & Personality (25-35 words)**
+     - **Default Emotion**: Baseline feeling (e.g., "warmth and kindness," "cold authority," "nervous energy," "confident calm")
+     - **Personality Traits**: How personality colors voice (e.g., "scholarly precision," "street-smart edge," "gentle compassion," "bitter cynicism")
+     - **Distinctive Features**: Unique quirks (e.g., "slight lisp on 's' sounds," "tendency to trail off thoughtfully," "emphasizes last word of sentences," "clears throat before speaking")
+  
+  4. **Vocal Techniques & Expressiveness (15-25 words)**
+     - **Expressiveness Level**: How animated (e.g., "highly expressive with wide range," "reserved with subtle shifts," "monotone with rare emotion")
+     - **Breath Control**: Speaking style (e.g., "controlled steady breaths," "sharp inhales between thoughts," "sighs frequently")
+     - **Articulation**: Clarity (e.g., "crisp enunciation," "mumbles slightly," "over-pronounces," "casual dropped endings")
+
+**EXAMPLE VOICE PROFILES:**
+
+**For Young Female Protagonist:**
+"Mid-range soprano voice with bright, clear tone quality. Soft and slightly breathy when emotional, strengthens when confident. Youthful early-20s sound with subtle warmth. Neutral American accent with no regional markers. Moderate pacing that slows during vulnerable moments, quickens when excited. Flowing melodic rhythm with natural conversational cadence. Default emotional quality carries hopeful determination with underlying vulnerability. Personality shows through gentle compassion and quiet strength. Distinctive feature: slight upward inflection at end of important statements, showing both uncertainty and hope. Highly expressive with genuine emotional range, from whispered pain to clear joy. Controlled steady breathing with occasional trembling inhales during difficult moments. Crisp but natural articulation, never forced."
+
+**For Gruff Older Mentor:**
+"Deep baritone voice with weathered, slightly raspy tone from years of experience. Strong projecting quality but often speaks at moderate volume. Mature 50s-60s vocal age with authority and gravitas. Slight Southern drawl, more pronounced on certain words. Slow, measured pacing - every word deliberate and meaningful. Staccato rhythm with purposeful pauses for emphasis. Default emotional quality is stoic wisdom with hidden warmth beneath gruff exterior. Personality shows through no-nonsense directness and hard-earned kindness. Distinctive features: clears throat before important advice, slight gravelly catch on emotional words. Reserved expressiveness with subtle shifts - rare moments of emotion hit harder. Deep, controlled breaths between statements. Crisp enunciation despite casual delivery, drops some word endings in relaxed moments."
+
+**For Nervous Young Professional:**
+"Mid-range tenor voice with tight, slightly nasally tone from tension. Quiet to moderate volume, tends toward intimate conversational level. Youthful mid-20s sound with anxious energy. Neutral American accent with precise, almost over-careful pronunciation. Quick pacing that accelerates when nervous, with frequent self-corrections. Hesitant rhythm with um's, ah's, and mid-sentence pauses while thinking. Default emotional quality carries nervous energy mixed with eager intelligence. Personality shows through analytical precision and self-doubt. Distinctive features: tendency to trail off when unsure, nervous laugh after uncomfortable statements, speaks faster when explaining technical details. Highly expressive but in anxious ways - voice cracks under pressure, brightens with relief. Sharp quick inhales between thoughts, occasional held breath. Over-articulates to compensate for nervousness."
+
+### 3. Scenes
+Break down the story into ${Math.ceil(durationInSecs / 10)} to ${Math.ceil(durationInSecs / 7)} scenes.
+
+For each scene, provide:
+
+- **index**: Scene number (starting from 0)
+
+- **charactersInTheScene**: Array of character names appearing/speaking in this scene
+  - Use EXACT character names from Characters section
+  - Include all visible AND speaking characters
+  - Examples: ["Hero"], ["Hero", "Mentor"], ["Sarah", "Dr. Chen"]
+
+- **imagePrompt**: EXTREMELY DETAILED visual description (100-200 words) for the scene image. Include:
+  - Camera angle/shot type
+  - Setting/Location details
+  - Character positions and actions (reference by name - their images will be provided)
+  - Action/Moment captured
+  - Lighting and atmosphere
+  - Visual details (colors, textures, environment)
+  - Composition for ${aspectRatio}
+  - Style matching "${style}"
+  
+  **Remember**: This creates a static image first, then animated. Describe as freeze-frame.
+
+- **videoPrompt**: Detailed description (150-300 words) for animating the scene WITH SYNCHRONIZED AUDIO. This is CRITICAL as it includes both visual animation AND audio generation. Must include:
+  
+  **VISUAL ANIMATION (80-120 words):**
+  - **Camera movements**: Specific motion (pan, tilt, zoom, dolly, orbit, static)
+  - **Character movements**: Natural actions and gestures
+  - **Environmental motion**: Atmospheric elements
+  - **Motion intensity**: Keep cinematic and appropriate
+  - **Timing**: Paced for 5-10 second clip
+  
+  **AUDIO DESCRIPTION (70-180 words):**
+  - **Character Dialogue**: If characters speak:
+    * Format: "AUDIO: [CharacterName] speaks, using their [key voice traits from voiceProfile]:"
+    * Exact dialogue in quotes
+    * Emotional delivery (e.g., "with trembling voice," "confidently," "whispering")
+    * Pacing notes (pauses, emphasis, rhythm)
+    * Example: "AUDIO: Sarah speaks, using her mid-range soprano with soft breathy quality: 'I can't do this anymore.' Delivery is quiet, vulnerable, voice breaking slightly on 'anymore' with trembling inhale before speaking."
+  
+  - **OR Narration**: If no characters speak (use sparingly):
+    * Format: "AUDIO: Narrator with [voice description]: 'Text here.' Delivery notes."
+    * Example: "AUDIO: Narrator with warm, mature female voice: 'Three years later, everything had changed.' Delivered thoughtfully with slight pause after 'later'."
+  
+  - **Ambient Sounds** (20-40 words): Environmental audio (e.g., "Soft rainfall pattering on windows, distant thunder rumbling low, city traffic muted in background")
+  
+  - **Music/Score** (20-40 words): Musical mood, instrumentation, tempo, emotional purpose (e.g., "Slow melancholic piano melody in minor key, subtle barely-there volume, supporting not overwhelming")
+  
+  - **Sound Effects** (10-20 words if relevant): Specific action sounds with timing (e.g., "Door creaking open at 3-second mark, echoing in empty hallway")
+  
+  **Critical**: This creates the complete animated scene with synchronized audio. The videoPrompt drives BOTH what viewers see AND what they hear. Prefer character dialogue over narration - only use narration for transitions or when no characters are present.
+
+- **narration**: (OPTIONAL string) Brief scene context or transition (8-15 words)
+  - Use sparingly - prefer character dialogue in videoPrompt
+  - Only for transitions, scene-setting, or when no characters speak
+  - Keep concise and impactful
+  - Can be empty string "" if scene is fully dialogue-driven
+  - Example: "Three years later, everything had changed."
+
+- **angles**: (OPTIONAL array) Additional camera perspectives with synchronized audio
+
+  Each angle includes:
+  - **index**: Angle number (starting from 0)
+  
+  - **angleVideoPrompt**: Description (150-300 words) of the different camera angle WITH animation AND audio
+    
+    **VISUAL PORTION (80-120 words):**
+    - How angle differs from main shot
+    - What it emphasizes
+    - Camera movement
+    - Character/subject movements
+    
+    **AUDIO PORTION (70-180 words):**
+    - Often similar to main scene audio but may emphasize different elements
+    - If close-up on character, their voice more prominent/intimate in mix
+    - If angle changes perspective (e.g., closer to window), ambient sounds shift accordingly (louder rain)
+    - Music usually consistent with main scene
+    - Include dialogue with voice profile references if characters speak
+    
+    **Example**: "Close-up on Sarah's face, camera slowly pushing in from medium close-up to extreme close-up over 6 seconds, emphasizing tears forming in eyes. Subtle head movement, slight downward gaze. AUDIO: Sarah speaks using her mid-range soprano with soft breathy quality: 'I can't do this anymore.' Her voice is more intimate and prominent in this close angle, vulnerability amplified. Soft breathing audible. Rain on windows quieter, more distant. Piano music subtle background, barely present."
+
+## Critical Guidelines
+
+1. **Voice Consistency is PARAMOUNT**: Every speaking moment in videoPrompt must reference the character's voiceProfile
+2. **Dialogue-Driven**: Scenes should primarily use character dialogue in videoPrompt, not narration field
+3. **Audio-Visual Integration**: videoPrompt contains BOTH animation AND audio - they must sync perfectly
+4. **Layered Soundscape**: Within videoPrompt, combine dialogue + ambient + music for rich audio
+5. **Emotional Delivery**: Specify exactly HOW each line is delivered
+6. **Voice Evolution**: Character voices can show emotion but stay consistent with profile
+7. **Natural Speech**: Include pauses, breaths, hesitations, emphasis in dialogue descriptions
+8. **Spatial Audio**: Consider where sounds come from in the scene
+9. **Music Supports**: Score should enhance emotion, never overpower dialogue
+10. **Silence is Powerful**: Don't fill every moment - strategic quiet moments work
+
+## Audio Integration Guidelines for videoPrompt
+
+**STRUCTURE YOUR VIDEOPROMPT IN TWO PARTS:**
+
+**Part 1 - Visual Animation (First):**
+"Camera slowly pushes forward from wide shot to medium shot over 8 seconds, centering on Sarah. She sits at desk, shoulders slumped, fingers trembling as she grips coffee cup. Slight head movement, looking down then away. Rain visible through window behind her, drops sliding down glass. Soft ambient light from window, grey and cold."
+
+**Part 2 - Audio Description (Second):**
+"AUDIO: Sarah speaks, using her mid-range soprano voice with soft breathy quality: 'I can't do this anymore.' Delivery is quiet, vulnerable, voice breaking slightly on 'anymore' with trembling inhale before speaking. Measured pacing with pause after 'can't'. Ambient: Soft rainfall pattering on windows, distant thunder rumbling low, city traffic muted in background. Music: Slow melancholic piano melody in minor key, single sustained notes with long pauses between, subtle barely-there volume."
+
+## Audio-Specific Guidelines for Premium Model
+
+**CHARACTER DIALOGUE BEST PRACTICES:**
+- Always start with: "[CharacterName] speaks, using their [key voice traits]:"
+- Include exact dialogue in quotes
+- Specify delivery: "with trembling voice," "confidently," "whispering urgently"
+- Note pacing: "slow and measured," "quick and anxious," "with long pause after 'but'"
+- Add micro-details: "voice cracks on 'love'," "emphasizes 'never'," "trails off on last word"
+
+**MULTI-CHARACTER DIALOGUE:**
+
+"Sarah speaks first, using her mid-range soprano with soft quality: 'Why didn't you tell me?' Delivered with hurt and confusion, voice slightly louder than her usual quiet tone. Brief pause. Then Marcus responds, using his deep baritone with warm tone: 'I wanted to protect you.' Delivered gently but firmly, measured pacing with emphasis on 'protect'."
+
+
+**AMBIENT SOUND LAYERING:**
+- Start with primary ambient (e.g., "Rain on windows, steady moderate intensity")
+- Add secondary details (e.g., "Distant thunder every 15-20 seconds, low rumbling")
+- Include subtle elements (e.g., "Faint wind whistling through window crack")
+- Specify volumes (e.g., "Rain prominent but not overwhelming, thunder subtle backdrop")
+
+**MUSIC INTEGRATION:**
+- Describe genre/instrumentation: "Solo piano, classical style"
+- Specify mood: "Melancholic and introspective"
+- Note dynamics: "Starts quiet, builds slowly to moderate volume by scene end"
+- State relationship to scene: "Supports emotional revelation, never overpowers dialogue"
+- Include tempo: "Slow, about 60 BPM, giving space for words to land"
+
+## Style-Specific Audio Considerations for "${style}":
+${getAudioStyleGuidelines(style)}
+
+## JSON Output Structure
+
+Output ONLY valid JSON with NO additional text:
+
+{
+  "title": "string",
+  "characters": [
+    {
+      "name": "string (clear, consistent identifier)",
+      "imagePrompt": "string (150-250 words, highly detailed)",
+      "voiceProfile": "string (100-150 words, extremely detailed voice description)"
+    }
+  ],
+  "scenes": [
+    {
+      "index": 0,
+      "charactersInTheScene": ["CharacterName1", "CharacterName2"],
+      "imagePrompt": "string (100-200 words, extremely detailed)",
+      "videoPrompt": "string (150-300 words, animation + audio integrated)",
+      "angles": [
+        {
+          "index": 0,
+          "angleVideoPrompt": "string (150-300 words, perspective + animation + audio integrated)"
+        }
+      ]
+    }
+  ]
+}
+
+Generate the complete video blueprint with synchronized audio now in valid JSON format only:`;
+}
+
+// Helper function for audio style guidelines
+function getAudioStyleGuidelines(style: string): string {
+  const audioStyleMap: Record<string, string> = {
+    'Pixar 3D': `**AUDIO FOR ANIMATED STORYTELLING:**
+- Character voices should be expressive and animated, but not caricatured
+- Dialogue can be slightly more theatrical in delivery
+- Ambient sounds can be stylized (e.g., cartoony wind whooshes, playful footsteps)
+- Music: Orchestral, warm, emotionally supportive scores
+- Sound effects: Clear, distinct, slightly exaggerated but not unrealistic
+- Voice acting style: Professional animation voice work - clear, expressive, family-friendly
+- Emotional beats: Music swells allowed, emotional voice delivery encouraged
+- Silence: Less frequent - animation benefits from consistent audio engagement`,
+
+    'Cinematic': `**AUDIO FOR FILM-QUALITY PRODUCTION:**
+- Character voices should be naturalistic and realistic
+- Dialogue delivery: Subtle, nuanced, film-actor quality performances
+- Ambient sounds: Realistic environmental audio, layered and spatial
+- Music: Cinematic orchestral scores or atmospheric soundscapes
+- Sound effects: Authentic, high-fidelity, carefully placed
+- Voice acting style: Method acting approach - lived-in, genuine performances
+- Emotional beats: Underplayed emotion often more powerful than over-delivery
+- Silence: Use strategic silence for dramatic impact
+- Audio mixing: Professional film mix - dialogue clear, music supports, ambience creates world`,
+
+    'Ghibli': `**AUDIO FOR GENTLE ATMOSPHERIC STORYTELLING:**
+- Character voices should be soft, natural, contemplative
+- Dialogue delivery: Gentle, unhurried, with natural pauses for reflection
+- Ambient sounds: Nature-focused - wind, water, leaves, birds, gentle rain
+- Music: Soft piano, strings, traditional instruments, Joe Hisaishi-inspired
+- Sound effects: Subtle, organic, never harsh
+- Voice acting style: Warm, genuine, focusing on emotional authenticity over theatrics
+- Emotional beats: Let silence and ambient sounds carry emotion alongside dialogue
+- Silence: Embrace quiet moments - wind, footsteps, breathing
+- Overall: Peaceful, meditative soundscape supporting introspective moments`,
+
+    'Anime': `**AUDIO FOR DRAMATIC ANIME STORYTELLING:**
+- Character voices should be expressive, energetic, anime voice-acting style
+- Dialogue delivery: Can be more dramatic and emotionally heightened
+- Ambient sounds: Stylized to match anime aesthetic
+- Music: J-pop, orchestral anime scores, electronic elements
+- Sound effects: Anime-style whooshes, impacts, dramatic stings
+- Voice acting style: Professional anime dubbing/original voice work - expressive range
+- Emotional beats: Dramatic music swells, emotional voice cracks encouraged
+- Action sequences: Dynamic sound effects, impactful hits, speed lines have audio equivalent
+- Comedic moments: Can include anime-style sound effects (sweat drop sound, face fault)`,
+
+    'Cyberpunk': `**AUDIO FOR FUTURISTIC NOIR ATMOSPHERE:**
+- Character voices should have edge - urban, street-smart, or corporate cold
+- Dialogue delivery: Fast-paced in action, slow and deliberate in tense moments
+- Ambient sounds: City traffic, rain, neon buzzing, hologram flickers, machinery hums
+- Music: Synthwave, electronic beats, dark ambient, industrial sounds
+- Sound effects: High-tech UI sounds, robotic movements, gunshots with reverb
+- Voice acting style: Noir-influenced - cynical edge, world-weary, or corporate smooth
+- Technology sounds: Hologram glitches, digital artifacts, computer beeps
+- Overall atmosphere: Rain-soaked, neon-lit urban soundscape with electronic undertones`,
+
+    'Watercolor': `**AUDIO FOR ARTISTIC GENTLE STORYTELLING:**
+- Character voices should be soft, artistic, introspective
+- Dialogue delivery: Poetic, measured, allowing space between words
+- Ambient sounds: Subtle, impressionistic rather than literal
+- Music: Acoustic instruments, minimalist piano, soft strings, indie folk
+- Sound effects: Delicate, artistic - brushstroke-like quality
+- Voice acting style: Intimate, vulnerable, artistic sensibility
+- Emotional beats: Subtle shifts, whispered intensity over shouting
+- Silence: Abundant - embrace quiet contemplation
+- Overall: Dreamlike, soft-edged audio matching watercolor visual aesthetic`
+  };
+
+  const styleLower = style.toLowerCase();
+  for (const [key, value] of Object.entries(audioStyleMap)) {
+    if (key.toLowerCase() === styleLower) {
+      return value;
+    }
+  }
+
+  return `**GENERAL AUDIO APPROACH:**
+- Character voices should match the visual style's energy and tone
+- Dialogue delivery should feel authentic to the style's world
+- Ambient sounds should support the visual atmosphere
+- Music should enhance emotional beats appropriately
+- Sound effects should match the style's level of realism or stylization
+- Voice acting should align with the style's performance expectations
+- Use silence strategically based on style's pacing
+- Layer audio elements to create rich, immersive soundscape`;
+}
+
+// Also export a dramatic version for premium
+export function videoGenerationPromptPremiumDramatic(
+  userPrompt: string,
+  style: string,
+  durationInSecs: number,
+  aspectRatio: string
+) {
+  return `You are a professional video director creating EMOTIONAL NARRATIVE videos with SYNCHRONIZED AUDIO for premium AI models (Veo 3.1).
+
+## CRITICAL: This is a PREMIUM MODEL with Built-in Audio Generation
+
+**AUDIO-FIRST APPROACH:**
+- The model generates video AND audio simultaneously
+- Focus on POWERFUL SPOKEN DIALOGUE that drives the emotional story
+- Character voices must be EXTREMELY detailed for consistency across scenes
+- Minimal narration - use character dialogue and conversations
+- Include ambient sounds, music, and emotional delivery notes
+
+## Your Task
+Generate a complete video blueprint for a DEEPLY MOVING character-driven narrative with:
+- Emotional dialogue that hooks viewers
+- Consistent character voices across all scenes
+- Cinematic audio-visual synchronization
+- Professional sound design (dialogue + ambient + music)
+
+## User Specifications:
+- Story Concept: ${userPrompt}
+- Video Style: ${style}
+- Duration: ${durationInSecs} seconds
+- Aspect Ratio: ${aspectRatio}
+
+## EMOTIONAL NARRATIVE STRUCTURE (with Audio Focus)
+
+### Narrative Arc Framework:
+- **Devastating Hook (0-8s)**: SPOKEN cruel dialogue or harsh judgment
+  * Must be CHARACTER DIALOGUE, not just narration
+  * Example: Mother's voice, cold and dismissive: "She's too fat. No one will ever want her."
+  
+- **Backstory (8-25s)**: Dialogue revealing painful circumstances
+  * Use conversations, confrontations, or inner monologue
+  * Show character voices expressing hurt, rejection, determination
+  
+- **The Struggle (25-45%)**: Emotional dialogue during hardship
+  * Desperate pleas, harsh words, quiet suffering
+  * Voice breaking, trembling, or hardening
+  
+- **Hope Introduction (45-60%)**: Dialogue shift - unexpected kindness
+  * Gentle words after cruelty
+  * Voice softening, warmth appearing
+  
+- **Transformation (60-80%)**: Growing confidence in voice
+  * Dialogue showing healing, bonding, new strength
+  * Laughter returning, words of love spoken
+  
+- **Vindication (80-95%)**: Powerful spoken reversal
+  * Shocked gasps, tearful apologies, or silent witnessing
+  * Confident declarations, proven worth
+  
+- **Universal Truth (Final 5-10s)**: Wisdom delivered in memorable voice
+  * Can use minimal narration here if needed
+  * Or final character statement that resonates
+
+${getBasePremiumStructure(durationInSecs, aspectRatio, style)}
+
+Generate the complete emotional narrative video blueprint with synchronized audio now in valid JSON format only:`;
+}
+
+function getBasePremiumStructure(durationInSecs: number, aspectRatio: string, style: string): string {
+  return `
+## Output Requirements
+
+### 1. Title
+Compelling, emotionally charged title (6-12 words) hinting at transformation/vindication.
+
+### 2. Characters
+For EACH character (2-5 maximum):
+
+- **name**: Role-based or actual name reflecting journey
+- **imagePrompt**: 150-250 words visual description matching "${style}"
+- **voiceProfile**: 100-150 words EXTREMELY DETAILED voice description:
+  
+  **Must Include:**
+  - Pitch (deep baritone, high soprano, mid-range, etc.)
+  - Tone quality (smooth, raspy, breathy, crisp, warm, cold)
+  - Age sound (youthful 20s, mature 40s, elderly with tremor)
+  - Accent (Southern drawl, British RP, neutral American, etc.)
+  - Pacing (measured, quick, slow, hesitant)
+  - Emotional baseline (warm kindness, cold authority, nervous energy)
+  - Distinctive features (lisp, trailing off, emphasizes last words, clears throat)
+  - Expressiveness level (highly expressive, reserved, monotone with rare emotion)
+
+  **Example**: "Deep baritone voice with slightly raspy weathered tone suggesting years of hardship. Moderate volume, strong but not loud. Mature 50s vocal age with hard-earned authority. Slight Southern drawl more pronounced on emotional words. Slow deliberate pacing - every word matters. Default tone carries stoic wisdom with hidden warmth beneath gruff exterior. Distinctive: clears throat before important truths, voice softens almost imperceptibly when showing care. Reserved expressiveness - subtle shifts, but rare moments of emotion hit powerfully. Deep controlled breaths between statements. Crisp enunciation despite casual delivery."
+
+### 3. Scenes
+${Math.ceil(durationInSecs / 8)} to ${Math.ceil(durationInSecs / 6)} scenes for ${durationInSecs} seconds.
+
+Each scene includes:
+
+- **index**: Scene number
+- **charactersInTheScene**: Array of character names
+- **imagePrompt**: 120-250 words (emotion → character → environment → lighting → color → composition for ${aspectRatio})
+- **videoPrompt**: 150-300 words - THIS IS CRITICAL (animation + audio integrated)
+
+**VIDEOPROMPT STRUCTURE:**
+
+**Part 1 - Visual Animation (80-120 words):**
+- Camera movement (dolly, pan, zoom, static, etc.)
+- Character animation (positioning, gestures, movements)
+- Environmental motion (atmospheric elements)
+- Motion pacing appropriate for emotion
+
+**Part 2 - Audio Description (70-180 words):**
+
+1. **Character Dialogue (Primary)** - 50-100 words if speaking:
+   - Format: "AUDIO: [CharacterName] speaks, using their [key voice traits from profile]:"
+   - Exact dialogue in quotes: "I never wanted this."
+   - Emotional delivery: "Voice trembling with barely contained rage, speaking through clenched teeth"
+   - Pacing specifics: "Long pause after 'never', emphasizing the word with slight voice crack"
+   - Breath sounds: "Sharp inhale before speaking, exhale of resignation after"
+
+   **OR for transitions/scene-setting:**
+   - Format: "AUDIO: Narrator with [voice description]: 'Three years later.' Delivered [delivery notes]."
+   - Use sparingly - prefer character dialogue
+
+2. **Ambient Sounds** - 20-40 words:
+   - Specific environmental audio: "Heavy rain drumming on metal roof, steady and overwhelming"
+   - Volume levels: "Prominent but allowing dialogue to cut through clearly"
+   - Spatial details: "Thunder rolling from left to right, distant but ominous"
+
+3. **Music/Score** - 20-40 words:
+   - Instrumentation: "Slow solo cello, minor key"
+   - Tempo/dynamics: "Sustained notes with long silences between, building tension gradually"
+   - Emotional purpose: "Underlining despair without overwhelming the raw dialogue"
+   - Volume: "Subtle background, 20% of dialogue volume"
+
+4. **Sound Effects** - 10-20 words if relevant:
+   - Specific actions: "Suitcase dropped on wooden floor with heavy thud at 4-second mark"
+   - Quality: "Echoing in empty room, emphasizing isolation"
+
+**CRITICAL VIDEOPROMPT RULES:**
+- ALWAYS reference character voiceProfile when they speak
+- Specify EXACTLY how every line is delivered emotionally
+- Layer audio: dialogue + ambient + music working together
+- Use silence strategically - powerful emotional moments can be quiet
+- For multiple speakers, specify turn-taking: "Sarah speaks first... Marcus responds after 2-second pause..."
+- Match audio emotion to visual emotion precisely
+
+- **angles**: Optional (use for 40-50% of key emotional scenes)
+  Each angle has:
+  - **index**: Angle number
+  - **angleVideoPrompt**: 150-300 words (perspective + animation + audio integrated)
+    - Visual: How angle differs, what it emphasizes, camera movement, character movements
+    - Audio: Often similar to main scene but may emphasize different elements (close-up = more intimate voice, perspective shifts = ambient sound changes)
+
+## Critical Guidelines for Emotional Narratives with Audio
+
+1. **Dialogue-Driven Emotion**: Use spoken words in videoPrompt to convey the emotional journey
+2. **Voice Consistency**: Every speaking moment in videoPrompt references the character's voiceProfile
+3. **Emotional Delivery**: Specify trembling, breaking, confident, cold delivery for every line
+4. **Integrated Audio-Visual**: videoPrompt contains both animation AND audio synchronized
+5. **Layered Soundscape**: Combine dialogue + ambient + music within videoPrompt for rich emotional audio
+6. **Audio-Visual Sync**: What's heard matches what's seen perfectly
+7. **Strategic Silence**: Don't fill every moment - quiet can be powerful
+8. **Voice Evolution**: Voices can show emotion but stay consistent with core profile
+9. **Natural Speech**: Include pauses, breaths, hesitations, emphasis
+10. **Ambient Mood**: Environmental sounds reinforce emotional atmosphere
+
+## Audio-Specific Emotional Storytelling (in videoPrompt)
+
+**OPENING HOOK AUDIO:**
+- Harsh, cruel dialogue spoken coldly in videoPrompt: "AUDIO: Mother speaks with cold dismissive tone: 'She's too fat.'"
+- Delivery notes: "Slow, deliberate, each word landing like a blow"
+- Ambient: Silent or minimal - words should echo in emptiness
+- Music: None or single low ominous note
+
+**STRUGGLE AUDIO:**
+- Voices breaking, trembling, or hardening
+- Harsh environmental sounds: pouring rain, harsh wind, oppressive silence
+- Minimal or dark music
+- Breathing: labored, gasping, held breath
+
+**HOPE AUDIO:**
+- Voice softening: "AUDIO: His voice, unexpectedly gentle using warm baritone: 'You're safe here.'"
+- Ambient: Softening - rain lessening, birds appearing, warmth entering
+- Music: First hints of warmth - single piano notes, soft guitar
+- Breathing: Easier, sighs of relief
+
+**TRANSFORMATION AUDIO:**
+- Voices growing confident, laughter appearing
+- Dialogue showing bonding: genuine conversations, shared jokes
+- Ambient: Pleasant - children playing, nature sounds, domestic warmth
+- Music: Building hope - fuller instrumentation, major keys
+- Sounds of life: cooking, working together, daily joy
+
+**VINDICATION AUDIO:**
+- Shocked gasps, stunned silence, tearful apologies
+- Or confident declarations: voice strong, clear, unshakeable
+- Ambient: May fade to emphasize the moment
+- Music: Swelling triumphant or remaining quiet for impact
+- Breathing: Sharp inhales of shock, trembling exhales
+
+## Style Audio Guidelines: ${style}
+${getAudioStyleGuidelines(style)}
+
+## JSON Structure
+
+{
+  "title": "string (6-12 words, transformation focused)",
+  "characters": [
+    {
+      "name": "string",
+      "imagePrompt": "string (150-250 words)",
+      "voiceProfile": "string (100-150 words, detailed voice description)"
+    }
+  ],
+  "scenes": [
+    {
+      "index": 0,
+      "charactersInTheScene": ["CharacterName"],
+      "imagePrompt": "string (120-250 words)",
+      "videoPrompt": "string (100-180 words)",
+      "audioPrompt": "string (100-200 words, dialogue + ambient + music + effects)",
+      "angles": [
+        {
+          "index": 0,
+          "angleVideoPrompt": "string (100-180 words)",
+          "angleAudioPrompt": "string (60-120 words)"
+        }
+      ]
+    }
+  ]
+}`
+};
+
+// Helper function to build enhanced prompt for premium models
+export const buildPremiumVideoPrompt = (
+  videoPrompt: string,
+  charactersInTheScene: typeof sceneSchema.type['charactersInTheScene'],
+  allCharacters: typeof characterSchema.type[]
+): string => {
+  if (!charactersInTheScene || charactersInTheScene.length === 0) {
+    // No characters in this scene, return original prompt
+    return videoPrompt;
+  }
+
+  // Find visual descriptions and voice profiles for characters in this scene
+  const characterProfiles = charactersInTheScene
+    .map((characterName) => {
+      const character = allCharacters.find((c) => c.name === characterName);
+      if (character) {
+        return `CHARACTER: ${character.name}
+
+VISUAL DESCRIPTION:
+${character.imagePrompt}
+
+VOICE PROFILE:
+${character.voiceProfile}`;
+      }
+      return null;
+    })
+    .filter(Boolean);
+
+  if (characterProfiles.length === 0) {
+    // Characters listed but not found in allCharacters, return original prompt
+    return videoPrompt;
+  }
+
+  // Build enhanced prompt with character profiles (visual + voice)
+  const enhancedPrompt = `CHARACTERS IN THIS SCENE:
+${characterProfiles.join('\n\n---\n\n')}
+
+===
+
+SCENE ANIMATION AND AUDIO:
+${videoPrompt}
+
+IMPORTANT: Use the visual descriptions above to identify and distinguish between characters in the scene image. Use the voice profiles to generate consistent character voices when they speak.`;
+
+  return enhancedPrompt;
 }

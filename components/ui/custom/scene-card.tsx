@@ -256,7 +256,7 @@ export const SceneCard = ({
 
             {/* Generate Audio */}
             <CustomButton
-              disabled={!scene.narration.trim() || generatingScene === index || scene.audioInProcess}
+              disabled={(scene.narration && !scene.narration.trim()) || generatingScene === index || scene.audioInProcess}
               onClick={() =>
                 generateSceneAudio({
                   index,
@@ -267,9 +267,9 @@ export const SceneCard = ({
                 'flex items-center gap-2 py-2 rounded-lg text-white transition-all',
                 {
                   'bg-green-600 hover:bg-green-700 cursor-pointer':
-                    !(!scene.narration.trim() || generatingScene === index || scene.audioInProcess),
+                    !((scene.narration && !scene.narration.trim()) || generatingScene === index || scene.audioInProcess),
                   'bg-green-600/60 opacity-60 cursor-not-allowed':
-                    !scene.narration.trim() || generatingScene === index || scene.audioInProcess,
+                    (scene.narration && !scene.narration.trim()) || generatingScene === index || scene.audioInProcess,
                 }
               )}
               icon={AudioLines}

@@ -93,6 +93,7 @@ const SceneContent: React.FC<{
   scene: Doc<"videos">["scenes"][0];
   sceneIndex: number;
   captionStyle?: Infer<typeof captionStyleSchema>;
+  muted?: boolean;
 }> = ({ scene, sceneIndex, captionStyle }) => {
   const frame = useCurrentFrame(); // This now gets the LOCAL frame within this sequence
 
@@ -142,7 +143,7 @@ const SceneContent: React.FC<{
             objectFit: "cover",
             borderRadius: "0.5rem",
           }}
-          muted={true}
+          muted={false}
         />
       ) : scene.imageUrl ? (
         <Img

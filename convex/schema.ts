@@ -92,6 +92,7 @@ export const aspectRatioValidator = v.union(
 export const characterSchema = v.object({
   name: v.string(),
   imagePrompt: v.string(),
+  voiceProfile: v.optional(v.string()),
   imageStorageId: v.optional(v.id('_storage')),
   imageUrl: v.optional(v.string()),
   inProcess: v.optional(v.boolean()),

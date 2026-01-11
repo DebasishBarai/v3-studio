@@ -1,7 +1,7 @@
 'use node'
 
 import { GoogleGenAI } from "@google/genai";
-import { videoGenerationPrompt, videoGenerationPromptDramatic } from "../helper";
+import { videoGenerationPrompt, videoGenerationPromptDramatic, videoGenerationPromptPremium, videoGenerationPromptPremiumDramatic } from "../helper";
 import { v } from "convex/values";
 import { action } from "../_generated/server";
 import { styleValidator, musicValidator, aspectRatioValidator, voiceValidator, videoResolutionValidator, videoGenerationModelSchema } from "../schema";
@@ -48,8 +48,11 @@ export const createVideoBlueprint = action({
 
     console.log('create video');
 
-    const prompt = (args.storyTellingStyle === 'dramatic') ? videoGenerationPromptDramatic(args.prompt, args.style, args.durationInSecs, args.aspectRatio) :
-      videoGenerationPrompt(args.prompt, args.style, args.durationInSecs, args.aspectRatio);
+    const modelCategory = args?.videoGenerationModel?.category || 'standard';
+
+    const prompt = (modelCategory === 'standard') ? ((args.storyTellingStyle === 'dramatic') ? videoGenerationPromptDramatic(args.prompt, args.style, args.durationInSecs, args.aspectRatio) :
+      videoGenerationPrompt(args.prompt, args.style, args.durationInSecs, args.aspectRatio)) : ((args.storyTellingStyle === 'dramatic') ? videoGenerationPromptPremiumDramatic(args.prompt, args.style, args.durationInSecs, args.aspectRatio) :
+        videoGenerationPromptPremium(args.prompt, args.style, args.durationInSecs, args.aspectRatio));
 
     const response = await genai.models.generateContent({
       model: "gemini-2.5-flash",

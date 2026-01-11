@@ -2,6 +2,7 @@ import { Infer, v } from "convex/values";
 import { workflow } from "../index";
 import { internal } from "../_generated/api";
 import { characterSchema } from "../schema";
+import { Id } from "../_generated/dataModel";
 
 export const autoGenerateVideoWorkflow = workflow.define({
   args: {
@@ -24,7 +25,7 @@ export const autoGenerateVideoWorkflow = workflow.define({
 
       await Promise.all(
         video.characters
-          .map((character, index) => ({ character, index })) // preserve index
+          .map((character: typeof characterSchema.type, index: number) => ({ character, index })) // preserve index
           .filter(({ character }) => !character.imageUrl)
           .map(({ character, index }) => {
             console.log('Generating character image:', character.name);
@@ -153,7 +154,7 @@ export const autoGenerateVideoWorkflow = workflow.define({
                 characterImageIds: generateCharacterIds({
                   characters: updatedVideoAfterCharactersGenerated.characters,
                   characterNames: scene.charactersInTheScene ?? [],
-                }),
+                }) as Id<'_storage'>[],
                 videoId: args.videoId,
                 sceneIndex: sceneIndex,
                 userId: args.userId,

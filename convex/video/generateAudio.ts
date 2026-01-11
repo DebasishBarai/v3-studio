@@ -7,6 +7,7 @@ import { internal } from "../_generated/api";
 import { Doc, Id } from "../_generated/dataModel";
 
 import { AssemblyAI, SpeechModel } from "assemblyai";
+import { sceneSchema } from '../schema';
 
 const elevenLabsClient = new ElevenLabsClient({
   apiKey: process.env.ELEVENLABS_API_KEY,
@@ -157,7 +158,7 @@ export const internalGenerateAudio = internalAction({
       });
 
       // Update only the scenes array
-      const updatedScenes = video.scenes.map((scene, index) =>
+      const updatedScenes = video.scenes.map((scene: typeof sceneSchema.type, index: number) =>
         index === args.sceneIndex
           ? { ...scene, audioId: audioStorageId, audioUrl: audioUrl, words: words }
           : scene

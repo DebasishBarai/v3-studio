@@ -664,6 +664,16 @@ export const VideoEditorComponent = ({ videoId, tour = false }: { videoId: strin
     console.log('Generating scene audio...');
     setGeneratingScene(index);
 
+    if (!text) {
+      if (videoData.videoGenerationModel?.category === 'premium') {
+        toast.info('Narration is optional for premium category');
+        return
+      } else {
+        console.log('No prompt provided for scene audio');
+        toast.error('Please enter a prompt for the scene audio');
+        return
+      }
+    }
     if (!text.trim()) {
       console.log('No prompt provided for scene audio');
       toast.error('Please enter a prompt for the scene audio');

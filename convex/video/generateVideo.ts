@@ -4,11 +4,19 @@ import { v } from "convex/values";
 import { internal } from "../_generated/api";
 import { action, internalAction } from "../_generated/server";
 import Replicate from "replicate";
+import { AssemblyAI, SpeechModel } from "assemblyai";
 import { Doc, Id } from "../_generated/dataModel";
+
+import { buildPremiumVideoPrompt } from "../helper";
+import { sceneSchema } from "../schema";
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
 })
+
+const assemblyAiClient = new AssemblyAI({
+  apiKey: process.env.ASSEMBLYAI_API_KEY as string,
+});
 
 export const generateSceneVideo = action({
   args: {
@@ -73,7 +81,7 @@ export const internalGenerateSceneVideo = internalAction({
 
     try {
       // update scene videoInProcess
-      const updatedScenesWithInProcess = video.scenes.map((scene, index) =>
+      const updatedScenesWithInProcess = video.scenes.map((scene: typeof sceneSchema.type, index: number) =>
         index === args.sceneIndex
           ? { ...scene, videoInProcess: true }
           : scene
@@ -88,13 +96,19 @@ export const internalGenerateSceneVideo = internalAction({
         },
       });
 
-      const input = {
+      const model = video?.videoGenerationModel?.model || "wan-video/wan-2.2-i2v-fast";
+
+      const scene = video.scenes[args.sceneIndex]
+
+      const input = model === "wan-video/wan-2.2-i2v-fast" ? {
         image: args.baseImageUrl,
         prompt: args.prompt,
         resolution: video?.resolution || "720p",
-      };
-
-      const model = video?.videoGenerationModel?.model || "wan-video/wan-2.2-i2v-fast";
+      } : {
+        image: args.baseImageUrl,
+        prompt: buildPremiumVideoPrompt(args.prompt, scene.charactersInTheScene, video.characters),
+        resolution: video?.resolution || "720p",
+      }
 
       const output = await replicate.run(model, { input });
 
@@ -119,21 +133,62 @@ export const internalGenerateSceneVideo = internalAction({
         userId: user._id,
       });
 
-      // Update only the scenes array
-      const updatedScenes = video.scenes.map((scene, index) =>
-        index === args.sceneIndex
-          ? { ...scene, videoId: videoStorageId, videoUrl: videoUrl }
-          : scene
-      );
+      if (video?.videoGenerationModel?.category === 'premium') {
 
-      // Update video
-      await ctx.runMutation(internal.video.video.updateInternalVideo, {
-        id: args.videoId,
-        userId: user._id,
-        update: {
-          scenes: updatedScenes,
-        },
-      });
+        // Generate captions with AssemblyAI
+
+        const speechModel: SpeechModel = "universal"
+        const params = {
+          audio: videoUrl as string,
+          speech_model: speechModel,
+        }
+
+        const captionResponse = await assemblyAiClient.transcripts.transcribe(params);
+
+        if (!captionResponse.words) {
+          throw new Error("Failed to generate captions");
+        }
+
+        // Store captions in video
+        const words = captionResponse.words.map((word) => ({
+          text: word.text,
+          startMs: word.start,
+          endMs: word.end,
+        }));
+
+        // Update only the scenes array
+        const updatedScenes = video.scenes.map((scene: typeof sceneSchema.type, index: number) =>
+          index === args.sceneIndex
+            ? { ...scene, videoId: videoStorageId, videoUrl: videoUrl, words: words }
+            : scene
+        );
+
+        // Update video
+        await ctx.runMutation(internal.video.video.updateInternalVideo, {
+          id: args.videoId,
+          userId: user._id,
+          update: {
+            scenes: updatedScenes,
+          },
+        });
+      } else {
+
+        // Update only the scenes array
+        const updatedScenes = video.scenes.map((scene: typeof sceneSchema.type, index: number) =>
+          index === args.sceneIndex
+            ? { ...scene, videoId: videoStorageId, videoUrl: videoUrl }
+            : scene
+        );
+
+        // Update video
+        await ctx.runMutation(internal.video.video.updateInternalVideo, {
+          id: args.videoId,
+          userId: user._id,
+          update: {
+            scenes: updatedScenes,
+          },
+        });
+      }
 
       // update credits
       await ctx.runMutation(internal.user.decreaseInternalCredits, {
