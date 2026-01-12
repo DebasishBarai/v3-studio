@@ -3,7 +3,7 @@
 import { api } from '@/convex/_generated/api';
 import { useQuery } from 'convex/react';
 import Image from 'next/image';
-import VideoCard from './video-card';
+import VideoCard from '@/components/ai-tools/ai-videos/video-card';
 import { CreateVideoBlueprint } from '@/components/create-video-blueprint';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
