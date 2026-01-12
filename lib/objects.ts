@@ -761,7 +761,7 @@ export const promptVariations = {
 
 // [TODO]
 // 1. Create a demo video for the app and put it in the landing page
-// 2. Create options for the captions and the user should be able to tweak it on the go - done
-// 3. components/billing page to be used uniformly
+// 2. Convex workflow is not working properly. needs to be shifted to something else for long running auto generate tasks
+// 3. look for an alternate way to save the files istead of using the convex as this is slow
 // 4. Write blogs for improving SEO - started
 
