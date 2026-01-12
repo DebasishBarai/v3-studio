@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Check, Gift, Coins } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useScrollDownAnimationHook } from "@/hooks/use-scroll-down-animation-hook";
 import { motion } from "framer-motion";
 
@@ -260,7 +259,7 @@ export const PricingPage = () => {
                       </div>
                     )}
                   </div>
-                  
+
                   {/* Price and Button */}
                   <div className="mt-6 flex items-center justify-start">
                     <div className="text-2xl font-semibold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">${pack.price}</div>

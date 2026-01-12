@@ -133,7 +133,7 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
+    <div className="w-full min-h-screen bg-transparent text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Tabs */}
         <div className="flex items-center justify-center mb-12">
@@ -141,8 +141,8 @@ export default function PricingPage() {
             <button
               onClick={() => setActiveTab('subscription')}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${activeTab === 'subscription'
-                ? 'bg-background text-foreground shadow'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25'
+                : 'text-slate-400 hover:text-white'
                 }`}
             >
               Subscription
@@ -150,8 +150,8 @@ export default function PricingPage() {
             <button
               onClick={() => setActiveTab('credits')}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${activeTab === 'credits'
-                ? 'bg-background text-foreground shadow'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25'
+                : 'text-slate-400 hover:text-white'
                 }`}
             >
               Credits
@@ -163,8 +163,9 @@ export default function PricingPage() {
         {activeTab === 'subscription' && (
           <div className="space-y-8">
             <div className="text-center">
-              <h1 className="text-4xl font-bold text-white mb-4">Plans & Pricing</h1>
-              <p className="text-xl text-muted-foreground">Choose the perfect plan for your creative needs</p>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Plans &
+                <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"> Pricing</span></h1>
+              <p className="text-xl text-slate-300">Choose the perfect plan for your creative needs</p>
             </div>
 
             {/* Billing Toggle */}
@@ -203,7 +204,7 @@ export default function PricingPage() {
                     <div className="flex items-start justify-between mb-2">
                       <h2 className="text-2xl font-bold">{tier.name}</h2>
                       {tier.badge && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
                           {tier.badge}
                         </span>
                       )}
@@ -215,7 +216,7 @@ export default function PricingPage() {
                     {/* Pricing */}
                     <div className="mb-4">
                       <div className="flex items-baseline gap-1">
-                        <span className="text-4xl font-bold">${tier.price}</span>
+                        <span className="text-4xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">${tier.price}</span>
                         <span className="text-muted-foreground text-sm">/{tier.period}</span>
                       </div>
                     </div>
@@ -236,9 +237,9 @@ export default function PricingPage() {
                   {/* CTA Button */}
                   <div className="px-6 py-4 border-t border-zinc-800">
                     <button
-                      className={`w-full py-2.5 px-4 rounded-md font-medium cursor-pointer transition-colors ${tier.name === 'Free'
-                        ? 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                        : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                      className={`w-full py-2.5 px-4 rounded-md font-medium cursor-pointer transition-colors ${user?.subscriptionProductId === tier.productId
+                        ? 'bg-gradient-to-r from-amber-600 to-yellow-600 shadow-lg shadow-amber-500/25 hover:from-amber-500 hover:to-yellow-500 transition-all duration-300 hover:scale-105 text-white'
+                        : 'bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg shadow-indigo-500/25 hover:from-indigo-500 hover:to-purple-500 transition-all duration-300 hover:scale-105 text-secondary-foreground'
                         }`}
                       onClick={async () => await openCheckout({ products: [tier.productId] })}
                     >
@@ -255,7 +256,7 @@ export default function PricingPage() {
         {activeTab === 'credits' && (
           <div className="space-y-8">
             <div className="text-center">
-              <h1 className="text-4xl font-bold text-white mb-4">Credit Packages</h1>
+              <h1 className="text-4xl font-bold text-white mb-4">Credit <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Packages</span></h1>
               <p className="text-xl text-muted-foreground">Buy credits and unlock creative potential</p>
             </div>
 
@@ -289,9 +290,9 @@ export default function PricingPage() {
 
                   {/* Price and Button */}
                   <div className="mt-6 flex items-center justify-between">
-                    <div className="text-xl font-semibold">${pack.price}</div>
+                    <div className="text-2xl font-semibold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">${pack.price}</div>
                     <button
-                      className="inline-flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap rounded-md font-medium transition-colors bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 h-8 px-4 text-sm"
+                      className="inline-flex items-center justify-center gap-2 cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg shadow-indigo-500/25 hover:from-indigo-500 hover:to-purple-500 transition-all duration-300 hover:scale-105 whitespace-nowrap rounded-md font-medium transition-colors text-secondary-foreground hover:bg-secondary/80 py-2 h-8 px-4 text-sm"
                       onClick={async () => await openCheckout({ products: [pack.productId] })}
                     >
                       Purchase Now
@@ -306,7 +307,7 @@ export default function PricingPage() {
 
       <div className="w-full flex flex-col justify-center items-center" >
         <Button variant="default"
-          className="mt-8 p-4"
+          className="mt-8 p-4 rounded-md font-medium cursor-pointer transition-colors bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg shadow-indigo-500/25 hover:from-indigo-500 hover:to-purple-500 transition-all duration-300 hover:scale-105 hover:text-white text-secondary-foreground"
           onClick={async () => await openCustomerPortal()}
         >
           Manage your subscriptions
