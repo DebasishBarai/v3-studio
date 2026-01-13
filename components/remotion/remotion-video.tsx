@@ -216,6 +216,8 @@ const Caption: React.FC<{
   const textAlign = captionStyle?.textAlign ?? "center";
   const fontFamily = captionStyle?.fontFamily ?? "Pacifico"
   const textTransform = captionStyle?.textTransform ?? "none"
+  const bgCurrentWord = captionStyle?.bgCurrentWord ?? true
+  const currentWordBounce = captionStyle?.currentWordBounce ?? true
 
   const wordStartFrame = (currentWord.startMs / 1000) * 30;
   const localFrame = Math.max(0, frame - wordStartFrame);
@@ -277,9 +279,9 @@ const Caption: React.FC<{
           fontSize: fontSize,
           color: textColor,
           textAlign: textAlign as "left" | "center" | "right",
-          background: showBackground ? hexToRgba(backgroundColor, backgroundOpacity) : "transparent",
-          padding: showBackground ? "0.6rem 1.2rem" : "0",
-          borderRadius: showBackground ? "0.5rem" : "0",
+          background: showBackground && !bgCurrentWord ? hexToRgba(backgroundColor, backgroundOpacity) : "transparent",
+          padding: showBackground && !bgCurrentWord ? "0.6rem 1.2rem" : "0",
+          borderRadius: showBackground && !bgCurrentWord ? "0.5rem" : "0",
           maxWidth: "90%",
           lineHeight: 1.3,
           fontFamily: fontFamily,
@@ -299,7 +301,10 @@ const Caption: React.FC<{
                 display: "inline-block",
                 marginRight: "0.35rem",
                 color: isActive ? textColor : "#ffffff",
-                transform: isActive
+                background: isActive && showBackground && bgCurrentWord ? hexToRgba(backgroundColor, backgroundOpacity) : "transparent",
+                padding: isActive && showBackground && bgCurrentWord ? "0.6rem 1.2rem" : "0",
+                borderRadius: isActive && showBackground && bgCurrentWord ? "0.5rem" : "0",
+                transform: isActive && currentWordBounce
                   ? `scale(${scale}) translateY(${translateY}px) rotate(${rotate}deg)`
                   : "none",
               }}
@@ -309,6 +314,6 @@ const Caption: React.FC<{
           );
         })}
       </div>
-    </AbsoluteFill>
+    </AbsoluteFill >
   );
 };

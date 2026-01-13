@@ -408,6 +408,28 @@ export const CaptionStyleControls = ({
                 />
               </div>
 
+              {/* Show BG Current Word */}
+              <div className="flex items-center justify-between pt-1">
+                <label className="text-sm font-medium text-white/90">BG Current Word</label>
+                <input
+                  type="checkbox"
+                  checked={value?.bgCurrentWord}
+                  onChange={(e) => update("bgCurrentWord", e.target.checked)}
+                  className="w-5 h-5 text-blue-500 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer bg-white/10 border-white/20"
+                />
+              </div>
+
+              {/* Show Bounce */}
+              <div className="flex items-center justify-between pt-1">
+                <label className="text-sm font-medium text-white/90">Bounce</label>
+                <input
+                  type="checkbox"
+                  checked={value?.currentWordBounce}
+                  onChange={(e) => update("currentWordBounce", e.target.checked)}
+                  className="w-5 h-5 text-blue-500 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer bg-white/10 border-white/20"
+                />
+              </div>
+
             </div>
 
             {/* Desktop: Horizontal Grid */}
@@ -571,6 +593,29 @@ export const CaptionStyleControls = ({
                   className="w-5 h-5 text-blue-500 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer bg-white/10 border-white/20"
                 />
               </div>
+
+              {/* Show BG Current Word */}
+              <div className="flex flex-col gap-1 items-center">
+                <label className="text-xs font-medium text-white/90">BG Current Word</label>
+                <input
+                  type="checkbox"
+                  checked={value.bgCurrentWord}
+                  onChange={(e) => update("bgCurrentWord", e.target.checked)}
+                  className="w-5 h-5 text-blue-500 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer bg-white/10 border-white/20"
+                />
+              </div>
+
+              {/* Show Bounce */}
+              <div className="flex flex-col gap-1 items-center">
+                <label className="text-xs font-medium text-white/90">Bounce</label>
+                <input
+                  type="checkbox"
+                  checked={value.currentWordBounce}
+                  onChange={(e) => update("currentWordBounce", e.target.checked)}
+                  className="w-5 h-5 text-blue-500 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer bg-white/10 border-white/20"
+                />
+              </div>
+
             </div>
           </div>
         </div>

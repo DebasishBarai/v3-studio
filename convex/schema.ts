@@ -194,6 +194,8 @@ export const captionStyleSchema = v.object({
     v.literal('Coiny'),
     v.literal('Komika'),
   )),
+  bgCurrentWord: v.optional(v.boolean()),
+  currentWordBounce: v.optional(v.boolean()),
   showCaption: v.optional(v.boolean()),
   // Advanced styling - stores additional CSS properties as JSON string
   advancedStyle: v.optional(v.string())

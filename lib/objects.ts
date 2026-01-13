@@ -1,3 +1,5 @@
+import { makeErroringSearchParamsForUseCache } from "next/dist/server/request/search-params"
+
 export const avatars = [
   {
     name: 'Avatar 1',
@@ -761,7 +763,6 @@ export const promptVariations = {
 
 // [TODO]
 // 1. Create a demo video for the app and put it in the landing page
-// 2. Convex workflow is not working properly. needs to be shifted to something else for long running auto generate tasks
-// 3. look for an alternate way to save the files istead of using the convex as this is slow
+// 2. The onboarding feature to be extended
+// 3. Auto generate errors out most of the time. Needs to be fixed
 // 4. Write blogs for improving SEO - started
-
