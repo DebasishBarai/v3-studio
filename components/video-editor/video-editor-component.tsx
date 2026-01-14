@@ -303,8 +303,12 @@ export const VideoEditorComponent = ({ videoId, tour = false }: { videoId: strin
 
   if (!video || !videoData) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-foreground text-xl">Loading video...</div>
+      <div className="min-h-screen bg-background flex items-center justify-center space-x-4">
+        <div className="relative w-16 h-16 mb-4">
+          <div className="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
+          <div className="absolute inset-0 border-4 border-emerald-500 rounded-full border-t-transparent animate-spin"></div>
+        </div>
+        <p className="text-gray-500 text-lg">Loading your videos...</p>
       </div>
     );
   }
