@@ -626,12 +626,12 @@ export const VideoEditorComponent = ({ videoId, tour = false }: { videoId: strin
 
     const confirmConfig = videoData.videoGenerationModel?.category === 'premium' ? {
       action: 'Generating Scene Video',
-      requiredCredits: 10,
-      balanceCredits: user?.credits ? user.credits - 10 : 0
+      requiredCredits: 40,
+      balanceCredits: user?.credits ? user.credits - 40 : 0
     } : {
       action: 'Generating Scene Video',
-      requiredCredits: 5,
-      balanceCredits: user?.credits ? user.credits - 5 : 0
+      requiredCredits: 10,
+      balanceCredits: user?.credits ? user.credits - 10 : 0
     }
 
     const confirmed = await confirm(confirmConfig)

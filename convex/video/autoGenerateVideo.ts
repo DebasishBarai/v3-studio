@@ -35,7 +35,7 @@ export const autoGenerateVideo = action({
     // calculate the total credits required
     let totalRequiredCredits = 0
 
-    const creditsRequiredForEachVideoGeneration = video?.videoGenerationModel?.category === 'premium' ? 10 : 5
+    const creditsRequiredForEachVideoGeneration = video?.videoGenerationModel?.category === 'premium' ? 40 : 10
 
     totalRequiredCredits += video.characters.reduce((sum: number, character: any) => {
       return !character.imageUrl ? sum + 5 : sum;

@@ -3,7 +3,7 @@ import { Doc } from "@/convex/_generated/dataModel";
 export const calculateTotalCreditsRequired = (video: Doc<'videos'>) => {
   let totalRequiredCredits = 0
 
-  const creditsRequiredForEachVideoGeneration = video?.videoGenerationModel?.category === 'premium' ? 10 : 5
+  const creditsRequiredForEachVideoGeneration = video?.videoGenerationModel?.category === 'premium' ? 40 : 10
 
   totalRequiredCredits += video.characters.reduce((sum: number, character: any) => {
     return !character.imageUrl ? sum + 5 : sum;

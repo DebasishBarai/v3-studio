@@ -65,10 +65,6 @@ export const internalGenerateSceneVideo = internalAction({
       throw new Error("User not found");
     }
 
-    if (user.credits < 5) {
-      throw new Error("Insufficient credits");
-    }
-
     // Get video
     let video = await ctx.runQuery(internal.video.video.getInternalVideo, {
       id: args.videoId,
@@ -77,6 +73,12 @@ export const internalGenerateSceneVideo = internalAction({
 
     if (!video) {
       throw new Error("Video not found");
+    }
+
+    const creditsForVideoGeneration = video?.videoGenerationModel?.category === 'premium' ? 40 : 10
+
+    if (user.credits < creditsForVideoGeneration) {
+      throw new Error("Insufficient credits");
     }
 
     try {
@@ -193,7 +195,7 @@ export const internalGenerateSceneVideo = internalAction({
       // update credits
       await ctx.runMutation(internal.user.decreaseInternalCredits, {
         subject: user.subject,
-        amount: video?.videoGenerationModel?.category === 'premium' ? 10 : 5,
+        amount: video?.videoGenerationModel?.category === 'premium' ? 40 : 10,
       });
       return { videoStorageId, videoUrl }
     } catch (error) {

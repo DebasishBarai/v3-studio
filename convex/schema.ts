@@ -313,6 +313,8 @@ export const CAPTION_PRESETS: Record<string, CaptionStyleType> = {
     transitionStyle: 'scale' as const,
     fontFamily: 'Coiny',
     showCaption: true,
+    bgCurrentWord: true,
+    currentWordBounce: false,
   },
 
   youtubeShorts: {
@@ -329,6 +331,8 @@ export const CAPTION_PRESETS: Record<string, CaptionStyleType> = {
     transitionStyle: 'scale' as const,
     fontFamily: 'Komika',  // Added Komika font family
     showCaption: true,
+    bgCurrentWord: false,
+    currentWordBounce: true,
     advancedStyle: JSON.stringify({
       textShadow: '0.1em 0.1em 0.1em #000, 0.1em -0.1em 0.1em #000, -0.1em 0.1em 0.1em #000, -0.1em -0.1em 0.1em #000, 0.1em 0.1em 0.2em #000, 0.1em -0.1em 0.2em #000, -0.1em 0.1em 0.2em #000, -0.1em -0.1em 0.2em #000, 0px 0px 0.1em #000, 0px 0px 0.2em #000, 0px 0px 0.3em #000, 0px 0px 0.4em #000, 0px 0px 0.5em #000, 0px 0px 0.6em #000',
       padding: '5px 10px',
@@ -352,10 +356,12 @@ export const CAPTION_PRESETS: Record<string, CaptionStyleType> = {
     transitionStyle: 'fade' as const,
     fontFamily: 'Coiny' as const,
     showCaption: true,
+    bgCurrentWord: true,
+    currentWordBounce: false,
   },
 
   classic: {
-    textColor: '#FFFFFF',
+    textColor: '#FFCD00',
     backgroundColor: '#000000',
     backgroundOpacity: 0.8,
     showBackground: true,
@@ -368,6 +374,8 @@ export const CAPTION_PRESETS: Record<string, CaptionStyleType> = {
     transitionStyle: 'none' as const,
     fontFamily: 'Pacifico',
     showCaption: true,
+    bgCurrentWord: true,
+    currentWordBounce: false,
   },
 
   minimal: {
@@ -384,6 +392,8 @@ export const CAPTION_PRESETS: Record<string, CaptionStyleType> = {
     transitionStyle: 'fade' as const,
     fontFamily: 'Bangers',
     showCaption: true,
+    bgCurrentWord: true,
+    currentWordBounce: false,
   }
 } as const;
 
