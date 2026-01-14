@@ -1214,11 +1214,12 @@ export const VideoEditorComponent = ({ videoId, tour = false }: { videoId: strin
                 {expandedSections.characters && (
                   <div className="p-6 pt-0 space-y-6">
                     {/* Grid of Character Cards */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 m-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6 m-4">
                       {videoData.characters.map((character: any, index: number) => (
                         <CharacterCard
                           key={index}
                           index={index}
+                          aspectRatio={videoData.aspectRatio}
                           character={character}
                           removeCharacter={removeCharacter}
                           generateCharacterImage={generateCharacterImage}

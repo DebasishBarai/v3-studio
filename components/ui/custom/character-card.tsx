@@ -12,6 +12,7 @@ import { useState } from 'react'
 
 export const CharacterCard = ({
   index,
+  aspectRatio,
   character,
   removeCharacter,
   generateCharacterImage,
@@ -43,14 +44,14 @@ export const CharacterCard = ({
       </div>
 
       {character.imageUrl ? (
-        <div>
+        <div className={cn('w-full', aspectRatio === '16:9' ? 'aspect-video' : 'aspect-9/16')}>
           <Image
             src={character.imageUrl}
             alt={character.name}
             width={500}
             height={500}
             unoptimized
-            className="w-full h-[250px] rounded-lg object-cover"
+            className="w-full rounded-lg object-cover"
           />
           <div className="flex justify-between items-center mt-3">
             <Link href={character.imageUrl} target="_blank">
@@ -117,7 +118,7 @@ export const CharacterCard = ({
         </div>
       ) : (
         <>
-          <div className="h-[250px] flex flex-col items-center justify-center text-muted-foreground">
+          <div className={cn("w-full flex flex-col items-center justify-center text-muted-foreground", aspectRatio === '16:9' ? 'aspect-video' : 'aspect-9/16')}>
             <ImageOff className="w-12 h-12 mb-1 opacity-70" />
             <span className="text-sm">No image yet</span>
           </div>
