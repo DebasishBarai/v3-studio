@@ -126,9 +126,9 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
     { id: 3, title: 'Duration', icon: Film, color: 'text-orange-500' },
     { id: 4, title: 'AI Model', icon: Bot, color: 'text-indigo-500' },
     { id: 5, title: 'Video Quality', icon: Gauge, color: 'text-emerald-500' },
-    { id: 6, title: 'Story Style', icon: Sparkles, color: 'text-blue-500' },
-    { id: 7, title: 'Music', icon: Music, color: 'text-cyan-500' },
-    { id: 8, title: 'Voice', icon: Mic, color: 'text-green-500' },
+    // { id: 6, title: 'Story Style', icon: Sparkles, color: 'text-blue-500' },
+    { id: 6, title: 'Music', icon: Music, color: 'text-cyan-500' },
+    { id: 7, title: 'Voice', icon: Mic, color: 'text-green-500' },
   ];
 
   const [tourReady, setTourReady] = useState(false);
@@ -290,7 +290,8 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
   };
 
   const generateVideo = async () => {
-    if (!prompt || !selectedStyle || (selectedMusic === null) || !selectedVoice || !selectedAspectRatio || !selectedDuration || !storyTellingStyle) {
+    // if (!prompt || !selectedStyle || (selectedMusic === null) || !selectedVoice || !selectedAspectRatio || !selectedDuration || !storyTellingStyle) {
+    if (!prompt || !selectedStyle || (selectedMusic === null) || !selectedVoice || !selectedAspectRatio || !selectedDuration) {
       console.log({ prompt, selectedStyle, selectedMusic, selectedVoice, selectedAspectRatio, selectedDuration, storyTellingStyle })
       toast.error('Please fill in all the required fields');
       return;
@@ -321,6 +322,9 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
         return
       }
 
+      console.log({ prompt, selectedStyle, selectedMusic, selectedVoice, selectedAspectRatio, selectedDuration })
+      return
+
       if (selectedMusic === 0) {
         videoId = await createVideoBlueprint({
           prompt,
@@ -328,7 +332,8 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
           voice: voices.find(s => s.id === selectedVoice)!.voice as Infer<typeof voiceValidator>,
           aspectRatio: aspectRatios.find(s => s.id === selectedAspectRatio)!.label as Infer<typeof aspectRatioValidator>,
           durationInSecs: selectedDuration,
-          storyTellingStyle: storyTellingStyle === 'dramatic' ? 'dramatic' : 'default',
+          // storyTellingStyle: storyTellingStyle === 'dramatic' ? 'dramatic' : 'default',
+          storyTellingStyle: 'default',
           numberOfImagesPerPrompt: 1,
           generateMultipleAngles: false,
           videoGenerationModel: selectedModel === 'premium' ?
@@ -344,7 +349,8 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
           voice: voices.find(s => s.id === selectedVoice)!.voice as Infer<typeof voiceValidator>,
           aspectRatio: aspectRatios.find(s => s.id === selectedAspectRatio)!.label as Infer<typeof aspectRatioValidator>,
           durationInSecs: selectedDuration,
-          storyTellingStyle: storyTellingStyle === 'dramatic' ? 'dramatic' : 'default',
+          // storyTellingStyle: storyTellingStyle === 'dramatic' ? 'dramatic' : 'default',
+          storyTellingStyle: 'default',
           numberOfImagesPerPrompt: 1,
           generateMultipleAngles: false,
           videoGenerationModel: selectedModel === 'premium' ?
@@ -383,9 +389,9 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
       case 3: return selectedDuration !== null;
       case 4: return selectedModel !== null;
       case 5: return selectedResolution !== null;
-      case 6: return storyTellingStyle !== null;
-      case 7: return selectedMusic !== null;
-      case 8: return selectedVoice !== null;
+      // case 6: return storyTellingStyle !== null;
+      case 6: return selectedMusic !== null;
+      case 7: return selectedVoice !== null;
       default: return false;
     }
   };
@@ -787,59 +793,59 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
               </motion.div>
             )}
 
-            {currentStep === 6 && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                onAnimationComplete={() => {
-                  // Set tourReady after animation completes
-                  setTimeout(() => setTourReady(true), 0);
-                }}
-                id='story-telling-style-section'
-              >
-                {/* Storytelling Style Section */}
-                <p className="text-muted-foreground mb-4">
-                  Choose the storytelling approach for your video.
-                </p>
-                <div
-                  className="grid grid-cols-2 gap-4 max-w-md mx-auto">
-                  {['default', 'dramatic'].map((style, index) => (
-                    <motion.button
-                      key={style}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      onClick={() => setStoryTellingStyle(style)}
-                      className={cn(
-                        "relative p-8 rounded-lg border-2 transition-all hover:scale-105 cursor-pointer",
-                        storyTellingStyle === style
-                          ? 'border-blue-500 bg-blue-500/10 ring-2 ring-blue-500/50'
-                          : 'border-border bg-secondary/50'
-                      )}
-                    >
-                      <div className="text-center">
-                        <p className="text-xl font-bold mb-2 capitalize">{style}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {style === 'default' ? 'Balanced pacing' : 'Intense & engaging'}
-                        </p>
-                      </div>
-                      {storyTellingStyle === style && (
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          className="absolute top-2 right-2 bg-blue-500 rounded-full p-1"
-                        >
-                          <Check className="w-4 h-4 text-white" />
-                        </motion.div>
-                      )}
-                    </motion.button>
-                  ))}
-                </div>
-              </motion.div>
-            )}
+            {/* {currentStep === 6 && ( */}
+            {/*   <motion.div */}
+            {/*     initial={{ opacity: 0, y: 20 }} */}
+            {/*     animate={{ opacity: 1, y: 0 }} */}
+            {/*     transition={{ delay: 0.1 }} */}
+            {/*     onAnimationComplete={() => { */}
+            {/*       // Set tourReady after animation completes */}
+            {/*       setTimeout(() => setTourReady(true), 0); */}
+            {/*     }} */}
+            {/*     id='story-telling-style-section' */}
+            {/*   > */}
+            {/*     {/* Storytelling Style Section */}
+            {/*     <p className="text-muted-foreground mb-4"> */}
+            {/*       Choose the storytelling approach for your video. */}
+            {/*     </p> */}
+            {/*     <div */}
+            {/*       className="grid grid-cols-2 gap-4 max-w-md mx-auto"> */}
+            {/*       {['default', 'dramatic'].map((style, index) => ( */}
+            {/*         <motion.button */}
+            {/*           key={style} */}
+            {/*           initial={{ opacity: 0, y: 20 }} */}
+            {/*           animate={{ opacity: 1, y: 0 }} */}
+            {/*           transition={{ delay: index * 0.1 }} */}
+            {/*           onClick={() => setStoryTellingStyle(style)} */}
+            {/*           className={cn( */}
+            {/*             "relative p-8 rounded-lg border-2 transition-all hover:scale-105 cursor-pointer", */}
+            {/*             storyTellingStyle === style */}
+            {/*               ? 'border-blue-500 bg-blue-500/10 ring-2 ring-blue-500/50' */}
+            {/*               : 'border-border bg-secondary/50' */}
+            {/*           )} */}
+            {/*         > */}
+            {/*           <div className="text-center"> */}
+            {/*             <p className="text-xl font-bold mb-2 capitalize">{style}</p> */}
+            {/*             <p className="text-xs text-muted-foreground"> */}
+            {/*               {style === 'default' ? 'Balanced pacing' : 'Intense & engaging'} */}
+            {/*             </p> */}
+            {/*           </div> */}
+            {/*           {storyTellingStyle === style && ( */}
+            {/*             <motion.div */}
+            {/*               initial={{ scale: 0 }} */}
+            {/*               animate={{ scale: 1 }} */}
+            {/*               className="absolute top-2 right-2 bg-blue-500 rounded-full p-1" */}
+            {/*             > */}
+            {/*               <Check className="w-4 h-4 text-white" /> */}
+            {/*             </motion.div> */}
+            {/*           )} */}
+            {/*         </motion.button> */}
+            {/*       ))} */}
+            {/*     </div> */}
+            {/*   </motion.div> */}
+            {/* )} */}
 
-            {currentStep === 7 && (
+            {currentStep === 6 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -926,7 +932,7 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
               </motion.div>
             )}
 
-            {currentStep === 8 && (
+            {currentStep === 7 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -1140,7 +1146,7 @@ const getElementByCurrentStep = (currentStep: number) => {
     '#duration-section',        // Step 3
     '#ai-model-section',        // Step 4
     '#video-quality-section',   // Step 5
-    '#story-telling-style-section', // Step 6
+    // '#story-telling-style-section', // Step 6
     '#music-section',           // Step 7
     '#voice-section',           // Step 8
   ];
@@ -1156,7 +1162,7 @@ const getStepTitle = (step: number) => {
     "Set duration",
     "Choose AI model",
     "Select quality",
-    "Pick story style",
+    // "Pick story style",
     "Add background music",
     "Choose voice"
   ];
@@ -1171,7 +1177,7 @@ const getStepDescription = (step: number) => {
     "Set the length of your video.",
     "Select the AI model for video generation.",
     "Choose the resolution for your video.",
-    "Select your storytelling approach.",
+    // "Select your storytelling approach.",
     "Pick background music to set the mood.",
     "Choose a voice for narration."
   ];
