@@ -322,9 +322,6 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
         return
       }
 
-      console.log({ prompt, selectedStyle, selectedMusic, selectedVoice, selectedAspectRatio, selectedDuration })
-      return
-
       if (selectedMusic === 0) {
         videoId = await createVideoBlueprint({
           prompt,
