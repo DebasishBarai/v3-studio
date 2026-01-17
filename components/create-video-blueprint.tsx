@@ -1030,84 +1030,106 @@ export const CreateVideoBlueprint = ({ tour = false }: { tour?: boolean }) => {
       </Button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className={cn("max-w-[95svw] max-h-[90svh] overflow-auto p-0 bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] backdrop-blur-xl border-zinc-800")}>
+        <DialogContent className={cn("max-w-[95svw] lg:max-w-[1200px] xl:max-w-[1400px] max-h-[90svh] overflow-auto p-0 bg-gradient-to-r from-[#1E1E2D] via-[#1A1A24] to-[#101014] backdrop-blur-xl border-zinc-800")}>
           <DialogHeader className="px-6 pt-6 pb-4 border-b bg-red-500">
             <DialogTitle className="text-2xl font-bold flex items-center gap-2">
               <Film className="w-6 h-6" />
               Create Your AI Video
             </DialogTitle>
           </DialogHeader>
-          <div className="flex flex-col h-full">
-            {/* Progress Bar */}
-            <div className="hidden md:block px-6 pt-6 pb-4 border-b">
-              <div className="flex items-center justify-between mb-4">
-                {steps.map((step, index) => (
-                  <div key={step.id} className="flex items-center">
-                    <div
-                      className={cn(
-                        "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all",
-                        index < currentStep && "bg-green-500 text-white",
-                        index === currentStep && "bg-primary text-primary-foreground ring-4 ring-primary/20",
-                        index > currentStep && "bg-muted text-muted-foreground"
-                      )}
-                    >
-                      {index < currentStep ? <Check className="w-4 h-4" /> : index + 1}
-                    </div>
-                    {index < steps.length - 1 && (
+
+          <div className="flex flex-1 overflow-hidden">
+            {/* Left Section - Main Wizard */}
+            <div className="flex-1 flex flex-col min-w-0">
+              {/* Progress Bar */}
+              <div className="hidden md:block px-6 pt-6 pb-4 border-b">
+                <div className="flex items-center justify-between mb-4">
+                  {steps.map((step, index) => (
+                    <div key={step.id} className="flex items-center">
                       <div
                         className={cn(
-                          "w-12 h-1 mx-1 transition-all",
-                          index < currentStep ? "bg-green-500" : "bg-muted"
+                          "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all",
+                          index < currentStep && "bg-green-500 text-white",
+                          index === currentStep && "bg-primary text-primary-foreground ring-4 ring-primary/20",
+                          index > currentStep && "bg-muted text-muted-foreground"
                         )}
-                      />
-                    )}
-                  </div>
-                ))}
+                      >
+                        {index < currentStep ? <Check className="w-4 h-4" /> : index + 1}
+                      </div>
+                      {index < steps.length - 1 && (
+                        <div
+                          className={cn(
+                            "w-12 h-1 mx-1 transition-all",
+                            index < currentStep ? "bg-green-500" : "bg-muted"
+                          )}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 overflow-y-auto px-6 py-6 bg-zinc-900/50">
+                {renderStepContent()}
+              </div>
+
+              {/* Footer */}
+              <div className="border-t px-6 py-4 bg-slate-600/30">
+                <div className="flex justify-between items-center">
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      handleBack();
+                      paginate(-1);
+                    }}
+                    disabled={currentStep === 0 || isLoading}
+                  >
+                    <ChevronLeft className="w-4 h-4 mr-2" />
+                    Back
+                  </Button>
+
+                  {currentStep === steps.length - 1 ? (
+                    <Button
+                      onClick={generateVideo}
+                      disabled={!canProceed()}
+                      className="bg-red-500 hover:to-purple-700 text-white"
+                      id='next-button'
+                    >
+                      {isLoading ? <Spinner /> : <Sparkles className="w-6 h-6" />}
+                      {isLoading ? 'Generating...' : 'Generate Outline'}
+                    </Button>
+                  ) : (
+                    <Button
+                      id='next-button'
+                      onClick={() => {
+                        handleNext();
+                        paginate(1);
+                      }}
+                      disabled={!canProceed() || isLoading}
+                    >
+                      Next
+                      <ChevronRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Content */}
-            <div className="flex-1 overflow-y-auto px-6 py-6 bg-zinc-900/50">
-              {renderStepContent()}
-            </div>
-
-            {/* Footer */}
-            <div className="border-t px-6 py-4 bg-slate-600/30">
-              <div className="flex justify-between items-center">
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    handleBack();
-                    paginate(-1);
-                  }}
-                  disabled={currentStep === 0 || isLoading}
-                >
-                  <ChevronLeft className="w-4 h-4 mr-2" />
-                  Back
-                </Button>
-
-                {currentStep === steps.length - 1 ? (
-                  <Button
-                    onClick={generateVideo}
-                    disabled={!canProceed()}
-                    className="bg-red-500 hover:to-purple-700 text-white"
-                    id='next-button'
-                  >
-                    {isLoading ? <Spinner /> : <Sparkles className="w-6 h-6" />}
-                    {isLoading ? 'Generating...' : 'Generate Outline'}
-                  </Button>
+            {/* Sample Video Preview - Only visible on lg screens and up */}
+            <div className="hidden lg:flex lg:w-80 xl:w-96 items-center justify-center p-4 border-l border-zinc-800 bg-zinc-900/30">
+              <div className="w-full h-full max-h-[70vh] aspect-[9/16] bg-zinc-800/50 rounded-lg border border-zinc-700 flex items-center justify-center overflow-hidden">
+                {selectedStyle ? (
+                  <div className="w-full h-full flex items-center justify-center">
+                    {/* Video will be rendered here */}
+                    <div className="w-16 h-16 rounded-full bg-pink-500/20 flex items-center justify-center">
+                      <Play className="w-8 h-8 text-pink-500" />
+                    </div>
+                  </div>
                 ) : (
-                  <Button
-                    id='next-button'
-                    onClick={() => {
-                      handleNext();
-                      paginate(1);
-                    }}
-                    disabled={!canProceed() || isLoading}
-                  >
-                    Next
-                    <ChevronRight className="w-4 h-4 ml-2" />
-                  </Button>
+                  <div className="w-16 h-16 rounded-full bg-zinc-700/50 flex items-center justify-center">
+                    <Film className="w-8 h-8 text-zinc-500" />
+                  </div>
                 )}
               </div>
             </div>
