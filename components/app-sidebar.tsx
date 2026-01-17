@@ -20,11 +20,13 @@ import {
 } from "@/components/ui/sidebar";
 import {
   Home,
-  Clapperboard, Package,
+  Clapperboard,
+  Package,
   Folder,
   CreditCard,
   Settings,
   Coins,
+  LayoutTemplate,
   LucideIcon
 } from "lucide-react";
 import { useAction, useQuery } from "convex/react";
@@ -43,7 +45,8 @@ type MenuItem = {
 const creativeToolsItems: MenuItem[] = [
   { title: "Home", url: "/dashboard", icon: Home },
   { title: "AI Video", url: "/ai-tools/ai-video", icon: Clapperboard },
-  { title: "Product Ads", url: "/ai-tools/product-ads", icon: Package, badge: "New" },
+  { title: "Templates", url: "/templates", icon: LayoutTemplate, badge: "New" },
+  { title: "Product Ads", url: "/ai-tools/product-ads", icon: Package },
 ];
 
 const userItems: MenuItem[] = [
